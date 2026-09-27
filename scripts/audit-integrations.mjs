@@ -44,6 +44,11 @@ function publishedPage(pathname) {
 }
 
 const locales = ["ko", "en", "ja", "zh"];
+const localeResources = Object.fromEntries(locales.map((locale) => [locale, JSON.parse(read(`${locale}.json`))]));
+const localeResourceKeys = Object.keys(localeResources.ko);
+for (const locale of locales) {
+  assert(localeResourceKeys.every((key) => Object.hasOwn(localeResources[locale], key)), `${locale}.json: translation keys differ from ko.json`);
+}
 const localePages = Object.fromEntries(locales.map((locale) => [
   locale,
   walk(locale, (file) => file.endsWith(".html")).map((file) => path.posix.basename(file)).sort()
@@ -93,11 +98,24 @@ for (const page of allHtml) {
       assert(alternates.get(language) === `https://molgga.com${localizedRoute(targetLocale)}`, `${page}: ${language} alternate does not match the clean route`);
     }
   }
-  const title = html.match(/<title>(.*?)<\/title>/is)?.[1] || "";
+  const title = html.match(/<title\b[^>]*>(.*?)<\/title>/is)?.[1] || "";
   const metadataTitles = [title, ...["og:title", "twitter:title"].map((name) => html.match(new RegExp(`<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([^"']*)`, "i"))?.[1] || "")];
   const descriptions = ["description", "og:description", "twitter:description"].map((name) => html.match(new RegExp(`<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([^"']*)`, "i"))?.[1] || "");
   assert(metadataTitles.every(Boolean), `${page}: title/Open Graph/Twitter title metadata is incomplete`);
   assert(descriptions.every(Boolean), `${page}: description/Open Graph/Twitter description metadata is incomplete`);
+  assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
+  assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
+  assert(/assets\/js\/i18n\.js\?v=\d{8}-\d+/.test(html), `${page}: i18n.js is missing a cache token`);
+  assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
+  const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
+  assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
+  for (const key of i18nKeys) assert(Object.hasOwn(localeResources[locale], key), `${page}: ${locale}.json is missing data-i18n key ${key}`);
+  for (const [, declaration] of html.matchAll(/\bdata-i18n-attr=["']([^"']+)["']/gi)) {
+    for (const entry of declaration.split(";")) {
+      const key = entry.slice(entry.indexOf(":") + 1).trim();
+      assert(Object.hasOwn(localeResources[locale], key), `${page}: ${locale}.json is missing metadata key ${key}`);
+    }
+  }
   if (locale !== "ko") {
     for (const [index, value] of metadataTitles.entries()) assert(!/[\uac00-\ud7af]/.test(value), `${page}: non-Korean title ${index + 1} contains Korean text`);
     for (const [index, description] of descriptions.entries()) assert(!/[\uac00-\ud7af]/.test(description), `${page}: non-Korean description ${index + 1} contains Korean text`);
@@ -117,15 +135,7 @@ for (const [locale, expected] of Object.entries({
 })) {
   const aboutHtml = read(`${locale}/about.html`);
   assert(aboutHtml.includes(updatedAboutOfferings) && aboutHtml.includes(updatedResultNote), `${locale}: About page source text is out of sync with its translation keys`);
-  const translationSandbox = {
-    window: {},
-    location: { pathname: `/${locale}/about` },
-    document: { readyState: "loading", addEventListener() {} },
-    MutationObserver: class { observe() {} },
-    NodeFilter: { SHOW_TEXT: 4 }
-  };
-  vm.runInNewContext(read("assets/js/i18n-catalog.js"), translationSandbox, { timeout: 1000 });
-  vm.runInNewContext(read("assets/js/i18n.js"), translationSandbox, { timeout: 1000 });
+  const translate = (value) => localeResources[locale][value] ?? localeResources.ko[value] ?? value;
   const homeHtml = read(`${locale}/index.html`)
     .replace(/<script\b[\s\S]*?<\/script>/gi, "")
     .replace(/<!--[\s\S]*?-->/g, "");
@@ -136,17 +146,17 @@ for (const [locale, expected] of Object.entries({
     .map(([, value]) => value)
     .filter((value) => /[\uac00-\ud7af]/.test(value));
   const untranslatedHomeCopy = [...new Set([...homeText, ...homeLabels])]
-    .filter((value) => translationSandbox.window.MOA_I18N.t(value) === value);
+    .filter((value) => translate(value) === value);
   assert(untranslatedHomeCopy.length === 0, `${locale}: home page has missing translations: ${untranslatedHomeCopy.join(" | ")}`);
-  assert(translationSandbox.window.MOA_I18N.t(updatedAboutOfferings) === expected[0], `${locale}: About offerings paragraph translation is missing or stale`);
-  assert(translationSandbox.window.MOA_I18N.t(updatedResultNote) === expected[1], `${locale}: result interpretation paragraph translation is missing or stale`);
+  assert(translate(updatedAboutOfferings) === expected[0], `${locale}: About offerings paragraph translation is missing or stale`);
+  assert(translate(updatedResultNote) === expected[1], `${locale}: result interpretation paragraph translation is missing or stale`);
   if (locale === "ja") {
-    assert(!/ナダム/.test(translationSandbox.window.MOA_I18N.t("가까움도 나다움도 함께 지켜요.")), "ja: attachment result copy contains a transliteration error");
-    assert(!/制格/.test(translationSandbox.window.MOA_I18N.t("전생의 당신은 궁과 마을 사이를 오가던 심부름꾼 토끼였어요. 발이 빨라 급한 소식을 전하는 데 늘 제격이었고, 가는 길에 새로운 친구도 자주 만들었죠.")), "ja: past-life result copy contains a mistranslation");
+    assert(!/ナダム/.test(translate("가까움도 나다움도 함께 지켜요.")), "ja: attachment result copy contains a transliteration error");
+    assert(!/制格/.test(translate("전생의 당신은 궁과 마을 사이를 오가던 심부름꾼 토끼였어요. 발이 빨라 급한 소식을 전하는 데 늘 제격이었고, 가는 길에 새로운 친구도 자주 만들었죠.")), "ja: past-life result copy contains a mistranslation");
   }
   if (locale === "zh") {
-    assert(translationSandbox.window.MOA_I18N.t("/ 몰까 소개") === "/ 关于 molgga", "zh: About breadcrumb contains a corrupted translation");
-    assert(translationSandbox.window.MOA_I18N.t("문의 안내") === "联系说明", "zh: contact label contains a corrupted translation");
+    assert(translate("/ 몰까 소개") === "/ 关于 molgga", "zh: About breadcrumb contains a corrupted translation");
+    assert(translate("문의 안내") === "联系说明", "zh: contact label contains a corrupted translation");
   }
 }
 
@@ -378,6 +388,10 @@ for (const page of allHtml) {
   }
 }
 assert(i18nScriptVersions.size === 1, `localized pages use missing or inconsistent i18n.js cache tokens: ${[...i18nScriptVersions].join(", ")}`);
+assert(Object.keys(localeResources.ko).length === Object.keys(localeResources.en).length
+  && Object.keys(localeResources.ko).length === Object.keys(localeResources.ja).length
+  && Object.keys(localeResources.ko).length === Object.keys(localeResources.zh).length,
+`${locales.join(", ")}.json: translation resource sizes differ`);
 const migration = read("migrations/0001_worldcup_votes.sql");
 for (const column of ["vote_id", "game_id", "item_id", "bracket_size", "created_at"]) {
   assert(new RegExp(`\\b${column}\\b`, "i").test(migration), `D1 migration is missing ${column}`);

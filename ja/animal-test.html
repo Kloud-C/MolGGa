@@ -2,9 +2,11 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4fbf8">
-  <meta name="description" content="日常の選択から、自分に合う動物キャラクターを見つけてみましょう。">
+  <meta name="description" content="日常の選択から、自分に合う動物キャラクターを見つけてみましょう。" data-i18n-attr="content:seo.description.animal-test">
   <link rel="canonical" href="https://molgga.com/ja/animal-test">
   <link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/animal-test">
   <link rel="alternate" hreflang="en-US" href="https://molgga.com/en/animal-test">
@@ -14,19 +16,19 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="molgga">
   <meta property="og:url" content="https://molgga.com/ja/animal-test">
-  <meta property="og:title" content="動物タイプ診断 | molgga">
-  <meta property="og:description" content="日常の選択から、自分に合う動物キャラクターを見つけてみましょう。">
+  <meta property="og:title" content="動物タイプ診断 | molgga" data-i18n-attr="content:seo.title.animal-test">
+  <meta property="og:description" content="日常の選択から、自分に合う動物キャラクターを見つけてみましょう。" data-i18n-attr="content:seo.description.animal-test">
   <meta property="og:image" content="https://molgga.com/image/og/molgga-og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="molgga — 나의 취향은 뭘까?">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="動物タイプ診断 | molgga">
-  <meta name="twitter:description" content="日常の選択から、自分に合う動物キャラクターを見つけてみましょう。">
+  <meta name="twitter:title" content="動物タイプ診断 | molgga" data-i18n-attr="content:seo.title.animal-test">
+  <meta name="twitter:description" content="日常の選択から、自分に合う動物キャラクターを見つけてみましょう。" data-i18n-attr="content:seo.description.animal-test">
   <meta name="twitter:image" content="https://molgga.com/image/og/molgga-og.jpg">
   <link rel="icon" type="image/png" href="../image/Logo/molgga-icon.png">
   <link rel="stylesheet" href="../assets/css/styles.css?v=20260927-3">
-  <title>動物タイプ診断 | molgga</title>
+  <title data-i18n="seo.title.animal-test">動物タイプ診断 | molgga</title>
   <meta name="google-adsense-account" content="ca-pub-7232290504812389">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7232290504812389" crossorigin="anonymous"></script>  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R12M8D84MC"></script>
@@ -45,73 +47,72 @@
 <body>
   <header class="site-header"><div class="wrap header-inner">
     <a class="brand" href="index.html" aria-label="molgga home"><img class="brand-logo" src="../image/Logo/molgga-logo.png" alt="molgga" width="166" height="42" style="width:166px;height:auto;max-width:100%;display:block"></a>
-    <nav class="nav" aria-label="주요 메뉴"><a href="contact.html">문의</a><select class="language-select" data-language-select aria-label="언어 선택"><option value="ko">한국어</option><option value="en">English (US)</option><option value="ja">日本語</option><option value="zh">简体中文</option></select><a href="about.html">몰까 소개</a><a class="button button-small" href="index.html#contents">둘러보기 <span aria-hidden="true">→</span></a></nav>
+    <nav class="nav" aria-label="주요 메뉴"><a href="contact.html"><span data-i18n="문의">문의</span></a><select class="language-select" data-language-select aria-label="언어 선택"><option value="ko">한국어</option><option value="en">English (US)</option><option value="ja">日本語</option><option value="zh">简体中文</option></select><a href="about.html"><span data-i18n="몰까 소개">몰까 소개</span></a><a class="button button-small" href="index.html#contents"><span data-i18n="둘러보기">둘러보기</span> <span aria-hidden="true">→</span></a></nav>
   </div></header>
   <main class="page-main"><div class="wrap article">
-    <nav class="breadcrumbs" aria-label="현재 위치"><a href="index.html">홈</a> / 동물상 성향 테스트</nav>
+    <nav class="breadcrumbs" aria-label="현재 위치"><a href="index.html"><span data-i18n="홈">홈</span></a> <span data-i18n="/ 동물상 성향 테스트">/ 동물상 성향 테스트</span></nav>
     <header class="article-header">
-      <span class="eyebrow-text">molgga ORIGINAL · 동물상 테스트</span>
-      <h1>동물상 테스트: 나의 동물 캐릭터 찾기</h1>
-      <p>나의 성향과 어울리는 동물 캐릭터를 찾아보세요.</p>
+      <span class="eyebrow-text"><span data-i18n="molgga ORIGINAL · 동물상 테스트">molgga ORIGINAL · 동물상 테스트</span></span>
+      <h1><span data-i18n="동물상 테스트: 나의 동물 캐릭터 찾기">동물상 테스트: 나의 동물 캐릭터 찾기</span></h1>
+      <p><span data-i18n="나의 성향과 어울리는 동물 캐릭터를 찾아보세요.">나의 성향과 어울리는 동물 캐릭터를 찾아보세요.</span></p>
     </header>
     <section class="content-panel" aria-labelledby="quiz-heading" data-clarity-mask="true">
-      <h2 id="quiz-heading">나에게 더 가까운 답을 골라 주세요</h2>
-      <p>최근 모습을 기준으로 선택해 보세요. 모든 질문에 답하면 결과를 볼 수 있습니다.</p>
+      <h2 id="quiz-heading"><span data-i18n="나에게 더 가까운 답을 골라 주세요">나에게 더 가까운 답을 골라 주세요</span></h2>
+      <p><span data-i18n="최근 모습을 기준으로 선택해 보세요. 모든 질문에 답하면 결과를 볼 수 있습니다.">최근 모습을 기준으로 선택해 보세요. 모든 질문에 답하면 결과를 볼 수 있습니다.</span></p>
       <form id="animal-quiz">
-        <fieldset class="field-question"><legend>1. 바쁜 한 주 뒤, 가장 먼저 하고 싶은 일은?</legend>
-          <label class="radio-line"><input type="radio" name="q1" value="dog,deer" required> 친한 사람을 만나 이야기한다</label><label class="radio-line"><input type="radio" name="q1" value="cat,bear"> 혼자 조용한 시간을 보낸다</label><label class="radio-line"><input type="radio" name="q1" value="otter,fox"> 가보지 않은 곳에 가본다</label><label class="radio-line"><input type="radio" name="q1" value="bear,deer"> 익숙한 집에서 푹 쉰다</label>
+        <fieldset class="field-question"><legend><span data-i18n="1. 바쁜 한 주 뒤, 가장 먼저 하고 싶은 일은?">1. 바쁜 한 주 뒤, 가장 먼저 하고 싶은 일은?</span></legend>
+          <label class="radio-line"><input type="radio" name="q1" value="dog,deer" required> <span data-i18n="친한 사람을 만나 이야기한다">친한 사람을 만나 이야기한다</span></label><label class="radio-line"><input type="radio" name="q1" value="cat,bear"> <span data-i18n="혼자 조용한 시간을 보낸다">혼자 조용한 시간을 보낸다</span></label><label class="radio-line"><input type="radio" name="q1" value="otter,fox"> <span data-i18n="가보지 않은 곳에 가본다">가보지 않은 곳에 가본다</span></label><label class="radio-line"><input type="radio" name="q1" value="bear,deer"> <span data-i18n="익숙한 집에서 푹 쉰다">익숙한 집에서 푹 쉰다</span></label>
         </fieldset>
-        <fieldset class="field-question"><legend>2. 함께하는 과제에서 자연스럽게 맡는 역할은?</legend>
-          <label class="radio-line"><input type="radio" name="q2" value="dog,deer" required> 서로 말을 나누도록 분위기를 잇는다</label><label class="radio-line"><input type="radio" name="q2" value="fox,bear"> 선택지를 정리해 실행 순서를 제안한다</label><label class="radio-line"><input type="radio" name="q2" value="deer,cat"> 빠진 의견이나 부담을 살핀다</label><label class="radio-line"><input type="radio" name="q2" value="otter,fox"> 작은 실험을 해보고 반응을 확인한다</label>
+        <fieldset class="field-question"><legend><span data-i18n="2. 함께하는 과제에서 자연스럽게 맡는 역할은?">2. 함께하는 과제에서 자연스럽게 맡는 역할은?</span></legend>
+          <label class="radio-line"><input type="radio" name="q2" value="dog,deer" required> <span data-i18n="서로 말을 나누도록 분위기를 잇는다">서로 말을 나누도록 분위기를 잇는다</span></label><label class="radio-line"><input type="radio" name="q2" value="fox,bear"> <span data-i18n="선택지를 정리해 실행 순서를 제안한다">선택지를 정리해 실행 순서를 제안한다</span></label><label class="radio-line"><input type="radio" name="q2" value="deer,cat"> <span data-i18n="빠진 의견이나 부담을 살핀다">빠진 의견이나 부담을 살핀다</span></label><label class="radio-line"><input type="radio" name="q2" value="otter,fox"> <span data-i18n="작은 실험을 해보고 반응을 확인한다">작은 실험을 해보고 반응을 확인한다</span></label>
         </fieldset>
-        <fieldset class="field-question"><legend>3. 약속 계획이 갑자기 바뀌면 나는 보통…</legend>
-          <label class="radio-line"><input type="radio" name="q3" value="fox,bear" required> 가능한 대안을 비교해 빠르게 정한다</label><label class="radio-line"><input type="radio" name="q3" value="otter,fox"> 새로 생긴 기회로 생각하고 다른 일을 찾는다</label><label class="radio-line"><input type="radio" name="q3" value="bear,cat"> 익숙하고 부담이 적은 선택지를 고른다</label><label class="radio-line"><input type="radio" name="q3" value="cat,deer"> 잠깐 혼자 생각한 뒤 내게 편한 쪽을 정한다</label>
+        <fieldset class="field-question"><legend><span data-i18n="3. 약속 계획이 갑자기 바뀌면 나는 보통…">3. 약속 계획이 갑자기 바뀌면 나는 보통…</span></legend>
+          <label class="radio-line"><input type="radio" name="q3" value="fox,bear" required> <span data-i18n="가능한 대안을 비교해 빠르게 정한다">가능한 대안을 비교해 빠르게 정한다</span></label><label class="radio-line"><input type="radio" name="q3" value="otter,fox"> <span data-i18n="새로 생긴 기회로 생각하고 다른 일을 찾는다">새로 생긴 기회로 생각하고 다른 일을 찾는다</span></label><label class="radio-line"><input type="radio" name="q3" value="bear,cat"> <span data-i18n="익숙하고 부담이 적은 선택지를 고른다">익숙하고 부담이 적은 선택지를 고른다</span></label><label class="radio-line"><input type="radio" name="q3" value="cat,deer"> <span data-i18n="잠깐 혼자 생각한 뒤 내게 편한 쪽을 정한다">잠깐 혼자 생각한 뒤 내게 편한 쪽을 정한다</span></label>
         </fieldset>
-        <fieldset class="field-question"><legend>4. 친구가 고민을 털어놓았을 때 먼저 하는 일은?</legend>
-          <label class="radio-line"><input type="radio" name="q4" value="deer,cat" required> 상황을 차분히 듣고 감정을 확인한다</label><label class="radio-line"><input type="radio" name="q4" value="dog,bear"> 곁에 있겠다고 말하고 함께 시간을 보낸다</label><label class="radio-line"><input type="radio" name="q4" value="fox,otter"> 지금 바꿀 수 있는 방법을 같이 정리한다</label><label class="radio-line"><input type="radio" name="q4" value="cat,bear"> 조언을 서두르지 않고 상대의 속도를 기다린다</label>
+        <fieldset class="field-question"><legend><span data-i18n="4. 친구가 고민을 털어놓았을 때 먼저 하는 일은?">4. 친구가 고민을 털어놓았을 때 먼저 하는 일은?</span></legend>
+          <label class="radio-line"><input type="radio" name="q4" value="deer,cat" required> <span data-i18n="상황을 차분히 듣고 감정을 확인한다">상황을 차분히 듣고 감정을 확인한다</span></label><label class="radio-line"><input type="radio" name="q4" value="dog,bear"> <span data-i18n="곁에 있겠다고 말하고 함께 시간을 보낸다">곁에 있겠다고 말하고 함께 시간을 보낸다</span></label><label class="radio-line"><input type="radio" name="q4" value="fox,otter"> <span data-i18n="지금 바꿀 수 있는 방법을 같이 정리한다">지금 바꿀 수 있는 방법을 같이 정리한다</span></label><label class="radio-line"><input type="radio" name="q4" value="cat,bear"> <span data-i18n="조언을 서두르지 않고 상대의 속도를 기다린다">조언을 서두르지 않고 상대의 속도를 기다린다</span></label>
         </fieldset>
-        <fieldset class="field-question"><legend>5. 새 취미를 시작할 때 내 방식은?</legend>
-          <label class="radio-line"><input type="radio" name="q5" value="otter,fox" required> 체험부터 해보고 재미를 느껴 본다</label><label class="radio-line"><input type="radio" name="q5" value="fox,cat"> 기초 정보를 찾아 방법을 익힌다</label><label class="radio-line"><input type="radio" name="q5" value="bear,deer"> 정해 둔 시간에 꾸준히 반복한다</label><label class="radio-line"><input type="radio" name="q5" value="cat,bear"> 작은 목표를 세우고 천천히 연습한다</label>
+        <fieldset class="field-question"><legend><span data-i18n="5. 새 취미를 시작할 때 내 방식은?">5. 새 취미를 시작할 때 내 방식은?</span></legend>
+          <label class="radio-line"><input type="radio" name="q5" value="otter,fox" required> <span data-i18n="체험부터 해보고 재미를 느껴 본다">체험부터 해보고 재미를 느껴 본다</span></label><label class="radio-line"><input type="radio" name="q5" value="fox,cat"> <span data-i18n="기초 정보를 찾아 방법을 익힌다">기초 정보를 찾아 방법을 익힌다</span></label><label class="radio-line"><input type="radio" name="q5" value="bear,deer"> <span data-i18n="정해 둔 시간에 꾸준히 반복한다">정해 둔 시간에 꾸준히 반복한다</span></label><label class="radio-line"><input type="radio" name="q5" value="cat,bear"> <span data-i18n="작은 목표를 세우고 천천히 연습한다">작은 목표를 세우고 천천히 연습한다</span></label>
         </fieldset>
-        <fieldset class="field-question"><legend>6. 비 오는 휴일, 마음에 드는 하루는?</legend>
-          <label class="radio-line"><input type="radio" name="q6" value="bear,cat" required> 따뜻한 음료와 익숙한 영상으로 쉬기</label><label class="radio-line"><input type="radio" name="q6" value="otter,fox"> 실내에서 할 새로운 활동 찾아보기</label><label class="radio-line"><input type="radio" name="q6" value="cat,deer"> 밀린 책이나 취미를 혼자 즐기기</label><label class="radio-line"><input type="radio" name="q6" value="dog,bear"> 친구와 편한 실내 약속 만들기</label>
+        <fieldset class="field-question"><legend><span data-i18n="6. 비 오는 휴일, 마음에 드는 하루는?">6. 비 오는 휴일, 마음에 드는 하루는?</span></legend>
+          <label class="radio-line"><input type="radio" name="q6" value="bear,cat" required> <span data-i18n="따뜻한 음료와 익숙한 영상으로 쉬기">따뜻한 음료와 익숙한 영상으로 쉬기</span></label><label class="radio-line"><input type="radio" name="q6" value="otter,fox"> <span data-i18n="실내에서 할 새로운 활동 찾아보기">실내에서 할 새로운 활동 찾아보기</span></label><label class="radio-line"><input type="radio" name="q6" value="cat,deer"> <span data-i18n="밀린 책이나 취미를 혼자 즐기기">밀린 책이나 취미를 혼자 즐기기</span></label><label class="radio-line"><input type="radio" name="q6" value="dog,bear"> <span data-i18n="친구와 편한 실내 약속 만들기">친구와 편한 실내 약속 만들기</span></label>
         </fieldset>
-        <fieldset class="field-question"><legend>7. 중요한 일을 잊지 않으려고 나는…</legend>
-          <label class="radio-line"><input type="radio" name="q7" value="deer,fox" required> 미리 알림과 필요한 준비물을 챙긴다</label><label class="radio-line"><input type="radio" name="q7" value="fox,otter"> 다른 일정이나 단서와 연결해 기억한다</label><label class="radio-line"><input type="radio" name="q7" value="bear,cat"> 매일 비슷한 시간에 확인하는 습관을 둔다</label><label class="radio-line"><input type="radio" name="q7" value="cat,fox"> 개인 메모에 적고 내 방식대로 관리한다</label>
+        <fieldset class="field-question"><legend><span data-i18n="7. 중요한 일을 잊지 않으려고 나는…">7. 중요한 일을 잊지 않으려고 나는…</span></legend>
+          <label class="radio-line"><input type="radio" name="q7" value="deer,fox" required> <span data-i18n="미리 알림과 필요한 준비물을 챙긴다">미리 알림과 필요한 준비물을 챙긴다</span></label><label class="radio-line"><input type="radio" name="q7" value="fox,otter"> <span data-i18n="다른 일정이나 단서와 연결해 기억한다">다른 일정이나 단서와 연결해 기억한다</span></label><label class="radio-line"><input type="radio" name="q7" value="bear,cat"> <span data-i18n="매일 비슷한 시간에 확인하는 습관을 둔다">매일 비슷한 시간에 확인하는 습관을 둔다</span></label><label class="radio-line"><input type="radio" name="q7" value="cat,fox"> <span data-i18n="개인 메모에 적고 내 방식대로 관리한다">개인 메모에 적고 내 방식대로 관리한다</span></label>
         </fieldset>
-        <fieldset class="field-question"><legend>8. 처음 만나는 사람이 많은 자리에선?</legend>
-          <label class="radio-line"><input type="radio" name="q8" value="dog,otter" required> 먼저 인사를 나누며 대화에 들어간다</label><label class="radio-line"><input type="radio" name="q8" value="cat,deer"> 분위기를 살펴보다 편한 순간에 참여한다</label><label class="radio-line"><input type="radio" name="q8" value="dog,deer"> 대화에서 소외된 사람이 없는지 살핀다</label><label class="radio-line"><input type="radio" name="q8" value="fox,otter"> 공통 관심사를 찾아 대화를 이어간다</label>
+        <fieldset class="field-question"><legend><span data-i18n="8. 처음 만나는 사람이 많은 자리에선?">8. 처음 만나는 사람이 많은 자리에선?</span></legend>
+          <label class="radio-line"><input type="radio" name="q8" value="dog,otter" required> <span data-i18n="먼저 인사를 나누며 대화에 들어간다">먼저 인사를 나누며 대화에 들어간다</span></label><label class="radio-line"><input type="radio" name="q8" value="cat,deer"> <span data-i18n="분위기를 살펴보다 편한 순간에 참여한다">분위기를 살펴보다 편한 순간에 참여한다</span></label><label class="radio-line"><input type="radio" name="q8" value="dog,deer"> <span data-i18n="대화에서 소외된 사람이 없는지 살핀다">대화에서 소외된 사람이 없는지 살핀다</span></label><label class="radio-line"><input type="radio" name="q8" value="fox,otter"> <span data-i18n="공통 관심사를 찾아 대화를 이어간다">공통 관심사를 찾아 대화를 이어간다</span></label>
         </fieldset>
-        <fieldset class="field-question"><legend>9. 짧은 여행지를 고를 때 중요하게 보는 것은?</legend>
-          <label class="radio-line"><input type="radio" name="q9" value="fox,bear" required> 이동 시간과 비용을 비교했을 때의 효율</label><label class="radio-line"><input type="radio" name="q9" value="deer,dog"> 체력과 동행인의 일정에 맞는 여유</label><label class="radio-line"><input type="radio" name="q9" value="otter,fox"> 처음 만날 풍경이나 새로운 경험</label><label class="radio-line"><input type="radio" name="q9" value="bear,cat"> 익숙하고 편하게 다녀올 수 있는 장소</label>
+        <fieldset class="field-question"><legend><span data-i18n="9. 짧은 여행지를 고를 때 중요하게 보는 것은?">9. 짧은 여행지를 고를 때 중요하게 보는 것은?</span></legend>
+          <label class="radio-line"><input type="radio" name="q9" value="fox,bear" required> <span data-i18n="이동 시간과 비용을 비교했을 때의 효율">이동 시간과 비용을 비교했을 때의 효율</span></label><label class="radio-line"><input type="radio" name="q9" value="deer,dog"> <span data-i18n="체력과 동행인의 일정에 맞는 여유">체력과 동행인의 일정에 맞는 여유</span></label><label class="radio-line"><input type="radio" name="q9" value="otter,fox"> <span data-i18n="처음 만날 풍경이나 새로운 경험">처음 만날 풍경이나 새로운 경험</span></label><label class="radio-line"><input type="radio" name="q9" value="bear,cat"> <span data-i18n="익숙하고 편하게 다녀올 수 있는 장소">익숙하고 편하게 다녀올 수 있는 장소</span></label>
         </fieldset>
-        <fieldset class="field-question"><legend>10. 작은 목표를 이루었을 때 나는…</legend>
-          <label class="radio-line"><input type="radio" name="q10" value="dog,otter" required> 좋아하는 사람과 기쁨을 나눈다</label><label class="radio-line"><input type="radio" name="q10" value="cat,bear"> 조용히 뿌듯함을 느끼고 다음을 생각한다</label><label class="radio-line"><input type="radio" name="q10" value="otter,fox"> 다음에 시도할 재미있는 목표를 찾아본다</label><label class="radio-line"><input type="radio" name="q10" value="deer,bear"> 도와준 사람과 과정을 차분히 돌아본다</label>
+        <fieldset class="field-question"><legend><span data-i18n="10. 작은 목표를 이루었을 때 나는…">10. 작은 목표를 이루었을 때 나는…</span></legend>
+          <label class="radio-line"><input type="radio" name="q10" value="dog,otter" required> <span data-i18n="좋아하는 사람과 기쁨을 나눈다">좋아하는 사람과 기쁨을 나눈다</span></label><label class="radio-line"><input type="radio" name="q10" value="cat,bear"> <span data-i18n="조용히 뿌듯함을 느끼고 다음을 생각한다">조용히 뿌듯함을 느끼고 다음을 생각한다</span></label><label class="radio-line"><input type="radio" name="q10" value="otter,fox"> <span data-i18n="다음에 시도할 재미있는 목표를 찾아본다">다음에 시도할 재미있는 목표를 찾아본다</span></label><label class="radio-line"><input type="radio" name="q10" value="deer,bear"> <span data-i18n="도와준 사람과 과정을 차분히 돌아본다">도와준 사람과 과정을 차분히 돌아본다</span></label>
         </fieldset>
         <p id="animal-error" class="form-message" role="alert"></p>
-        <button class="button" type="submit">내 결과 보기 <span aria-hidden="true">→</span></button>
+        <button class="button" type="submit"><span data-i18n="내 결과 보기">내 결과 보기</span> <span aria-hidden="true">→</span></button>
       </form>
       <div id="animal-result" class="result" hidden aria-live="polite"></div>
     </section>
     <section>
-      <h2>결과 안내</h2>
-      <p>각 답변에 연결된 두 동물에 1점씩 더해 가장 높은 동물을 보여 줍니다.</p>
+      <h2><span data-i18n="결과 안내">결과 안내</span></h2>
+      <p><span data-i18n="각 답변에 연결된 두 동물에 1점씩 더해 가장 높은 동물을 보여 줍니다.">각 답변에 연결된 두 동물에 1점씩 더해 가장 높은 동물을 보여 줍니다.</span></p>
       <div class="info-grid">
-        <article class="info-card"><h3>🐕 강아지형 · 다정한 연결</h3><p>사람들과 어울리고 마음을 나누는 걸 좋아해요.</p></article>
-        <article class="info-card"><h3>🐈 고양이형 · 나만의 리듬</h3><p>혼자만의 시간과 편안한 속도를 소중히 여겨요.</p></article>
-        <article class="info-card"><h3>🦊 여우형 · 재치 있는 탐색</h3><p>상황을 살피고 새로운 방법을 찾아보는 편이에요.</p></article>
-        <article class="info-card"><h3>🦦 수달형 · 호기심 가득한 탐험</h3><p>새로운 활동에 뛰어들며 재미를 발견해요.</p></article>
-        <article class="info-card"><h3>🦌 사슴형 · 세심한 배려</h3><p>주변을 찬찬히 살피고 부드럽게 배려해요.</p></article>
-        <article class="info-card"><h3>🐻 곰형 · 든든한 안정감</h3><p>익숙하고 편안한 방식으로 꾸준히 해내요.</p></article>
+        <article class="info-card"><h3><span data-i18n="🐕 강아지형 · 다정한 연결">🐕 강아지형 · 다정한 연결</span></h3><p><span data-i18n="사람들과 어울리고 마음을 나누는 걸 좋아해요.">사람들과 어울리고 마음을 나누는 걸 좋아해요.</span></p></article>
+        <article class="info-card"><h3><span data-i18n="🐈 고양이형 · 나만의 리듬">🐈 고양이형 · 나만의 리듬</span></h3><p><span data-i18n="혼자만의 시간과 편안한 속도를 소중히 여겨요.">혼자만의 시간과 편안한 속도를 소중히 여겨요.</span></p></article>
+        <article class="info-card"><h3><span data-i18n="🦊 여우형 · 재치 있는 탐색">🦊 여우형 · 재치 있는 탐색</span></h3><p><span data-i18n="상황을 살피고 새로운 방법을 찾아보는 편이에요.">상황을 살피고 새로운 방법을 찾아보는 편이에요.</span></p></article>
+        <article class="info-card"><h3><span data-i18n="🦦 수달형 · 호기심 가득한 탐험">🦦 수달형 · 호기심 가득한 탐험</span></h3><p><span data-i18n="새로운 활동에 뛰어들며 재미를 발견해요.">새로운 활동에 뛰어들며 재미를 발견해요.</span></p></article>
+        <article class="info-card"><h3><span data-i18n="🦌 사슴형 · 세심한 배려">🦌 사슴형 · 세심한 배려</span></h3><p><span data-i18n="주변을 찬찬히 살피고 부드럽게 배려해요.">주변을 찬찬히 살피고 부드럽게 배려해요.</span></p></article>
+        <article class="info-card"><h3><span data-i18n="🐻 곰형 · 든든한 안정감">🐻 곰형 · 든든한 안정감</span></h3><p><span data-i18n="익숙하고 편안한 방식으로 꾸준히 해내요.">익숙하고 편안한 방식으로 꾸준히 해내요.</span></p></article>
       </div>
-      <h2>참고</h2>
-      <p>이 테스트는 과학적 진단이나 성격 판정이 아닙니다. 결과는 재미로만 봐주세요.</p>
+      <h2><span data-i18n="참고">참고</span></h2>
+      <p><span data-i18n="이 테스트는 과학적 진단이나 성격 판정이 아닙니다. 결과는 재미로만 봐주세요.">이 테스트는 과학적 진단이나 성격 판정이 아닙니다. 결과는 재미로만 봐주세요.</span></p>
     </section>
-    <p class="site-note">몰까는 답변을 저장하지 않습니다. 더 자세한 기준은 <a href="about.html">콘텐츠 원칙</a>, 데이터 안내는 <a href="privacy.html">개인정보처리방침</a>에서 확인하세요.</p>
+    <p class="site-note"><span data-i18n="몰까는 답변을 저장하지 않습니다. 더 자세한 기준은">몰까는 답변을 저장하지 않습니다. 더 자세한 기준은</span> <a href="about.html"><span data-i18n="콘텐츠 원칙">콘텐츠 원칙</span></a><span data-i18n=", 데이터 안내는">, 데이터 안내는</span> <a href="privacy.html"><span data-i18n="개인정보처리방침">개인정보처리방침</span></a><span data-i18n="에서 확인하세요.">에서 확인하세요.</span></p>
   </div></main>
-  <footer class="site-footer"><div class="wrap footer-inner"><div><a class="footer-brand" href="index.html">molgga</a><p class="footer-note">© 2026 molgga</p></div><nav class="footer-links" aria-label="정책 메뉴"><a href="about.html">서비스 소개</a><a href="privacy.html">개인정보처리방침</a><a href="terms.html">이용 안내</a><a href="contact.html">문의하기</a></nav></div></footer>
-  <script src="../assets/js/i18n-catalog.js" defer></script>
-  <script src="../assets/js/i18n.js?v=20260927-4" defer></script>
+  <footer class="site-footer"><div class="wrap footer-inner"><div><a class="footer-brand" href="index.html">molgga</a><p class="footer-note"><span data-i18n="© 2026 molgga">© 2026 molgga</span></p></div><nav class="footer-links" aria-label="정책 메뉴"><a href="about.html"><span data-i18n="서비스 소개">서비스 소개</span></a><a href="privacy.html"><span data-i18n="개인정보처리방침">개인정보처리방침</span></a><a href="terms.html"><span data-i18n="이용 안내">이용 안내</span></a><a href="contact.html"><span data-i18n="문의하기">문의하기</span></a></nav></div></footer>
+  <script src="../assets/js/i18n.js?v=20260928-1" defer></script>
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.8.3/kakao.min.js" crossorigin="anonymous" defer></script>
   <script src="../assets/js/share-config.js" defer></script>
   <script src="../assets/js/share.js?v=2" defer></script>

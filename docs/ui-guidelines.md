@@ -91,6 +91,9 @@ The template defines hierarchy and behavior, not identical wording or identical 
 ## Localization and cache updates
 
 - Keep structure and component classes the same across `ko/`, `en/`, `ja/`, and `zh/` pages. Translate visible labels through the existing dictionaries when shared scripts provide translations.
+- Load translation resources through i18next and i18next-http-backend from the root locale JSON files (`ko.json`, `en.json`, `ja.json`, `zh.json`). Pin CDN versions, use `data-i18n` for visible text, and use `data-i18n-attr` for translated metadata attributes.
+- Use readable namespaced keys such as `nav.contact` for new copy. Legacy Korean sentence keys remain only for existing content compatibility; do not add new literal-sentence keys. Keep `keySeparator: false` while legacy keys are present.
+- Keep the active language, `<html lang>`, page title and descriptions, canonical URL, Open Graph URL, and language alternates in sync when the language selector changes. Add a new language only after its translation JSON and localized static metadata are complete and reviewed.
 - Localize each page's static `<title>`, description, Open Graph title/description, and Twitter title/description in its HTML file; crawlers and link previews may read these before client-side translation runs. Keep Korean descriptions within Naver's 80-character guidance.
 - Use the same extensionless public route in canonical URLs, every `hreflang`, `og:url`, the sitemap, and tournament share links. The source files may still end in `.html`; that is an implementation detail, not the preferred public URL.
 - When changing shared CSS or JavaScript, add or increment its `?v=...` cache token in every HTML page that loads it, including currently unversioned references.
