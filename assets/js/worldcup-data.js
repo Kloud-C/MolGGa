@@ -58,7 +58,32 @@
     detail: locale(detailKo, detailEn, detailJa, detailZh),
     image: image("weekend-activities", id, "jpg")
   }));
-  weekendNames.push(...additionalWeekendNames);
+  const generatedWeekendNames = [
+    ["camping-trip", "캠핑 가서 하룻밤 보내기", "Spend a night camping", "キャンプで一泊する", "去露营住一晚", "친구와 텐트를 치고 자연 속에서 하룻밤 쉬어요.", "Share a relaxed night outdoors with a friend.", "友達とテントを張り、自然の中で一晩過ごします。", "和朋友搭起帐篷，在自然中度过轻松的一晚。"],
+    ["live-concert", "라이브 공연 보러 가기", "See a live music show", "ライブを見に行く", "去看现场演出", "좋아하는 음악을 현장에서 듣고 공연의 열기를 즐겨요.", "Hear favorite music live and enjoy the energy of a show.", "好きな音楽を生で聴き、会場の熱気を楽しみます。", "现场聆听喜欢的音乐，感受演出的热烈气氛。"],
+    ["karaoke-night", "노래방에서 신나게 노래하기", "Sing at a karaoke room", "カラオケで思いきり歌う", "去KTV唱歌", "아는 노래를 골라 친구와 번갈아 부르며 놀아요.", "Pick familiar songs and take turns singing with friends.", "知っている曲を選び、友達と交代で歌って楽しみます。", "选几首熟悉的歌，和朋友轮流唱着玩。"],
+    ["bowling-night", "친구들과 볼링 치기", "Go bowling with friends", "友達とボウリングをする", "和朋友去打保龄球", "누가 더 많이 쓰러뜨릴지 가볍게 승부를 겨뤄요.", "See who can knock down the most pins in a friendly game.", "ピンを多く倒せるのは誰か、気軽に勝負します。", "轻松比一比，看谁能击倒更多球瓶。"],
+    ["theme-park", "놀이공원에서 하루 보내기", "Spend a day at an amusement park", "遊園地で一日過ごす", "在游乐园玩一天", "좋아하는 놀이기구를 타며 하루 종일 들뜬 기분을 즐겨요.", "Fill the day with favorite rides and a little excitement.", "好きなアトラクションに乗って、一日わくわく過ごします。", "坐上喜欢的游乐设施，享受充满期待的一天。"],
+    ["aquarium-visit", "아쿠아리움 구경하기", "Visit an aquarium", "水族館を見に行く", "去水族馆看看", "천천히 수조를 둘러보며 물속 풍경에 빠져들어요.", "Take your time watching the calm underwater scenes.", "水槽をゆっくり巡り、水の中の景色に浸ります。", "慢慢逛逛水族箱，沉浸在水下景色里。"],
+    ["escape-room", "방탈출 게임 도전하기", "Try an escape room", "脱出ゲームに挑戦する", "挑战密室逃脱", "친구들과 단서를 맞춰가며 제한 시간 안에 문제를 풀어요.", "Work through clues with friends before time runs out.", "友達と手がかりをつなぎ、制限時間内に謎を解きます。", "和朋友一起拼凑线索，在时间结束前解开谜题。"],
+    ["rooftop-sunset", "루프탑에서 노을 보기", "Watch the sunset from a rooftop", "屋上で夕日を眺める", "在屋顶看日落", "탁 트인 곳에서 저무는 하늘을 바라보며 쉬어요.", "Unwind while the sky changes color over the city.", "開放的な屋上で、暮れていく空を眺めながら休みます。", "在开阔的屋顶放松身心，看天空慢慢染上晚霞。"],
+    ["food-festival", "야외 푸드 페스티벌 가기", "Visit an outdoor food festival", "屋外フードフェスに行く", "去户外美食节", "여러 가게를 둘러보며 눈에 띄는 먹거리를 맛봐요.", "Browse the stalls and try whatever catches your eye.", "いろいろな屋台を巡り、気になる食べ物を味わいます。", "逛逛不同摊位，尝尝吸引自己的美食。"],
+    ["flower-arranging", "꽃꽂이 클래스 체험하기", "Try a flower-arranging class", "フラワーアレンジメントを体験する", "体验插花课程", "계절 꽃을 골라 나만의 작은 꽃다발이나 장식을 만들어요.", "Choose seasonal flowers and make an arrangement of your own.", "季節の花を選び、自分だけの小さなアレンジを作ります。", "挑选应季鲜花，制作一份属于自己的小花艺。"],
+    ["ice-skating", "실내 스케이트장 가기", "Go ice skating", "アイススケートに行く", "去滑冰", "얼음 위를 천천히 미끄러지며 겨울 분위기를 즐겨요.", "Glide across the ice at your own pace and enjoy the rink.", "自分のペースで氷の上を滑り、リンクの雰囲気を楽しみます。", "按自己的节奏在冰面上滑行，感受滑冰场的乐趣。"],
+    ["surfing-lesson", "서핑 배우러 가기", "Take a surfing lesson", "サーフィンを習う", "去学冲浪", "강습을 받으며 파도 위에 서는 순간에 도전해요.", "Learn the basics and try standing up on a gentle wave.", "レッスンを受けながら、波に乗ることに挑戦します。", "跟着教练学习基础，试着站上温和的浪头。"],
+    ["movie-theater", "극장에서 영화 보기", "Watch a movie at the cinema", "映画館で映画を見る", "去电影院看电影", "큰 화면과 풍성한 사운드로 영화에 푹 빠져봐요.", "Settle in and enjoy a movie on the big screen.", "大きな画面と音響で、映画の世界に浸ります。", "坐下来享受大银幕和环绕音效带来的观影体验。"],
+    ["volunteer-day", "동네 봉사활동 참여하기", "Volunteer in the neighborhood", "地域のボランティアに参加する", "参加社区志愿活动", "이웃과 함께 정원을 가꾸며 보람 있는 시간을 보내요.", "Spend a meaningful day helping with a local community project.", "地域の人と一緒に活動し、充実した時間を過ごします。", "和邻里一起参与社区活动，度过有意义的一天。"],
+    ["ferry-ride", "유람선 타고 바람 쐬기", "Take a ferry ride", "フェリーに乗って風を感じる", "坐船吹吹海风", "배 위에서 시원한 바람과 물가 풍경을 즐겨요.", "Feel the breeze and take in the view from the water.", "船の上で風を感じながら、水辺の景色を楽しみます。", "坐在船上吹吹风，欣赏沿途的水岸风景。"],
+    ["planetarium-show", "천문관에서 별 구경하기", "Visit a planetarium", "プラネタリウムで星空を見る", "去天文馆看星空", "돔을 가득 채운 별과 우주 영상을 천천히 감상해요.", "Look up and drift through a star-filled planetarium sky.", "ドームいっぱいに広がる星空や宇宙の映像を眺めます。", "抬头欣赏铺满穹顶的星空和宇宙影像。"],
+    ["staycation", "호텔에서 여유롭게 쉬기", "Enjoy a relaxing hotel stay", "ホテルでゆっくり過ごす", "在酒店悠闲地休息", "익숙한 일상에서 벗어나 책을 읽고 느긋하게 쉬어요.", "Step away from routine and enjoy an unhurried hotel stay.", "いつもの生活を離れ、ホテルでのんびり過ごします。", "暂时离开日常，在酒店里悠闲地休息。"],
+    ["climbing-gym", "실내 클라이밍 도전하기", "Try indoor climbing", "ボルダリングに挑戦する", "挑战室内攀岩", "쉬운 코스부터 차근차근 올라가며 새로운 재미를 찾아요.", "Try an easy route and enjoy finding your way up the wall.", "簡単なコースから登り、自分なりの楽しさを見つけます。", "从简单路线开始攀爬，发现向上挑战的乐趣。"]
+  ].map(([id, ko, en, ja, zh, detailKo, detailEn, detailJa, detailZh]) => ({
+    id,
+    name: locale(ko, en, ja, zh),
+    detail: locale(detailKo, detailEn, detailJa, detailZh),
+    image: image("weekend-activities", id, "jpg")
+  }));
+  weekendNames.push(...additionalWeekendNames, ...generatedWeekendNames);
 
   const foodNames = [
     ["tteokbokki", "떡볶이", "Tteokbokki", "トッポッキ", "辣炒年糕"],

@@ -19,7 +19,7 @@
       page: "worldcup.html",
       thumbnail: "/image/home-categories/weekend.jpg",
       source: { kind: "worldcup", id: "weekend" },
-      metrics: { candidateCount: 32, choiceCount: 2, availableBrackets: [16, 32], estimatedMinutesByBracket: { 16: 3, 32: 5 } }
+      metrics: { candidateCount: 50, choiceCount: 2, availableBrackets: [16, 32], estimatedMinutesByBracket: { 16: 3, 32: 5 } }
     },
     {
       id: "late-night-food",

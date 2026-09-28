@@ -16,7 +16,7 @@
 
 ## 주말 취향 월드컵 이미지
 
-`worldcup/weekend-activities` 폴더에는 주말 취향 월드컵의 32개 선택지 이미지가 있습니다. 이제 16강 또는 32강을 고를 수 있으며, 매 게임마다 중복 없이 무작위로 대진을 구성합니다. `assets/js/worldcup-data.js`에서 항목과 파일 경로를 관리하며, 이미지를 교체할 때는 선택지 ID와 같은 파일명을 유지해 주세요. 이미지는 활동에 맞춰 직접 생성한 실사풍 이미지입니다.
+`worldcup/weekend-activities` 폴더에는 주말 취향 월드컵의 50개 선택지 이미지가 있습니다. 50개 후보 중 16개 또는 32개를 무작위로 뽑아 대진을 구성하며, 한 게임 안에서 같은 항목은 중복되지 않습니다. `assets/js/worldcup-data.js`에서 항목과 파일 경로를 관리하며, 이미지를 교체할 때는 선택지 ID와 같은 파일명을 유지해 주세요. 이미지는 활동에 맞춰 직접 생성한 실사풍 이미지입니다.
 
 - `movie-night.jpg` — 집에서 영화를 보며 쉬는 장면
 - `new-restaurant.jpg` — 동네 식당에서 식사하는 장면
@@ -50,6 +50,24 @@
 - `park-jog.jpg` — 공원에서 가볍게 달리는 장면
 - `spa-relax.jpg` — 따뜻하고 조용한 휴식 공간에서 쉬는 장면
 - `nearby-train-trip.jpg` — 근교행 기차에 앉아 창밖을 보는 장면
+- `camping-trip.jpg` — 친구와 숲속 캠핑장에서 쉬는 장면
+- `live-concert.jpg` — 라이브 공연을 즐기는 장면
+- `karaoke-night.jpg` — 친구와 노래방에서 노래하는 장면
+- `bowling-night.jpg` — 볼링장에서 친구들과 게임하는 장면
+- `theme-park.jpg` — 놀이공원을 둘러보는 장면
+- `aquarium-visit.jpg` — 아쿠아리움 수조를 바라보는 장면
+- `escape-room.jpg` — 친구들과 방탈출 단서를 푸는 장면
+- `rooftop-sunset.jpg` — 루프탑에서 도시의 노을을 보는 장면
+- `food-festival.jpg` — 야외 음식 축제를 둘러보는 장면
+- `flower-arranging.jpg` — 꽃꽂이 수업에서 꽃을 다듬는 장면
+- `ice-skating.jpg` — 실내 링크에서 스케이트를 타는 장면
+- `surfing-lesson.jpg` — 해변에서 서핑 강습을 받는 장면
+- `movie-theater.jpg` — 극장에서 친구와 영화를 보는 장면
+- `volunteer-day.jpg` — 동네 정원에서 봉사활동을 하는 장면
+- `ferry-ride.jpg` — 유람선에서 바닷바람을 쐬는 장면
+- `planetarium-show.jpg` — 천문관에서 별 영상을 보는 장면
+- `staycation.jpg` — 호텔 방에서 여유롭게 쉬는 장면
+- `climbing-gym.jpg` — 실내 암벽장에서 클라이밍하는 장면
 
 ## 테토/에겐 결과 이미지
 

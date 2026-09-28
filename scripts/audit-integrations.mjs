@@ -265,6 +265,8 @@ const backendSandbox = {};
 vm.runInNewContext(backendSource, backendSandbox, { timeout: 1000 });
 const backendCups = backendSandbox.WORLD_CUPS;
 assert(JSON.stringify(Object.keys(frontendCups).sort()) === JSON.stringify(Object.keys(backendCups).sort()), "worldcup frontend/backend game IDs differ");
+assert(frontendCups.weekend?.items.length === 50, `weekend World Cup must draw from 50 unique candidates (found ${frontendCups.weekend?.items.length ?? 0})`);
+assert(/shuffle\(config\.items\)\.slice\(0,\s*bracketSize\)/.test(read("assets/js/worldcup.js")), "World Cup must randomly draw the selected bracket size from the complete candidate list");
 
 const registryArchetypeSandbox = { window: {} };
 for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js"]) {
