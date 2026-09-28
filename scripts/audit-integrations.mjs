@@ -90,7 +90,9 @@ const phaseThreeTranslationKeys = [
   "contentActivity.scope.recent", "contentActivity.favorite.add", "contentActivity.favorite.remove",
   "contentActivity.empty.favorites", "contentActivity.empty.recent", "contentActivity.recent.title",
   "contentActivity.recent.clear", "contentActivity.suggestions.title", "contentActivity.suggestions.open",
-  "privacy.quizAnswers", "privacy.localContentPreferences", "privacy.storageNotice"
+  "privacy.quizAnswers", "privacy.localContentPreferences", "privacy.storageNotice",
+  "privacy.adCookiesDisclosure", "privacy.adSettingsIntro", "privacy.adSettingsMiddle", "privacy.adSettingsSuffix",
+  "2026년 9월 28일", "PRIVACY · 시행일 2026년 9월 28일", "aboutads.info 광고 선택"
 ];
 for (const locale of locales) {
   for (const key of phaseTwoTranslationKeys) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing phase 2 UI translation ${key}`);
@@ -160,6 +162,11 @@ for (const page of allHtml) {
   const html = read(page);
   const [locale] = page.split("/");
   const slug = path.posix.basename(page, ".html");
+  if (slug === "privacy") {
+    assert(html.includes('data-i18n="privacy.adCookiesDisclosure"'), `${page}: Google ad cookie disclosure is missing`);
+    assert(html.includes('href="https://adssettings.google.com/"') && html.includes('href="https://www.aboutads.info/choices/"'), `${page}: ad preference controls are missing`);
+    assert(html.includes('2026년 9월 28일'), `${page}: privacy policy update date is stale`);
+  }
   if (slug === "index" || registryContents.some((content) => path.posix.basename(content.page, ".html") === slug)) {
     assert(html.includes('content-activity.js?v=20260928-1'), `${page}: local content activity script is missing or stale`);
   }

@@ -1198,5 +1198,12 @@
   "tag.fantasy": "奇幻",
   "tag.lifestyle": "生活方式",
   "tag.money": "消费习惯",
-  "tag.habits": "习惯"
+  "tag.habits": "习惯",
+  "2026년 9월 28일": "2026年9月28日",
+  "PRIVACY · 시행일 2026년 9월 28일": "PRIVACY · 生效日期：2026年9月28日",
+  "privacy.adCookiesDisclosure": "如果展示 Google AdSense 广告，包括 Google 在内的第三方广告提供商可能会使用 Cookie，根据用户此前访问本网站或其他网站的记录投放广告。Google 广告 Cookie 可能使 Google 及其合作伙伴能够根据用户访问本网站或互联网其他网站的情况展示广告。",
+  "privacy.adSettingsIntro": "个性化广告设置可在",
+  "privacy.adSettingsMiddle": "中管理。部分第三方广告提供商使用 Cookie 投放个性化广告的选项可在",
+  "aboutads.info 광고 선택": "aboutads.info 广告选择",
+  "privacy.adSettingsSuffix": "中退出。广告和分析工具的设置可能因服务提供商和地区要求而异。"
 }

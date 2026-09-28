@@ -1198,5 +1198,12 @@
   "tag.fantasy": "Fantasy",
   "tag.lifestyle": "Lifestyle",
   "tag.money": "Spending habits",
-  "tag.habits": "Habits"
+  "tag.habits": "Habits",
+  "2026년 9월 28일": "September 28, 2026",
+  "PRIVACY · 시행일 2026년 9월 28일": "PRIVACY · Effective September 28, 2026",
+  "privacy.adCookiesDisclosure": "When Google AdSense ads are shown, third-party ad vendors, including Google, may use cookies to serve ads based on your previous visits to this or other websites. Google's advertising cookies may enable Google and its partners to serve ads based on visits to this site or other sites on the Internet.",
+  "privacy.adSettingsIntro": "Manage personalized ad settings in",
+  "privacy.adSettingsMiddle": ". You can opt out of some third-party vendors' use of cookies for personalized advertising at",
+  "aboutads.info 광고 선택": "aboutads.info choices",
+  "privacy.adSettingsSuffix": ". Ad and analytics settings may vary by service provider and regional requirements."
 }

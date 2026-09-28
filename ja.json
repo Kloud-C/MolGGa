@@ -1198,5 +1198,12 @@
   "tag.fantasy": "ファンタジー",
   "tag.lifestyle": "暮らし",
   "tag.money": "お金の使い方",
-  "tag.habits": "習慣"
+  "tag.habits": "習慣",
+  "2026년 9월 28일": "2026年9月28日",
+  "PRIVACY · 시행일 2026년 9월 28일": "PRIVACY・施行日 2026年9月28日",
+  "privacy.adCookiesDisclosure": "Google AdSense広告が表示される場合、Googleを含む第三者の広告事業者は、このサイトや他のサイトへの過去のアクセスに基づいて広告を配信するためにCookieを使用することがあります。Googleの広告Cookieにより、Googleとパートナーがこのサイトやインターネット上の他のサイトへのアクセスに基づいて広告を配信する場合があります。",
+  "privacy.adSettingsIntro": "パーソナライズド広告の設定は",
+  "privacy.adSettingsMiddle": "で管理できます。一部の第三者広告事業者によるCookieを使ったパーソナライズド広告は",
+  "aboutads.info 광고 선택": "aboutads.info の広告選択",
+  "privacy.adSettingsSuffix": "で拒否できます。広告・分析ツールの設定は、サービス提供者や地域の要件によって異なる場合があります。"
 }
