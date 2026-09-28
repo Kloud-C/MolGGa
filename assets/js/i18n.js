@@ -117,7 +117,7 @@
       defaultNS: "translation",
       keySeparator: false,
       interpolation: { escapeValue: false },
-      backend: { loadPath: "/{{lng}}.json?v=20260928-1", maxRetries: 1, retryTimeout: 350 }
+      backend: { loadPath: "/{{lng}}.json?v=20260929-1", maxRetries: 1, retryTimeout: 350 }
     })
     .then(updateMetadata)
     .catch((error) => {
@@ -125,13 +125,14 @@
       updateMetadata();
     });
 
+  const ready = initialize();
+
   window.MOA_I18N = {
     get language() { return window.i18next.resolvedLanguage || window.i18next.language || initialLanguage; },
     t: translate,
+    ready,
     translateTree
   };
-
-  initialize();
 
   document.addEventListener("change", (event) => {
     if (!event.target.matches("[data-language-select]")) return;

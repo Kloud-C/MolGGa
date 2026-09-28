@@ -11,7 +11,8 @@ for (const file of [
   "assets/js/teto-egen-data.js",
   "assets/js/attachment-data.js",
   "assets/js/past-life-data.js",
-  "assets/js/spending-habits-data.js"
+  "assets/js/spending-habits-data.js",
+  "assets/js/travel-role-data.js"
 ]) {
   vm.runInNewContext(read(file), runtime, { timeout: 1000, filename: file });
 }

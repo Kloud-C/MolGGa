@@ -60,6 +60,8 @@ for (const category of contentRegistry?.categories || []) {
 }
 for (const content of registryContents) {
   assert(Boolean(content.id && content.type && content.page && content.source?.kind), `content registry: incomplete identity or source for ${content.id || "unknown"}`);
+  assert(Boolean(content.cardLabelKey && content.createdAt && /^\d{4}-\d{2}-\d{2}$/.test(content.createdAt)), `content registry: card label or creation date is missing for ${content.id}`);
+  for (const locale of locales) assert(Boolean(localeResources[locale][content.cardLabelKey]), `${locale}.json: missing ${content.id} card label translation ${content.cardLabelKey}`);
   assert(content.categoryIds?.length > 0 && content.categoryIds.every((id) => registryCategoryIds.includes(id)), `content registry: invalid categories for ${content.id}`);
   assert(content.tagIds?.length > 0 && content.tagIds.every(Boolean), `content registry: missing tags for ${content.id}`);
   for (const tagId of content.tagIds || []) {
@@ -72,18 +74,21 @@ for (const content of registryContents) {
     for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} metadata translation ${key}`);
   }
 }
+assert(registryContents.some((content) => content.id === "travel-role" && content.source?.kind === "archetype" && content.page === "travel-role-test.html"), "content registry: travel-role quiz is not registered for the shared archetype engine");
 for (const locale of locales) {
   assert(localeResourceKeys.every((key) => Object.hasOwn(localeResources[locale], key)), `${locale}.json: translation keys differ from ko.json`);
 }
 const phaseTwoTranslationKeys = [
   "contentBrowser.search.label", "contentBrowser.search.placeholder", "contentBrowser.category.label",
-  "contentBrowser.category.all", "contentBrowser.view.label", "contentBrowser.view.grid",
+  "contentBrowser.category.all", "contentBrowser.sort.label", "contentBrowser.sort.catalog", "contentBrowser.sort.latest",
+  "contentBrowser.view.label", "contentBrowser.view.grid",
   "contentBrowser.view.compact", "contentBrowser.view.list", "contentBrowser.results.count",
   "contentBrowser.results.empty", "contentBrowser.results.reset", "contentBrowser.metrics.label",
   "contentBrowser.metrics.quiz", "contentBrowser.metrics.worldcup", "contentBrowser.preview.label",
   "contentBrowser.preview.close", "contentBrowser.preview.cancel", "contentBrowser.preview.start",
   "contentBrowser.preview.pool", "contentBrowser.preview.actionLabel", "contentBrowser.recommendations.title",
-  "contentBrowser.recommendations.description", "contentBrowser.recommendations.start"
+  "contentBrowser.recommendations.description", "contentBrowser.recommendations.start",
+  "나도 테스트하기", "나도 월드컵 해보기"
 ];
 const phaseThreeTranslationKeys = [
   "contentActivity.scope.label", "contentActivity.scope.all", "contentActivity.scope.favorites",
@@ -133,22 +138,17 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20260928-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260928-2'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-registry.js?v=20260929-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
   assert(html.includes('content-activity.css?v=20260928-1'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
-  const cards = [...html.matchAll(/<article\b([^>]*)>([\s\S]*?)<\/article>/gi)]
-    .filter(([opening]) => /\bclass=["'][^"']*\bcategory-card\b/i.test(opening))
-    .map(([whole, opening, body]) => {
-      const category = opening.match(/\bdata-category=["']([^"']+)["']/i)?.[1] || "";
-      const destination = body.match(/<a\b[^>]*\bhref=["']([^"']+)["']/i)?.[1] || "";
-      const content = registryContents.find((entry) => entry.page === destination);
-      assert(Boolean(content), `${locale}/index.html: content card destination is not in the registry (${destination})`);
-      return `${content?.id || ""}|${category}|${destination}`;
-    });
+  const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
     .filter(([opening]) => /\bclass=["'][^"']*\bhome-disclosure\b/i.test(opening));
-  assert(cards.length === registryContents.length, `${locale}/index.html: home card count differs from content registry (${cards.length} vs ${registryContents.length})`);
-  assert(new Set(cards.map((card) => card.split("|")[0])).size === registryContents.length, `${locale}/index.html: content cards do not map one-to-one to the content registry`);
-  assert(cards.some((card) => card.endsWith("|late-night-worldcup.html")), `${locale}/index.html: late-night matchup is missing from home`);
+  assert(staticCards.length === 0, `${locale}/index.html: cards are duplicated in HTML instead of generated from the shared registry`);
+  assert(html.includes('<div class="category-grid" data-category-list>'), `${locale}/index.html: dynamic registry card mount point is missing`);
+  assert(read("assets/js/content-browser.js").includes("registry.contents.forEach") && read("assets/js/content-browser.js").includes("const makeCard ="), `${locale}/index.html: shared registry card renderer is missing`);
+  const cards = registryContents.map((content) => `${content.id}|${content.categoryIds[0]}|${content.page}`);
+  assert(cards.length === registryContents.length && new Set(cards.map((card) => card.split("|")[0])).size === registryContents.length, `${locale}/index.html: registry card data does not map one-to-one`);
+  assert(registryContents.some((content) => content.page === "late-night-worldcup.html"), `${locale}/index.html: late-night matchup is missing from registry`);
   assert(disclosures.length === 2, `${locale}/index.html: both home disclosure sections must remain available`);
   assert(disclosures.every(([opening]) => !/\bopen(?:\s|=|>)/i.test(opening)), `${locale}/index.html: home disclosures should start collapsed`);
   return [locale, cards];
@@ -192,14 +192,14 @@ for (const page of allHtml) {
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
   assert(/assets\/js\/i18n\.js\?v=\d{8}-\d+/.test(html), `${page}: i18n.js is missing a cache token`);
-  assert(/assets\/css\/styles\.css\?v=20260928-1/.test(html), `${page}: shared styles are missing or stale`);
+  assert(/assets\/css\/styles\.css\?v=20260929-1/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
   for (const key of i18nKeys) assert(Object.hasOwn(localeResources[locale], key), `${page}: ${locale}.json is missing data-i18n key ${key}`);
   const hasContentResult = /data-(?:quiz|worldcup)-result\b|id=["'](?:animal-result|mbti-result)["']/.test(html);
   if (hasContentResult) {
-    assert(html.includes('content-registry.js?v=20260928-1'), `${page}: result recommendations lack the shared content registry`);
+    assert(html.includes('content-registry.js?v=20260929-1'), `${page}: result recommendations lack the shared content registry`);
     assert(html.includes('content-recommendations.js?v=20260928-1'), `${page}: shared result recommendations are not loaded`);
   }
   for (const [, declaration] of html.matchAll(/\bdata-i18n-attr=["']([^"']+)["']/gi)) {
@@ -218,12 +218,12 @@ for (const page of allHtml) {
   }
 }
 
-const updatedAboutOfferings = "현재 몰까에서는 주말 취향·야식 월드컵과 동물상, MBTI, 테토/에겐, 애착 유형, 전생, 소비 습관 테스트를 즐길 수 있습니다. 애착 유형 콘텐츠는 연구 자료를 참고하고, 각 콘텐츠의 질문과 설명은 몰까가 직접 작성합니다. 외부 테스트 문항이나 다른 사이트의 결과를 그대로 옮기지 않습니다.";
+const updatedAboutOfferings = "주말·야식 월드컵, 동물상·MBTI·테토/에겐·애착 유형·전생·소비 습관·친구 여행 역할 테스트를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 20문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 각 콘텐츠의 질문과 설명은 몰까가 직접 작성합니다.";
 const updatedResultNote = "결과는 각 페이지에서 선택한 내용에 따른 참고 정보입니다. 월드컵은 마지막까지 선택한 항목을 보여 주며, 야식 월드컵 랭킹에는 완주한 대진의 우승 메뉴가 집계됩니다. 성향 테스트는 선택에서 드러난 경향을 살펴보는 콘텐츠입니다. 어떤 결과도 전문 심리검사나 의료·법률·교육·채용 판단을 대신하지 않습니다.";
 for (const [locale, expected] of Object.entries({
-  en: ["Try the weekend and late-night food matchups, plus quizzes about animal characters, MBTI, Teto/Egen, attachment styles, past lives, and spending habits. Attachment-style content draws on research, and molgga writes its own questions and explanations. We do not copy questions or results from other sites.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
-  ja: ["molggaでは、週末や夜食のマッチ、動物タイプ・MBTI・テト／エゲン・愛着スタイル・前世・お金の使い方に関するテストを楽しめます。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。他のテストの設問や結果をそのまま転載していません。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
-  zh: ["molgga提供周末和夜宵选择赛，以及动物、MBTI、Teto/Egen、依恋类型、前世和消费习惯测试。依恋类型内容参考相关研究，各项问题和说明均由molgga原创。我们不会照搬其他测试的问题或其他网站的结果。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
+  en: ["Explore the weekend and late-night food matchups, plus quizzes about animal styles, MBTI, Teto/Egen, attachment styles, past lives, spending habits, and your role on a trip with friends. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz now takes 20 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
+  ja: ["週末・夜食の対決、動物タイプ・MBTI・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割テストを楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは20問で遊べます。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
+  zh: ["可以体验周末和夜宵选择赛，以及动物类型、MBTI、Teto/Egen、依恋类型、前世、消费习惯和朋友旅行角色测试。夜宵选择赛会从50种菜单中随机组成16强或32强，前世测试现为20道题。依恋类型内容参考相关研究，各项问题和说明均由molgga原创。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
 })) {
   const aboutHtml = read(`${locale}/about.html`);
   assert(aboutHtml.includes(updatedAboutOfferings) && aboutHtml.includes(updatedResultNote), `${locale}: About page source text is out of sync with its translation keys`);
@@ -240,7 +240,7 @@ for (const [locale, expected] of Object.entries({
   const untranslatedHomeCopy = [...new Set([...homeText, ...homeLabels])]
     .filter((value) => translate(value) === value);
   assert(untranslatedHomeCopy.length === 0, `${locale}: home page has missing translations: ${untranslatedHomeCopy.join(" | ")}`);
-  assert(translate(updatedAboutOfferings) === expected[0], `${locale}: About offerings paragraph translation is missing or stale`);
+  assert(translate("about.offerings.current") === expected[0], `${locale}: About offerings paragraph translation is missing or stale`);
   assert(translate(updatedResultNote) === expected[1], `${locale}: result interpretation paragraph translation is missing or stale`);
   if (locale === "ja") {
     assert(!/ナダム/.test(translate("가까움도 나다움도 함께 지켜요.")), "ja: attachment result copy contains a transliteration error");
@@ -335,7 +335,7 @@ assert(frontendCups.weekend?.items.length === 50, `weekend World Cup must draw f
 assert(/shuffle\(config\.items\)\.slice\(0,\s*bracketSize\)/.test(read("assets/js/worldcup.js")), "World Cup must randomly draw the selected bracket size from the complete candidate list");
 
 const registryArchetypeSandbox = { window: {} };
-for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js"]) {
+for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js"]) {
   vm.runInNewContext(read(file), registryArchetypeSandbox, { timeout: 1000, filename: file });
 }
 const archetypeConfigs = registryArchetypeSandbox.window.MOA_ARCHETYPE_TESTS || {};
@@ -381,12 +381,32 @@ for (const content of registryContents) {
     assert(metrics.questionCount === config.questions.length, `content registry: ${content.id} questionCount differs from source data (${metrics.questionCount} vs ${config.questions.length})`);
     assert(choicesPerQuestion.length === 1 && choicesPerQuestion[0] === metrics.choicesPerQuestion, `content registry: ${content.id} choicesPerQuestion differs from source data (${choicesPerQuestion.join(", ")})`);
     assert(metrics.resultCount === Object.keys(config.profiles).length, `content registry: ${content.id} resultCount differs from profiles`);
-    const statedMinutes = config.eyebrow?.match(/약\s*(\d+)분/)?.[1];
+    const statedMinutes = config.estimatedMinutes;
     assert(Boolean(statedMinutes) && Number(statedMinutes) === metrics.estimatedMinutes, `content registry: ${content.id} estimatedMinutes differs from its existing content definition`);
+    for (const [resultId, profile] of Object.entries(config.profiles)) {
+      const image = profile.image || profile.imageFile;
+      assert(Boolean(image) && fs.existsSync(path.resolve(root, "ko", image)), `${content.id}/${resultId}: configured result image is missing (${image || "none"})`);
+      for (const key of [profile.name, profile.catchphrase, profile.description]) {
+        for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id}/${resultId} result text ${key}`);
+      }
+    }
+    for (const [questionIndex, question] of config.questions.entries()) {
+      for (const key of [question.prompt, ...question.choices.map((choice) => choice.text)]) {
+        for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} question ${questionIndex + 1} text ${key}`);
+      }
+    }
   } else {
     assert(false, `content registry: unsupported source kind ${source.kind} for ${content.id}`);
   }
 }
+
+const resultShareSource = read("assets/js/share.js");
+assert(resultShareSource.includes("imageUrl: publicUrl(current.imageUrl)"), "result sharing: Kakao feed is not using the result-specific image URL");
+assert(resultShareSource.includes("title: current.title") && resultShareSource.includes("description: current.description || current.text"), "result sharing: Kakao feed lacks result-specific text");
+assert(resultShareSource.includes("translate(current.buttonTitle || \"결과 확인하기\")"), "result sharing: Kakao feed button does not support a per-content start label");
+assert(read("assets/js/archetype-test.js").includes("imageUrl: imagePath") && read("assets/js/archetype-test.js").includes(".replace(/\\.html$/, \"\")"), "archetype result sharing: result image or clean same-content route is missing");
+assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: winner image or same-game CTA is missing");
+assert(read("assets/js/app.js").includes("imageUrl: profiles[winner].image") && read("assets/js/app.js").includes("imageUrl: profile.image"), "legacy quiz result sharing: animal or MBTI image is missing");
 
 for (const [gameId, config] of Object.entries(frontendCups)) {
   const backend = backendCups[gameId];
@@ -433,15 +453,15 @@ const archetypeFiles = [
   "assets/js/teto-egen-data.js",
   "assets/js/attachment-data.js",
   "assets/js/past-life-data.js",
-  "assets/js/spending-habits-data.js"
+  "assets/js/spending-habits-data.js",
+  "assets/js/travel-role-data.js"
 ];
 const archetypeSandbox = { window: {} };
 for (const file of archetypeFiles) vm.runInNewContext(read(file), archetypeSandbox, { timeout: 1000 });
 for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHETYPE_TESTS || {})) {
   const profileIds = Object.keys(config.profiles || {});
   assert(config.questions?.length > 0, `${testId}: no questions configured`);
-  const statedCount = config.eyebrow?.match(/·\s*(\d+)문항/)?.[1];
-  assert(Boolean(statedCount) && Number(statedCount) === config.questions.length, `${testId}: eyebrow count is missing or does not match question data`);
+  assert(!/(?:\d+\s*(?:문항|questions|問|题)|(?:약|about|approximately)\s*\d+\s*(?:분|min))/i.test(config.eyebrow || ""), `${testId}: eyebrow repeats question count or estimated duration`);
   config.questions.forEach((question, questionIndex) => {
     assert(typeof question.prompt === "string" && question.prompt.trim(), `${testId}: question ${questionIndex + 1} has no prompt`);
     assert(/(?:마지막\s*질문|last\s+question|final\s+question)/i.test(question.prompt) === false, `${testId}: question ${questionIndex + 1} hard-codes a final-question label`);

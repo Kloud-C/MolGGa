@@ -8,10 +8,6 @@
   const allowedViews = ["grid", "compact", "list"];
   const translate = (key, options) => window.MOA_I18N?.t(key, options) || key;
   const activity = window.MOLGGA_CONTENT_ACTIVITY;
-  const localPageName = (href) => {
-    try { return new URL(href, window.location.href).pathname.split("/").pop(); }
-    catch { return ""; }
-  };
   const cardsById = new Map();
 
   const make = (tag, className, text) => {
@@ -32,7 +28,7 @@
     image.loading = "lazy";
     icon.append(image);
     const label = make("span", "card-label");
-    label.dataset.i18n = registry.categories.find((category) => content.categoryIds.includes(category.id))?.labelKey || "contentBrowser.card.category";
+    label.dataset.i18n = content.cardLabelKey || registry.categories.find((category) => content.categoryIds.includes(category.id))?.labelKey || "contentBrowser.card.category";
     const heading = make("h3");
     const headingText = make("span", "", translate(content.titleKey));
     headingText.dataset.i18n = content.titleKey;
@@ -56,69 +52,21 @@
     favorite.dataset.contentFavorite = content.id;
     favorite.setAttribute("aria-pressed", "false");
     topLine.append(label, favorite);
-    card.append(icon, topLine, heading, description, link);
+    const metrics = make("p", "category-card__metrics");
+    metrics.setAttribute("aria-label", translate("contentBrowser.metrics.label"));
+    metrics.dataset.contentMetrics = content.id;
+    card.append(icon, topLine, heading, description, metrics, link);
     return card;
   };
 
   registry.contents.forEach((content) => {
-    let card = [...grid.querySelectorAll(".category-card")].find((candidate) => localPageName(candidate.querySelector("a[href]")?.getAttribute("href")) === content.page);
-    if (!card) {
-      card = makeCard(content);
-      grid.append(card);
-    }
+    const card = makeCard(content);
     card.dataset.contentId = content.id;
     card.dataset.category = content.categoryIds[0];
     card.dataset.categoryIds = content.categoryIds.join(" ");
     card.dataset.tagIds = content.tagIds.join(" ");
-    let label = card.querySelector(".card-label");
-    if (!label) {
-      label = make("span", "card-label", translate("contentBrowser.card.category"));
-      card.prepend(label);
-    }
-    let topLine = card.querySelector(".category-card__topline");
-    if (!topLine) {
-      topLine = make("div", "category-card__topline");
-      label.before(topLine);
-      topLine.append(label);
-    }
-    if (!card.querySelector("[data-content-favorite]")) {
-      const favorite = make("button", "content-favorite-button", "☆");
-      favorite.type = "button";
-      favorite.dataset.contentFavorite = content.id;
-      favorite.setAttribute("aria-pressed", "false");
-      topLine.append(favorite);
-    }
-    const heading = card.querySelector("h3");
-    const description = card.querySelector("p");
-    if (heading) {
-      let text = heading.querySelector("[data-i18n]");
-      if (!text) {
-        text = make("span", "", translate(content.titleKey));
-        heading.replaceChildren(text);
-      }
-      text.dataset.i18n = content.titleKey;
-    }
-    if (description) {
-      let text = description.querySelector("[data-i18n]");
-      if (!text) {
-        text = make("span", "", translate(content.descriptionKey));
-        description.replaceChildren(text);
-      }
-      text.dataset.i18n = content.descriptionKey;
-    }
-    const link = card.querySelector("a[href]");
-    if (link) {
-      link.dataset.contentStart = content.id;
-      link.href = content.page;
-    }
-    let metrics = card.querySelector(".category-card__metrics");
-    if (!metrics) {
-      metrics = make("p", "category-card__metrics");
-      metrics.setAttribute("aria-label", translate("contentBrowser.metrics.label"));
-      description?.after(metrics);
-    }
-    metrics.dataset.contentMetrics = content.id;
     cardsById.set(content.id, card);
+    grid.append(card);
   });
 
   const searchLabel = make("label", "content-browser__search");
@@ -136,6 +84,27 @@
   const categorySelect = document.createElement("select");
   categorySelect.setAttribute("aria-label", translate("contentBrowser.category.label"));
   categoryLabel.append(categorySelect);
+
+  const sortLabel = make("label", "content-browser__sort");
+  sortLabel.append(make("span", "content-browser__field-label", translate("contentBrowser.sort.label")));
+  const sortSelect = document.createElement("select");
+  sortSelect.setAttribute("aria-label", translate("contentBrowser.sort.label"));
+  sortLabel.append(sortSelect);
+  const sortOptions = [
+    ["catalog", "contentBrowser.sort.catalog"],
+    ["latest", "contentBrowser.sort.latest"]
+  ];
+  const refreshSortOptions = () => {
+    const previous = sortSelect.value || "catalog";
+    sortSelect.replaceChildren(...sortOptions.map(([value, key]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = translate(key);
+      return option;
+    }));
+    sortSelect.value = sortOptions.some(([value]) => value === previous) ? previous : "catalog";
+  };
+  refreshSortOptions();
 
   const viewGroup = make("div", "content-browser__views");
   viewGroup.setAttribute("role", "group");
@@ -165,7 +134,7 @@
   });
 
   const toolbar = make("div", "content-browser__toolbar");
-  toolbar.append(searchLabel, categoryLabel, viewGroup);
+  toolbar.append(searchLabel, categoryLabel, sortLabel, viewGroup);
   const status = make("p", "content-browser__status");
   status.setAttribute("role", "status");
   status.setAttribute("aria-live", "polite");
@@ -325,9 +294,14 @@
     const { favorites, recent } = activityState();
     const allowedIds = activeScope === "favorites" ? new Set(favorites) : activeScope === "recent" ? new Set(recent.map((entry) => entry.id)) : null;
     let visibleCount = 0;
-    registry.contents.forEach((content) => {
+    const orderedContents = registry.contents.map((content, index) => ({ content, index }));
+    if (sortSelect.value === "latest") {
+      orderedContents.sort((a, b) => Date.parse(b.content.createdAt || "") - Date.parse(a.content.createdAt || "") || a.index - b.index);
+    }
+    orderedContents.forEach(({ content }) => {
       const card = cardsById.get(content.id);
       if (!card) return;
+      grid.append(card);
       const categoryText = content.categoryIds.map((id) => registry.categories.find((entry) => entry.id === id)).filter(Boolean).map(getTranslatedCategory).join(" ");
       const tagText = content.tagIds.map((id) => translate(`tag.${id}`)).join(" ");
       const searchableText = [translate(content.titleKey), translate(content.descriptionKey), categoryText, tagText, ...content.tagIds].join(" ").toLocaleLowerCase();
@@ -376,9 +350,11 @@
   };
 
   refreshCategoryOptions();
+  refreshSortOptions();
   updateCards();
   search.addEventListener("input", updateCards);
   categorySelect.addEventListener("change", updateCards);
+  sortSelect.addEventListener("change", updateCards);
   scopeGroup.addEventListener("click", (event) => {
     const button = event.target.closest("[data-content-scope]");
     if (!button || !scopeButtons.has(button.dataset.contentScope)) return;
@@ -396,6 +372,7 @@
     if (event.target.closest("[data-content-reset]")) {
       search.value = "";
       categorySelect.value = "all";
+      sortSelect.value = "catalog";
       activeScope = "all";
       updateCards();
       search.focus();
@@ -435,6 +412,7 @@
     search.placeholder = translate("contentBrowser.search.placeholder");
     search.setAttribute("aria-label", translate("contentBrowser.search.label"));
     categorySelect.setAttribute("aria-label", translate("contentBrowser.category.label"));
+    sortSelect.setAttribute("aria-label", translate("contentBrowser.sort.label"));
     viewGroup.setAttribute("aria-label", translate("contentBrowser.view.label"));
     scopeGroup.setAttribute("aria-label", translate("contentActivity.scope.label"));
     recentHeading.textContent = translate("contentActivity.recent.title");
@@ -442,6 +420,7 @@
     suggestionsHeading.textContent = translate("contentActivity.suggestions.title");
     toolbar.querySelector(".content-browser__search .content-browser__field-label").textContent = translate("contentBrowser.search.label");
     toolbar.querySelector(".content-browser__category .content-browser__field-label").textContent = translate("contentBrowser.category.label");
+    toolbar.querySelector(".content-browser__sort .content-browser__field-label").textContent = translate("contentBrowser.sort.label");
     viewButtons.forEach((button, mode) => { button.textContent = translate(viewLabels[mode]); });
     dialogEyebrow.textContent = translate("contentBrowser.preview.label");
     if (activePreview) {
@@ -459,6 +438,7 @@
     start.textContent = translate("contentBrowser.preview.start");
     reset.textContent = translate("contentBrowser.results.reset");
     refreshCategoryOptions();
+    refreshSortOptions();
     updateCards();
   };
   dialog.addEventListener("close", () => { activePreview = null; });

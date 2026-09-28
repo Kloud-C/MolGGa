@@ -306,8 +306,8 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 
 /* Phase 2 content discovery: shared registry-backed controls and layouts. */
 .content-browser { margin: 0 0 18px; }
-.content-browser__toolbar { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(150px, 210px) auto; align-items: end; gap: 12px; }
-.content-browser__search, .content-browser__category { display: grid; gap: 5px; min-width: 0; }
+.content-browser__toolbar { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(150px, 210px) minmax(135px, 180px) auto; align-items: end; gap: 12px; }
+.content-browser__search, .content-browser__category, .content-browser__sort { display: grid; gap: 5px; min-width: 0; }
 .content-browser__field-label { color: var(--muted); font-size: .78rem; font-weight: 750; }
 .content-browser input, .content-browser select { width: 100%; min-height: 46px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); font: inherit; font-size: .92rem; }
 .content-browser input:focus, .content-browser select:focus { outline: 3px solid var(--mint-200); border-color: var(--mint-600); }
@@ -359,7 +359,8 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
   .related-content__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
-  .content-browser__toolbar { grid-template-columns: minmax(0, 1fr) minmax(132px, .7fr); }
+  .content-browser__toolbar { grid-template-columns: minmax(0, 1fr) minmax(132px, .7fr) minmax(132px, .7fr); }
+  .content-browser__views { grid-column: 1 / -1; justify-self: end; }
   .content-browser__views { grid-column: 1 / -1; justify-content: flex-start; }
   .category-grid[data-view="compact"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -372,6 +373,7 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 }
 @media (max-width: 420px) {
   .content-browser__toolbar { grid-template-columns: 1fr; }
+  .content-browser__views { grid-column: auto; justify-self: start; }
   .content-browser__views { grid-column: auto; }
   .content-browser__view-button { flex: 1; padding-inline: 6px; }
   .category-grid[data-view="compact"] { grid-template-columns: 1fr; }

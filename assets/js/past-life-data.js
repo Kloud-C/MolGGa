@@ -1,7 +1,8 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["past-life"] = {
   title: "전생 테스트",
-  eyebrow: "molgga PLAY · 30문항 · 약 5분",
+  eyebrow: "molgga PLAY · 전생 테스트",
+  estimatedMinutes: 3,
   url: "https://molgga.com/past-life-test.html",
   questions: [
     { prompt: "낯선 마을에 도착한 첫날, 제일 먼저 할 일은?", choices: [
@@ -25,7 +26,7 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
       { text: "불가에 기대 조용히 쉰다", scores: ["cloud", "rock", "penguin"] }
     ] },
     { prompt: "새로운 일을 시작할 때 나는…", choices: [
-      { text: "일단 작게 해보며 감을 잡는다", scores: ["goblin", "otter", "trickster"] },
+      { text: "일단 작게 해보며 감을 잡는다", scores: ["goblin", "otter"] },
       { text: "순서와 필요한 도구를 먼저 챙긴다", scores: ["ant", "scribe"] }
     ] },
     { prompt: "친구들이 나를 찾는 이유는 대체로?", choices: [
@@ -69,7 +70,7 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
       { text: "호출의 이유와 준비물을 먼저 알아본다", scores: ["ant", "taster"] }
     ] },
     { prompt: "내가 운영하고 싶은 작은 가게는?", choices: [
-      { text: "따뜻한 수프와 차를 파는 가게", scores: ["healer", "taster", "market"] },
+      { text: "따뜻한 수프와 차를 파는 가게", scores: ["healer", "taster"] },
       { text: "지도와 여행 도구를 파는 가게", scores: ["compass", "market"] }
     ] },
     { prompt: "깊은 밤, 창밖에서 이상한 소리가 들리면?", choices: [
@@ -148,3 +149,11 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
     penguin: { name: "왕실 핫팩 담당 펭귄", emoji: "🐧", imageFile: "../image/past-life/generated/penguin.jpg", color: "#5c7f96", catchphrase: "추운 날엔 존재만으로 든든하게.", description: "전생의 당신은 얼음 왕국에서 중요한 사람들의 손을 데워주던 펭귄이었어요. 묵묵히 곁을 지키다가도 다 같이 모이면 제일 신나게 춤을 췄답니다.", good: ["dog", "cloud"], tricky: ["dandelion", "cat"] }
   }
 };
+
+// Keep a broad mix of the original themes while shortening the quiz to 20
+// questions. The shared archetype engine reads this filtered list everywhere.
+const pastLifeConfig = window.MOA_ARCHETYPE_TESTS["past-life"];
+const pastLifeQuestionPool = pastLifeConfig.questions;
+pastLifeConfig.questions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 13, 16, 17, 18, 21, 22, 23, 24, 27, 28, 29]
+  .map((index) => pastLifeQuestionPool[index]);
+pastLifeConfig.eyebrow = "molgga PLAY · 전생 테스트";

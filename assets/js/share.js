@@ -19,7 +19,15 @@
     </div>`;
   document.body.append(dialog);
 
-  let current = { title: "molgga", description: "", text: "", url: "https://molgga.com/ko/" };
+  let current = { title: "molgga", description: "", text: "", url: "https://molgga.com/ko/", imageUrl: "https://molgga.com/image/og/molgga-og.jpg", buttonTitle: "결과 확인하기" };
+  const publicUrl = (value) => {
+    try {
+      const resolved = new URL(value || "https://molgga.com/image/og/molgga-og.jpg", window.location.href);
+      return resolved.origin === window.location.origin ? `${resolved.origin}${resolved.pathname}` : resolved.href;
+    } catch {
+      return "https://molgga.com/image/og/molgga-og.jpg";
+    }
+  };
   const message = dialog.querySelector(".share-dialog__message");
   const status = dialog.querySelector(".share-dialog__status");
   const closeButton = dialog.querySelector("[data-share-close]");
@@ -80,10 +88,10 @@
         content: {
           title: current.title,
           description: current.description || current.text,
-          imageUrl: "https://molgga.com/image/og/molgga-og.jpg",
+          imageUrl: publicUrl(current.imageUrl),
           link: { mobileWebUrl: current.url, webUrl: current.url }
         },
-        buttons: [{ title: translate("결과 확인하기"), link: { mobileWebUrl: current.url, webUrl: current.url } }]
+        buttons: [{ title: translate(current.buttonTitle || "결과 확인하기"), link: { mobileWebUrl: current.url, webUrl: current.url } }]
       });
     } catch (error) {
       console.error("Kakao share failed", error);

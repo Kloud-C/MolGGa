@@ -2,7 +2,8 @@ window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["spending-habits"] = {
   title: "소비 습관 테스트",
   resultLabel: "나의 소비 습관 유형",
-  eyebrow: "molgga PLAY · 10문항 · 약 3분",
+  eyebrow: "molgga PLAY · 소비 습관",
+  estimatedMinutes: 3,
   url: "https://molgga.com/spending-habits-test.html",
   questions: [
     { prompt: "월급이나 용돈이 들어오면 가장 먼저 하는 일은?", choices: [

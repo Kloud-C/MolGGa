@@ -11,6 +11,8 @@
   const contents = [
     {
       id: "weekend",
+      createdAt: "2026-09-25",
+      cardLabelKey: "content.weekend.cardLabel",
       type: "worldcup",
       categoryIds: ["worldcup", "taste", "lifestyle"],
       tagIds: ["weekend", "leisure", "preference"],
@@ -23,6 +25,8 @@
     },
     {
       id: "late-night-food",
+      createdAt: "2026-09-26",
+      cardLabelKey: "content.late-night-food.cardLabel",
       type: "worldcup",
       categoryIds: ["worldcup", "taste", "lifestyle"],
       tagIds: ["late-night", "food", "preference"],
@@ -35,6 +39,8 @@
     },
     {
       id: "animal-test",
+      createdAt: "2026-09-25",
+      cardLabelKey: "content.animal-test.cardLabel",
       type: "quiz",
       categoryIds: ["personality", "fun"],
       tagIds: ["personality", "animal", "fun"],
@@ -47,6 +53,8 @@
     },
     {
       id: "mbti",
+      createdAt: "2026-09-25",
+      cardLabelKey: "content.mbti.cardLabel",
       type: "quiz",
       categoryIds: ["personality"],
       tagIds: ["personality", "mbti", "self-reflection"],
@@ -59,6 +67,8 @@
     },
     {
       id: "teto-egen",
+      createdAt: "2026-09-26",
+      cardLabelKey: "content.teto-egen.cardLabel",
       type: "quiz",
       categoryIds: ["personality", "relationships"],
       tagIds: ["personality", "relationships", "communication"],
@@ -71,6 +81,8 @@
     },
     {
       id: "attachment-style",
+      createdAt: "2026-09-26",
+      cardLabelKey: "content.attachment-style.cardLabel",
       type: "quiz",
       categoryIds: ["relationships", "personality"],
       tagIds: ["relationships", "dating", "communication"],
@@ -83,6 +95,8 @@
     },
     {
       id: "past-life",
+      createdAt: "2026-09-26",
+      cardLabelKey: "content.past-life.cardLabel",
       type: "quiz",
       categoryIds: ["fun", "personality"],
       tagIds: ["fantasy", "fun", "personality"],
@@ -91,10 +105,12 @@
       page: "past-life-test.html",
       thumbnail: "/image/home-categories/past-life.jpg",
       source: { kind: "archetype", id: "past-life" },
-      metrics: { questionCount: 30, choicesPerQuestion: 2, resultCount: 20, estimatedMinutes: 5 }
+      metrics: { questionCount: 20, choicesPerQuestion: 2, resultCount: 20, estimatedMinutes: 3 }
     },
     {
       id: "spending-habits",
+      createdAt: "2026-09-26",
+      cardLabelKey: "content.spending-habits.cardLabel",
       type: "quiz",
       categoryIds: ["lifestyle", "personality"],
       tagIds: ["lifestyle", "money", "habits"],
@@ -104,6 +120,20 @@
       thumbnail: "/image/home-categories/spending-habits.jpg",
       source: { kind: "archetype", id: "spending-habits" },
       metrics: { questionCount: 10, choicesPerQuestion: 4, resultCount: 4, estimatedMinutes: 3 }
+    },
+    {
+      id: "travel-role",
+      createdAt: "2026-09-29",
+      cardLabelKey: "content.travel-role.cardLabel",
+      type: "quiz",
+      categoryIds: ["relationships", "fun"],
+      tagIds: ["travel", "friends", "group-trip", "personality"],
+      titleKey: "travelRole.title",
+      descriptionKey: "travelRole.description",
+      page: "travel-role-test.html",
+      thumbnail: "/image/tests/travel-role-test/planner.png",
+      source: { kind: "archetype", id: "travel-role" },
+      metrics: { questionCount: 9, choicesPerQuestion: 2, resultCount: 8, estimatedMinutes: 2 }
     }
   ];
 

@@ -241,6 +241,8 @@
     share.addEventListener("click", () => window.MOLGGA_SHARE?.open({
       title: localize(winner.name),
       description: localize(winner.detail),
+      imageUrl: winner.image,
+      buttonTitle: tr("나도 월드컵 해보기"),
       text: formatShareText(tr("이번 월드컵 최종 우승은 [") + localize(winner.name) + tr("] !!"), pageUrl()),
       url: pageUrl()
     }));

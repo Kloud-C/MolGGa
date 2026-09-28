@@ -416,4 +416,36 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/late-night-worldcup" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/late-night-worldcup" />
   </url>
+  <url>
+    <loc>https://molgga.com/ko/travel-role-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/travel-role-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/en/travel-role-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/travel-role-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/ja/travel-role-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/travel-role-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/zh/travel-role-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/travel-role-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/travel-role-test" />
+  </url>
 </urlset>

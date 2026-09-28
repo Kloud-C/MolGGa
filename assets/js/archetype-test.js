@@ -5,7 +5,7 @@
   const config = window.MOA_ARCHETYPE_TESTS?.[root.dataset.archetypeTest];
   if (!config) return;
   const tr = (text) => window.MOA_I18N?.t(text) || text;
-  const localizedQuizUrl = (url) => `https://molgga.com/${window.MOA_I18N?.language || "ko"}/${new URL(url, location.href).pathname.split("/").pop()}`;
+  const localizedQuizUrl = (url) => `https://molgga.com/${window.MOA_I18N?.language || "ko"}/${new URL(url, location.href).pathname.split("/").pop().replace(/\.html$/, "")}`;
   const resultLabel = config.resultLabel || (root.dataset.archetypeTest === "past-life" ? "나의 전생 캐릭터" : "나의 결과 유형");
 
   const progress = root.querySelector("[data-quiz-progress]");
@@ -22,7 +22,7 @@
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[char]);
 
-  const renderQuestion = (animate = false) => {
+  const renderQuestion = (animate = false, focusPrompt = true) => {
     const question = config.questions[current];
     progress.max = config.questions.length;
     progress.value = current + 1;
@@ -38,7 +38,7 @@
       stage.classList.add("archetype-stage--entering");
       window.requestAnimationFrame(() => window.requestAnimationFrame(() => stage.classList.remove("archetype-stage--entering")));
     }
-    stage.querySelector("legend").focus({ preventScroll: true });
+    if (focusPrompt) stage.querySelector("legend").focus({ preventScroll: true });
 
     stage.querySelectorAll("[data-choice]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -54,7 +54,7 @@
     });
   };
 
-  const showResult = () => {
+  const showResult = (focusResult = true) => {
     const scores = Object.fromEntries(Object.keys(config.profiles).map((key) => [key, 0]));
     answers.forEach((answerIndex, questionIndex) => {
       config.questions[questionIndex].choices[answerIndex].scores.forEach((key) => {
@@ -86,7 +86,7 @@
     result.innerHTML = `<article class="archetype-result-card"><div class="archetype-result-card__top"><span class="archetype-result-card__brand">molgga PLAY · ${escapeHtml(tr(config.title))}</span>${imagePath ? `<img class="archetype-result-card__image" src="${escapeHtml(imagePath)}" alt="${escapeHtml(tr(profile.name))} 결과 이미지" loading="lazy" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true"> <span class="archetype-result-card__emoji" aria-hidden="true"><img src="../image/result-icons/puzzle.png" alt="" aria-hidden="true"></span>${imageCredit ? `<p class="image-credit">${escapeHtml(tr("이미지 출처:"))} <a href="${escapeHtml(imageCredit.source)}" target="_blank" rel="noopener noreferrer">${escapeHtml(imageCredit.artist)}</a> · <a href="${escapeHtml(imageCredit.licenseUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(imageCredit.license)}</a></p>` : ""}` : `<span class="archetype-result-card__emoji" aria-hidden="true"><img src="../image/result-icons/puzzle.png" alt="" aria-hidden="true"></span>`}<p class="archetype-result-card__label">${escapeHtml(tr(resultLabel))}</p><h3 tabindex="-1">${escapeHtml(tr(profile.name))}</h3><p class="archetype-result-card__catchphrase">${escapeHtml(tr(profile.catchphrase))}</p></div><div class="archetype-result-card__body"><p>${escapeHtml(tr(profile.description))}</p>${extraContent}</div></article><div class="result-actions"><button class="button button-small" type="button" data-quiz-restart>${escapeHtml(tr("다시 해보기"))}</button><button class="button button-small button-quiet" type="button" data-quiz-share>${escapeHtml(tr("결과 공유"))}</button></div><p class="share-status" role="status" aria-live="polite" data-quiz-share-status></p>`;
     result.hidden = false;
     window.MOLGGA_CONTENT_RECOMMENDATIONS?.mount(result, root.dataset.archetypeTest);
-    result.querySelector("h3").focus({ preventScroll: true });
+    if (focusResult) result.querySelector("h3").focus({ preventScroll: true });
     result.querySelector("[data-quiz-restart]").addEventListener("click", () => {
       answers.fill(null);
       current = 0;
@@ -101,7 +101,7 @@
       const url = localizedQuizUrl(config.url);
       const shareText = `${tr(profile.name)} · ${tr(profile.catchphrase)}\n---------------------------------------------------\n${tr("나도 테스트 해보고 싶다면?")}\n${url}`;
       status.textContent = "";
-      window.MOLGGA_SHARE?.open({ title: tr(profile.name), description: tr(profile.catchphrase), text: shareText, url });
+      window.MOLGGA_SHARE?.open({ title: tr(profile.name), description: `${tr(profile.catchphrase)} ${tr(profile.description)}`, imageUrl: imagePath, buttonTitle: tr("나도 테스트하기"), text: shareText, url });
     });
   };
 
@@ -125,5 +125,11 @@
   };
 
   backButton.addEventListener("click", () => move(-1));
-  renderQuestion();
+  const translationsReady = window.MOA_I18N?.ready;
+  if (translationsReady && typeof translationsReady.then === "function") translationsReady.then(() => renderQuestion());
+  else renderQuestion();
+  window.i18next?.on("languageChanged", () => {
+    if (result.hidden) renderQuestion(false, false);
+    else showResult(false);
+  });
 })();

@@ -11,6 +11,15 @@ This document is the shared implementation template for new and updated pages. F
 - Build the Korean structure first, then keep the same component order and class names in `en/`, `ja/`, and `zh/`. Add each page to the sitemap and the relevant navigation/content list when appropriate.
 - Prefer these existing templates over copying markup from a screenshot or introducing page-specific inline CSS.
 
+## Adding content to the shared explorer
+
+- Register each item once in `assets/js/content-registry.js`: stable ID, type, category IDs, tag IDs, localized title and description keys, thumbnail, canonical page path, source definition, real `createdAt`, and verified metrics.
+- The home cards are rendered from the registry. Do not add a second per-language card list to the four home HTML files. Keep the registry entry's page, preview, result recommendation, category filter, search terms, and favorite/recent ID aligned.
+- Add every new translation key to `ko.json`, `en.json`, `ja.json`, and `zh.json`; keep the localized page structure in sync and register the public route alternates in the sitemap.
+- For World Cups, keep the full candidate pool and supported bracket sizes in the existing World Cup source. Preview may show available rounds; do not replace a larger candidate pool with only the selected bracket.
+- `createdAt` is the date content first entered the project. The explorer uses it for newest-first sorting. Do not invent popularity figures; offer a popular sort only after an aggregate source is defined and checked.
+- Run the integration audit after adding an item so page, image, metrics, localization, route, and registry links are checked together.
+
 ## Quiz content template
 
 Keep the same reading order across quiz pages while allowing the subject matter and result details to stay distinct:
@@ -21,6 +30,8 @@ Keep the same reading order across quiz pages while allowing the subject matter 
 4. **Actions:** restart and share controls in the same order and with the shared button styles.
 
 - Center the result hero presentation (brand label, result image, result label, title, and catchphrase) within its card on every quiz. Keep longer explanatory copy and detail cards left-aligned for comfortable reading.
+- Send result shares through `MOLGGA_SHARE.open()` with the translated result title, short description, result image URL, localized same-content route, and a clear action such as “나도 테스트하기”. World Cup shares use the winner's image and return to that game. Use the generic Open Graph image only as the crawler fallback when an individual result share already has an image.
+- Result image URLs must be publicly reachable over HTTPS. The Kakao feed receives the result-specific title, description, image, and CTA at share time; the CTA must start the same content in the active language.
 
 The template defines hierarchy and behavior, not identical wording or identical result content. Keep each result description specific to its type. Prefer a short opening summary followed by a few useful, distinct details; avoid repeating the same generic paragraph across every result.
 
@@ -111,8 +122,9 @@ The template defines hierarchy and behavior, not identical wording or identical 
 8. For result families, confirm every configured image path exists and that missing images still have the intended fallback.
 9. For the home explorer, confirm search matches translated titles, descriptions, categories and tags; category filters use the registry; empty states can be cleared; all view buttons expose the selected state; and preview Start/Cancel work by keyboard and pointer.
 10. For result recommendations, confirm the current content is excluded, recommendations follow category/tag overlap, links remain in the active locale, and localized text fits each card.
-11. Check explorer and recommendation layouts at narrow phone, phone, tablet and desktop widths. Compact mode may use more columns, but card text and controls must remain readable and touchable.
-12. Check the favorite toggle's label and pressed state, empty favorite/recent states, recent-history clearing, and cross-tab storage refresh. Verify that only registered content IDs and timestamps are persisted and that no quiz answers or results enter local storage.
+11. For result shares, verify the Kakao card uses the selected result's image/title/description and its action returns to the same content in the active locale. Check the World Cup winner card similarly.
+12. Check explorer and recommendation layouts at narrow phone, phone, tablet and desktop widths. Compact mode may use more columns, but card text and controls must remain readable and touchable.
+13. Check the favorite toggle's label and pressed state, empty favorite/recent states, recent-history clearing, and cross-tab storage refresh. Verify that only registered content IDs and timestamps are persisted and that no quiz answers or results enter local storage.
 
 ## Integration and behavior checklist
 

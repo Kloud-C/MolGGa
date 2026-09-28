@@ -163,7 +163,7 @@
       result.querySelector(".archetype-result-card__image").addEventListener("error", (event) => { event.currentTarget.hidden = true; });
       result.querySelector("[data-share]").addEventListener("click", () => {
         const url = publicPageUrl("animal-test.html");
-        window.MOLGGA_SHARE?.open({ title: profiles[winner].name, description: profiles[winner].text, text: formatShareText(tr("이번 테스트 결과는 [") + tr(profiles[winner].name) + tr("] !!"), url), url });
+        window.MOLGGA_SHARE?.open({ title: profiles[winner].name, description: profiles[winner].text, imageUrl: profiles[winner].image, buttonTitle: tr("나도 테스트하기"), text: formatShareText(tr("이번 테스트 결과는 [") + tr(profiles[winner].name) + tr("] !!"), url), url });
       });
       result.hidden = false;
       const contentId = window.MOLGGA_CONTENT_REGISTRY?.contents.find((content) => content.source?.formId === animalForm.id)?.id;
@@ -231,7 +231,7 @@
       result.querySelector(".archetype-result-card__image").addEventListener("error", (event) => { event.currentTarget.hidden = true; });
       result.querySelector("[data-share]").addEventListener("click", () => {
         const url = publicPageUrl("mbti.html");
-        window.MOLGGA_SHARE?.open({ title: `${summary} · ${profile.title}`, description: profile.intro, text: formatShareText(tr("나의 MBTI는 [") + summary + tr("] !!"), url), url });
+        window.MOLGGA_SHARE?.open({ title: `${summary} · ${profile.title}`, description: profile.intro, imageUrl: profile.image, buttonTitle: tr("나도 테스트하기"), text: formatShareText(tr("나의 MBTI는 [") + summary + tr("] !!"), url), url });
       });
       result.hidden = false;
       const contentId = window.MOLGGA_CONTENT_REGISTRY?.contents.find((content) => content.source?.formId === mbtiForm.id)?.id;
