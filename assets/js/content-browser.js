@@ -7,6 +7,7 @@
   const storageKey = "molgga.contentViewMode";
   const allowedViews = ["grid", "compact", "list"];
   const translate = (key, options) => window.MOA_I18N?.t(key, options) || key;
+  const activity = window.MOLGGA_CONTENT_ACTIVITY;
   const localPageName = (href) => {
     try { return new URL(href, window.location.href).pathname.split("/").pop(); }
     catch { return ""; }
@@ -49,7 +50,13 @@
     const arrow = make("span", "", " →");
     arrow.setAttribute("aria-hidden", "true");
     link.append(arrow);
-    card.append(icon, label, heading, description, link);
+    const topLine = make("div", "category-card__topline");
+    const favorite = make("button", "content-favorite-button", "☆");
+    favorite.type = "button";
+    favorite.dataset.contentFavorite = content.id;
+    favorite.setAttribute("aria-pressed", "false");
+    topLine.append(label, favorite);
+    card.append(icon, topLine, heading, description, link);
     return card;
   };
 
@@ -63,6 +70,24 @@
     card.dataset.category = content.categoryIds[0];
     card.dataset.categoryIds = content.categoryIds.join(" ");
     card.dataset.tagIds = content.tagIds.join(" ");
+    let label = card.querySelector(".card-label");
+    if (!label) {
+      label = make("span", "card-label", translate("contentBrowser.card.category"));
+      card.prepend(label);
+    }
+    let topLine = card.querySelector(".category-card__topline");
+    if (!topLine) {
+      topLine = make("div", "category-card__topline");
+      label.before(topLine);
+      topLine.append(label);
+    }
+    if (!card.querySelector("[data-content-favorite]")) {
+      const favorite = make("button", "content-favorite-button", "☆");
+      favorite.type = "button";
+      favorite.dataset.contentFavorite = content.id;
+      favorite.setAttribute("aria-pressed", "false");
+      topLine.append(favorite);
+    }
     const heading = card.querySelector("h3");
     const description = card.querySelector("p");
     if (heading) {
@@ -126,6 +151,19 @@
     viewButtons.set(mode, button);
   });
 
+  const scopeGroup = make("div", "content-browser__scope");
+  scopeGroup.setAttribute("role", "group");
+  scopeGroup.setAttribute("aria-label", translate("contentActivity.scope.label"));
+  const scopeButtons = new Map();
+  ["all", "favorites", "recent"].forEach((scope) => {
+    const button = make("button", "content-browser__scope-button");
+    button.type = "button";
+    button.dataset.contentScope = scope;
+    button.setAttribute("aria-pressed", String(scope === "all"));
+    scopeGroup.append(button);
+    scopeButtons.set(scope, button);
+  });
+
   const toolbar = make("div", "content-browser__toolbar");
   toolbar.append(searchLabel, categoryLabel, viewGroup);
   const status = make("p", "content-browser__status");
@@ -134,7 +172,26 @@
   const reset = make("button", "button button-small button-quiet content-browser__reset", translate("contentBrowser.results.reset"));
   reset.type = "button";
   reset.dataset.contentReset = "true";
-  mount.replaceChildren(toolbar, status, reset);
+
+  const recentSection = make("section", "content-browser__recent");
+  recentSection.setAttribute("aria-labelledby", "recent-content-title");
+  const recentHeading = make("h3", "content-browser__recent-title", translate("contentActivity.recent.title"));
+  recentHeading.id = "recent-content-title";
+  const clearRecent = make("button", "button button-small button-quiet content-browser__clear-recent", translate("contentActivity.recent.clear"));
+  clearRecent.type = "button";
+  clearRecent.dataset.contentClearRecent = "true";
+  const recentHeader = make("div", "content-browser__recent-header");
+  recentHeader.append(recentHeading, clearRecent);
+  const recentList = make("div", "content-browser__recent-list");
+  recentSection.append(recentHeader, recentList);
+
+  const suggestions = make("section", "content-browser__suggestions");
+  suggestions.setAttribute("aria-labelledby", "content-suggestions-title");
+  const suggestionsHeading = make("h3", "content-browser__suggestions-title", translate("contentActivity.suggestions.title"));
+  suggestionsHeading.id = "content-suggestions-title";
+  const suggestionsList = make("div", "content-browser__suggestions-list");
+  suggestions.append(suggestionsHeading, suggestionsList);
+  mount.replaceChildren(toolbar, scopeGroup, recentSection, status, suggestions, reset);
 
   const dialog = make("dialog", "content-preview-dialog");
   dialog.setAttribute("aria-labelledby", "content-preview-title");
@@ -160,6 +217,7 @@
   document.body.append(dialog);
 
   let activeView = "grid";
+  let activeScope = "all";
   let activePreview = null;
   try {
     const saved = window.localStorage.getItem(storageKey);
@@ -198,9 +256,74 @@
     });
   };
 
+  const activityState = () => activity?.getState?.() || { recent: [], favorites: [] };
+  const translatedTitle = (content) => translate(content.titleKey);
+  const refreshFavoriteButtons = () => {
+    const favorites = new Set(activityState().favorites);
+    cardsById.forEach((card, id) => {
+      const content = registry.contents.find((entry) => entry.id === id);
+      const button = card.querySelector("[data-content-favorite]");
+      if (!button || !content) return;
+      const selected = favorites.has(id);
+      const label = translate(selected ? "contentActivity.favorite.remove" : "contentActivity.favorite.add", { title: translatedTitle(content) });
+      button.textContent = selected ? "★" : "☆";
+      button.setAttribute("aria-pressed", String(selected));
+      button.setAttribute("aria-label", label);
+      button.title = label;
+    });
+  };
+
+  const renderRecent = () => {
+    const { recent, favorites } = activityState();
+    recentList.replaceChildren();
+    recent.forEach((entry) => {
+      const content = registry.contents.find((candidate) => candidate.id === entry.id);
+      if (!content) return;
+      const link = make("a", "content-browser__recent-link", translatedTitle(content));
+      link.href = content.page;
+      link.dataset.contentStart = content.id;
+      recentList.append(link);
+    });
+    recentSection.hidden = !recent.length || search.value.trim() !== "" || categorySelect.value !== "all" || activeScope !== "all";
+    clearRecent.hidden = !recent.length;
+    scopeButtons.forEach((button, scope) => {
+      const count = scope === "favorites" ? favorites.length : scope === "recent" ? recent.length : null;
+      const key = scope === "all" ? "contentActivity.scope.all" : `contentActivity.scope.${scope}`;
+      button.textContent = translate(key, count === null ? undefined : { count });
+      button.setAttribute("aria-pressed", String(scope === activeScope));
+    });
+  };
+
+  const renderSuggestions = (query, selectedCategory) => {
+    suggestionsList.replaceChildren();
+    const terms = query.split(/[\s,·/]+/).map((term) => term.trim()).filter(Boolean);
+    const candidates = registry.contents.map((content, index) => {
+      const categoryText = content.categoryIds.map((id) => registry.categories.find((entry) => entry.id === id)).filter(Boolean).map(getTranslatedCategory).join(" ");
+      const tagText = content.tagIds.map((id) => translate(`tag.${id}`)).join(" ");
+      const fields = [translatedTitle(content), translate(content.descriptionKey), categoryText, tagText, ...content.tagIds].map((text) => text.toLocaleLowerCase());
+      const queryScore = terms.reduce((score, term) => score + (fields.some((field) => field.includes(term.toLocaleLowerCase())) ? 1 : 0), 0);
+      const categoryScore = selectedCategory !== "all" && content.categoryIds.includes(selectedCategory) ? 2 : 0;
+      return { content, score: queryScore + categoryScore, index };
+    }).filter(({ content, score }) => score > 0 && !(selectedCategory !== "all" && !content.categoryIds.includes(selectedCategory)))
+      .sort((a, b) => b.score - a.score || a.index - b.index)
+      .slice(0, 3);
+    candidates.forEach(({ content }) => {
+      const item = make("article", "content-browser__suggestion");
+      const title = make("h4", "", translatedTitle(content));
+      const link = make("a", "button button-small button-quiet", translate("contentActivity.suggestions.open"));
+      link.href = content.page;
+      link.dataset.contentStart = content.id;
+      item.append(title, link);
+      suggestionsList.append(item);
+    });
+    suggestions.hidden = candidates.length === 0;
+  };
+
   const updateCards = () => {
     const query = search.value.trim().toLocaleLowerCase();
     const selectedCategory = categorySelect.value || "all";
+    const { favorites, recent } = activityState();
+    const allowedIds = activeScope === "favorites" ? new Set(favorites) : activeScope === "recent" ? new Set(recent.map((entry) => entry.id)) : null;
     let visibleCount = 0;
     registry.contents.forEach((content) => {
       const card = cardsById.get(content.id);
@@ -210,7 +333,8 @@
       const searchableText = [translate(content.titleKey), translate(content.descriptionKey), categoryText, tagText, ...content.tagIds].join(" ").toLocaleLowerCase();
       const matchesCategory = selectedCategory === "all" || content.categoryIds.includes(selectedCategory);
       const matchesSearch = !query || searchableText.includes(query);
-      card.hidden = !(matchesCategory && matchesSearch);
+      const matchesScope = !allowedIds || allowedIds.has(content.id);
+      card.hidden = !(matchesCategory && matchesSearch && matchesScope);
       card.classList.toggle("category-card--compact", activeView === "compact");
       if (!card.hidden) visibleCount += 1;
       const metric = card.querySelector("[data-content-metrics]");
@@ -222,9 +346,16 @@
     viewButtons.forEach((button, mode) => button.setAttribute("aria-pressed", String(mode === activeView)));
     status.textContent = visibleCount
       ? translate("contentBrowser.results.count", { count: visibleCount })
-      : translate("contentBrowser.results.empty");
+      : activeScope === "favorites" && favorites.length === 0
+        ? translate("contentActivity.empty.favorites")
+        : activeScope === "recent" && recent.length === 0
+          ? translate("contentActivity.empty.recent")
+          : translate("contentBrowser.results.empty");
     status.classList.toggle("content-browser__status--empty", visibleCount === 0);
     reset.hidden = visibleCount > 0;
+    renderRecent();
+    renderSuggestions(query, selectedCategory);
+    refreshFavoriteButtons();
   };
 
   const openPreview = (content) => {
@@ -248,6 +379,12 @@
   updateCards();
   search.addEventListener("input", updateCards);
   categorySelect.addEventListener("change", updateCards);
+  scopeGroup.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-content-scope]");
+    if (!button || !scopeButtons.has(button.dataset.contentScope)) return;
+    activeScope = button.dataset.contentScope;
+    updateCards();
+  });
   viewGroup.addEventListener("click", (event) => {
     const button = event.target.closest("[data-view-mode]");
     if (!button || !allowedViews.includes(button.dataset.viewMode)) return;
@@ -256,13 +393,34 @@
     updateCards();
   });
   mount.addEventListener("click", (event) => {
-    if (!event.target.closest("[data-content-reset]")) return;
-    search.value = "";
-    categorySelect.value = "all";
-    updateCards();
-    search.focus();
+    if (event.target.closest("[data-content-reset]")) {
+      search.value = "";
+      categorySelect.value = "all";
+      activeScope = "all";
+      updateCards();
+      search.focus();
+      return;
+    }
+    if (event.target.closest("[data-content-clear-recent]")) {
+      activity?.clearRecent?.();
+      updateCards();
+      return;
+    }
+    const link = event.target.closest("a[data-content-start]");
+    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const content = registry.contents.find((entry) => entry.id === link.dataset.contentStart);
+    if (!content) return;
+    event.preventDefault();
+    openPreview(content);
   });
   grid.addEventListener("click", (event) => {
+    const favorite = event.target.closest("[data-content-favorite]");
+    if (favorite) {
+      event.preventDefault();
+      activity?.toggleFavorite?.(favorite.dataset.contentFavorite);
+      updateCards();
+      return;
+    }
     const link = event.target.closest("a[data-content-start]");
     if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const content = registry.contents.find((entry) => entry.id === link.dataset.contentStart);
@@ -278,6 +436,10 @@
     search.setAttribute("aria-label", translate("contentBrowser.search.label"));
     categorySelect.setAttribute("aria-label", translate("contentBrowser.category.label"));
     viewGroup.setAttribute("aria-label", translate("contentBrowser.view.label"));
+    scopeGroup.setAttribute("aria-label", translate("contentActivity.scope.label"));
+    recentHeading.textContent = translate("contentActivity.recent.title");
+    clearRecent.textContent = translate("contentActivity.recent.clear");
+    suggestionsHeading.textContent = translate("contentActivity.suggestions.title");
     toolbar.querySelector(".content-browser__search .content-browser__field-label").textContent = translate("contentBrowser.search.label");
     toolbar.querySelector(".content-browser__category .content-browser__field-label").textContent = translate("contentBrowser.category.label");
     viewButtons.forEach((button, mode) => { button.textContent = translate(viewLabels[mode]); });
@@ -304,4 +466,5 @@
     window.i18next.on("initialized", refreshLabels);
     window.i18next.on("languageChanged", refreshLabels);
   }
+  window.addEventListener("molgga:content-activity-change", updateCards);
 })();

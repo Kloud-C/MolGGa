@@ -112,6 +112,7 @@ The template defines hierarchy and behavior, not identical wording or identical 
 9. For the home explorer, confirm search matches translated titles, descriptions, categories and tags; category filters use the registry; empty states can be cleared; all view buttons expose the selected state; and preview Start/Cancel work by keyboard and pointer.
 10. For result recommendations, confirm the current content is excluded, recommendations follow category/tag overlap, links remain in the active locale, and localized text fits each card.
 11. Check explorer and recommendation layouts at narrow phone, phone, tablet and desktop widths. Compact mode may use more columns, but card text and controls must remain readable and touchable.
+12. Check the favorite toggle's label and pressed state, empty favorite/recent states, recent-history clearing, and cross-tab storage refresh. Verify that only registered content IDs and timestamps are persisted and that no quiz answers or results enter local storage.
 
 ## Integration and behavior checklist
 

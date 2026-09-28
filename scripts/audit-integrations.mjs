@@ -85,9 +85,40 @@ const phaseTwoTranslationKeys = [
   "contentBrowser.preview.pool", "contentBrowser.preview.actionLabel", "contentBrowser.recommendations.title",
   "contentBrowser.recommendations.description", "contentBrowser.recommendations.start"
 ];
+const phaseThreeTranslationKeys = [
+  "contentActivity.scope.label", "contentActivity.scope.all", "contentActivity.scope.favorites",
+  "contentActivity.scope.recent", "contentActivity.favorite.add", "contentActivity.favorite.remove",
+  "contentActivity.empty.favorites", "contentActivity.empty.recent", "contentActivity.recent.title",
+  "contentActivity.recent.clear", "contentActivity.suggestions.title", "contentActivity.suggestions.open",
+  "privacy.quizAnswers", "privacy.localContentPreferences", "privacy.storageNotice"
+];
 for (const locale of locales) {
   for (const key of phaseTwoTranslationKeys) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing phase 2 UI translation ${key}`);
+  for (const key of phaseThreeTranslationKeys) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing phase 3 UI or privacy translation ${key}`);
 }
+
+const activityStorage = new Map();
+const activityWindow = {
+  MOLGGA_CONTENT_REGISTRY: contentRegistry,
+  location: { pathname: "/ko/worldcup" },
+  localStorage: {
+    getItem(key) { return activityStorage.get(key) ?? null; },
+    setItem(key, value) { activityStorage.set(key, value); }
+  },
+  addEventListener() {},
+  dispatchEvent() {}
+};
+vm.runInNewContext(read("assets/js/content-activity.js"), { window: activityWindow, Date, Event, JSON, Number, Object, Array, Set }, { timeout: 1000 });
+const activityApi = activityWindow.MOLGGA_CONTENT_ACTIVITY;
+assert(activityApi?.getState().recent[0]?.id === "weekend", "content activity: opening a registered content route is not recorded locally");
+assert(activityApi?.toggleFavorite("mbti") === true && activityApi.isFavorite("mbti"), "content activity: favorite cannot be added");
+assert(activityApi?.toggleFavorite("mbti") === false && !activityApi.isFavorite("mbti"), "content activity: favorite cannot be removed");
+activityApi?.toggleFavorite("animal-test");
+activityApi?.clearRecent();
+const storedActivity = JSON.parse(activityStorage.get("molgga.contentActivity.v1") || "{}");
+assert(storedActivity.recent.length === 0 && storedActivity.favorites.includes("animal-test"), "content activity: clear recent removes favorites or keeps recent entries");
+assert(Object.keys(storedActivity).sort().join(",") === "favorites,recent", "content activity: unexpected data fields are persisted");
+assert(storedActivity.favorites.every((id) => registryContentIds.includes(id)) && activityApi.getState().recent.length === 0, "content activity: invalid content IDs are retained");
 const localePages = Object.fromEntries(locales.map((locale) => [
   locale,
   walk(locale, (file) => file.endsWith(".html")).map((file) => path.posix.basename(file)).sort()
@@ -100,7 +131,8 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20260928-1') && html.includes('content-browser.js?v=20260928-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-registry.js?v=20260928-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260928-2'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-activity.css?v=20260928-1'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const cards = [...html.matchAll(/<article\b([^>]*)>([\s\S]*?)<\/article>/gi)]
     .filter(([opening]) => /\bclass=["'][^"']*\bcategory-card\b/i.test(opening))
     .map(([whole, opening, body]) => {
@@ -128,6 +160,9 @@ for (const page of allHtml) {
   const html = read(page);
   const [locale] = page.split("/");
   const slug = path.posix.basename(page, ".html");
+  if (slug === "index" || registryContents.some((content) => path.posix.basename(content.page, ".html") === slug)) {
+    assert(html.includes('content-activity.js?v=20260928-1'), `${page}: local content activity script is missing or stale`);
+  }
   const declaredLocale = html.match(/<html\b[^>]*\blang=["']([^"']+)/i)?.[1]?.slice(0, 2);
   assert(declaredLocale === locale, `${page}: html lang does not match its locale folder`);
   const route = slug === "index" ? `/${locale}/` : `/${locale}/${slug}`;
