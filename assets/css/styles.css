@@ -319,21 +319,6 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 .content-browser__status--empty { color: var(--ink); }
 .content-browser__reset { margin: 0 0 14px; }
 .category-card__metrics { margin: -14px 0 18px !important; color: var(--mint-700) !important; font-size: .78rem !important; font-weight: 700; }
-.category-grid[data-view="compact"] { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; }
-.category-grid[data-view="compact"] .category-card { min-height: 238px; padding: 18px; }
-.category-grid[data-view="compact"] .card-icon { width: 46px; height: 46px; }
-.category-grid[data-view="compact"] .card-label { margin-top: 13px; font-size: .68rem; }
-.category-grid[data-view="compact"] .category-card h3 { font-size: 1.08rem; }
-.category-grid[data-view="compact"] .category-card p { margin-bottom: 18px; font-size: .86rem; }
-.category-grid[data-view="compact"] .category-card__metrics { font-size: .72rem !important; }
-.category-grid[data-view="list"] { grid-template-columns: 1fr; gap: 10px; }
-.category-grid[data-view="list"] .category-card { display: grid; min-height: 0; grid-template-columns: 54px minmax(0, 1fr) auto; grid-template-rows: auto auto auto auto; align-items: center; gap: 2px 16px; padding: 16px 19px; }
-.category-grid[data-view="list"] .card-icon { grid-column: 1; grid-row: 1 / span 4; align-self: start; }
-.category-grid[data-view="list"] .card-label { grid-column: 2; grid-row: 1; margin: 0; }
-.category-grid[data-view="list"] .category-card h3 { grid-column: 2; grid-row: 2; }
-.category-grid[data-view="list"] .category-card p:not(.category-card__metrics) { grid-column: 2; grid-row: 3; margin: 2px 0 0; }
-.category-grid[data-view="list"] .category-card__metrics { grid-column: 2; grid-row: 4; margin: 1px 0 0 !important; }
-.category-grid[data-view="list"] .category-card > .button { grid-column: 3; grid-row: 1 / span 4; margin: 0; }
 .content-preview-dialog { width: min(520px, calc(100% - 28px)); max-width: 520px; max-height: min(88dvh, 720px); overflow: auto; padding: 0; border: 1px solid var(--line); border-radius: 22px; background: white; color: var(--ink); box-shadow: 0 24px 80px rgba(25, 55, 43, .24); }
 .content-preview-dialog::backdrop { background: rgba(20, 38, 31, .48); backdrop-filter: blur(3px); }
 .content-preview-dialog__content { position: relative; padding: clamp(24px, 6vw, 36px); }
@@ -355,20 +340,14 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 .related-content__card .button { min-height: 40px; margin-top: auto; }
 
 @media (max-width: 920px) {
-  .category-grid[data-view="compact"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .related-content__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
   .content-browser__toolbar { grid-template-columns: minmax(0, 1fr) minmax(132px, .7fr) minmax(132px, .7fr); }
   .content-browser__views { grid-column: 1 / -1; justify-self: end; }
   .content-browser__views { grid-column: 1 / -1; justify-content: flex-start; }
-  .category-grid[data-view="compact"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 600px) {
-  .category-grid[data-view="compact"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .category-grid[data-view="list"] .category-card { grid-template-columns: 46px minmax(0, 1fr); gap: 2px 12px; padding: 14px; }
-  .category-grid[data-view="list"] .card-icon { width: 42px; height: 42px; grid-row: 1 / span 4; }
-  .category-grid[data-view="list"] .category-card > .button { grid-column: 2; grid-row: 5; justify-self: start; margin-top: 10px; }
   .related-content { padding: 18px; }
 }
 @media (max-width: 420px) {
@@ -376,8 +355,6 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
   .content-browser__views { grid-column: auto; justify-self: start; }
   .content-browser__views { grid-column: auto; }
   .content-browser__view-button { flex: 1; padding-inline: 6px; }
-  .category-grid[data-view="compact"] { grid-template-columns: 1fr; }
-  .category-grid[data-view="compact"] .category-card { min-height: 220px; }
   .related-content__grid { grid-template-columns: 1fr; }
   .content-preview-dialog__actions .button { flex: 1; }
 }

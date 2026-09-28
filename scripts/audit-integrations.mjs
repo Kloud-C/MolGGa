@@ -139,7 +139,7 @@ const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
   assert(html.includes('content-registry.js?v=20260929-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
-  assert(html.includes('content-activity.css?v=20260928-1'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
+  assert(html.includes('content-activity.css?v=20260929-2'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
     .filter(([opening]) => /\bclass=["'][^"']*\bhome-disclosure\b/i.test(opening));

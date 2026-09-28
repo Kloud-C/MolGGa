@@ -18,6 +18,7 @@ This document is the shared implementation template for new and updated pages. F
 - Add every new translation key to `ko.json`, `en.json`, `ja.json`, and `zh.json`; keep the localized page structure in sync and register the public route alternates in the sitemap.
 - For World Cups, keep the full candidate pool and supported bracket sizes in the existing World Cup source. Preview may show available rounds; do not replace a larger candidate pool with only the selected bracket.
 - `createdAt` is the date content first entered the project. The explorer uses it for newest-first sorting. Do not invent popularity figures; offer a popular sort only after an aggregate source is defined and checked.
+- Keep the three explorer modes visually distinct at every breakpoint: **기본** is the readable three-column card (one column on narrow phones) with title, category, useful metrics and start action, but no promotional paragraph; **간결하게** is a denser four-to-two-column tile grid with no paragraph or metrics; **목록** is a compact, single-row list with thumbnail, one-line title, favorite control and an accessible start arrow. Check that a saved view still has the same layout and that each mode can open the shared preview.
 - Run the integration audit after adding an item so page, image, metrics, localization, route, and registry links are checked together.
 
 ## Quiz content template
