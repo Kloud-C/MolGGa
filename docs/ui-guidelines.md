@@ -109,6 +109,9 @@ The template defines hierarchy and behavior, not identical wording or identical 
 6. Check cache tokens for changed CSS/JS and inspect `git diff --check` before commit.
 7. For quizzes, compare at least an early, middle, and final question: question number must match progress, and no prompt may claim to be final early.
 8. For result families, confirm every configured image path exists and that missing images still have the intended fallback.
+9. For the home explorer, confirm search matches translated titles, descriptions, categories and tags; category filters use the registry; empty states can be cleared; all view buttons expose the selected state; and preview Start/Cancel work by keyboard and pointer.
+10. For result recommendations, confirm the current content is excluded, recommendations follow category/tag overlap, links remain in the active locale, and localized text fits each card.
+11. Check explorer and recommendation layouts at narrow phone, phone, tablet and desktop widths. Compact mode may use more columns, but card text and controls must remain readable and touchable.
 
 ## Integration and behavior checklist
 

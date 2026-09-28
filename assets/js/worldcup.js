@@ -261,6 +261,7 @@
     ranking.append(title, caption, list);
     result.append(ranking);
     loadRanking(makeId(), winner);
+    window.MOLGGA_CONTENT_RECOMMENDATIONS?.mount(result, root.dataset.worldcupGame);
   };
 
   const choose = (item) => {

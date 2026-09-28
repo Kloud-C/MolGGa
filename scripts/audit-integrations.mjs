@@ -62,6 +62,9 @@ for (const content of registryContents) {
   assert(Boolean(content.id && content.type && content.page && content.source?.kind), `content registry: incomplete identity or source for ${content.id || "unknown"}`);
   assert(content.categoryIds?.length > 0 && content.categoryIds.every((id) => registryCategoryIds.includes(id)), `content registry: invalid categories for ${content.id}`);
   assert(content.tagIds?.length > 0 && content.tagIds.every(Boolean), `content registry: missing tags for ${content.id}`);
+  for (const tagId of content.tagIds || []) {
+    for (const locale of locales) assert(Boolean(localeResources[locale][`tag.${tagId}`]), `${locale}.json: missing ${content.id} search tag translation tag.${tagId}`);
+  }
   assert(Boolean(content.metrics && Number.isInteger(content.metrics.estimatedMinutes || Math.min(...Object.values(content.metrics.estimatedMinutesByBracket || {})))), `content registry: missing estimated duration for ${content.id}`);
   assert(fs.existsSync(path.join(root, content.thumbnail?.replace(/^\//, "") || "__missing_thumbnail__")), `content registry: missing thumbnail for ${content.id}`);
   assert(fs.existsSync(path.join(root, "ko", content.page)), `content registry: missing Korean page for ${content.id}`);
@@ -71,6 +74,19 @@ for (const content of registryContents) {
 }
 for (const locale of locales) {
   assert(localeResourceKeys.every((key) => Object.hasOwn(localeResources[locale], key)), `${locale}.json: translation keys differ from ko.json`);
+}
+const phaseTwoTranslationKeys = [
+  "contentBrowser.search.label", "contentBrowser.search.placeholder", "contentBrowser.category.label",
+  "contentBrowser.category.all", "contentBrowser.view.label", "contentBrowser.view.grid",
+  "contentBrowser.view.compact", "contentBrowser.view.list", "contentBrowser.results.count",
+  "contentBrowser.results.empty", "contentBrowser.results.reset", "contentBrowser.metrics.label",
+  "contentBrowser.metrics.quiz", "contentBrowser.metrics.worldcup", "contentBrowser.preview.label",
+  "contentBrowser.preview.close", "contentBrowser.preview.cancel", "contentBrowser.preview.start",
+  "contentBrowser.preview.pool", "contentBrowser.preview.actionLabel", "contentBrowser.recommendations.title",
+  "contentBrowser.recommendations.description", "contentBrowser.recommendations.start"
+];
+for (const locale of locales) {
+  for (const key of phaseTwoTranslationKeys) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing phase 2 UI translation ${key}`);
 }
 const localePages = Object.fromEntries(locales.map((locale) => [
   locale,
@@ -83,6 +99,8 @@ for (const locale of locales.slice(1)) {
 
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
+  assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
+  assert(html.includes('content-registry.js?v=20260928-1') && html.includes('content-browser.js?v=20260928-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
   const cards = [...html.matchAll(/<article\b([^>]*)>([\s\S]*?)<\/article>/gi)]
     .filter(([opening]) => /\bclass=["'][^"']*\bcategory-card\b/i.test(opening))
     .map(([whole, opening, body]) => {
@@ -132,10 +150,16 @@ for (const page of allHtml) {
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
   assert(/assets\/js\/i18n\.js\?v=\d{8}-\d+/.test(html), `${page}: i18n.js is missing a cache token`);
+  assert(/assets\/css\/styles\.css\?v=20260928-1/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
   for (const key of i18nKeys) assert(Object.hasOwn(localeResources[locale], key), `${page}: ${locale}.json is missing data-i18n key ${key}`);
+  const hasContentResult = /data-(?:quiz|worldcup)-result\b|id=["'](?:animal-result|mbti-result)["']/.test(html);
+  if (hasContentResult) {
+    assert(html.includes('content-registry.js?v=20260928-1'), `${page}: result recommendations lack the shared content registry`);
+    assert(html.includes('content-recommendations.js?v=20260928-1'), `${page}: shared result recommendations are not loaded`);
+  }
   for (const [, declaration] of html.matchAll(/\bdata-i18n-attr=["']([^"']+)["']/gi)) {
     for (const entry of declaration.split(";")) {
       const key = entry.slice(entry.indexOf(":") + 1).trim();
@@ -488,5 +512,5 @@ if (errors.length) {
   for (const error of errors) console.error(`- ${error}`);
   process.exitCode = 1;
 } else {
-  console.log(`Integration audit passed: ${checks} checks across ${allHtml.length} localized pages, localized SEO and translations, World Cup data/APIs, archetype data, assets, sitemap, redirects, and D1 docs.`);
+  console.log(`Integration audit passed: ${checks} checks across ${allHtml.length} localized pages, content discovery and recommendations, localized SEO, World Cup data/APIs, archetype data, assets, sitemap, redirects, and D1 docs.`);
 }

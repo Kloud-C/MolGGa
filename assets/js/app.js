@@ -166,6 +166,8 @@
         window.MOLGGA_SHARE?.open({ title: profiles[winner].name, description: profiles[winner].text, text: formatShareText(tr("이번 테스트 결과는 [") + tr(profiles[winner].name) + tr("] !!"), url), url });
       });
       result.hidden = false;
+      const contentId = window.MOLGGA_CONTENT_REGISTRY?.contents.find((content) => content.source?.formId === animalForm.id)?.id;
+      window.MOLGGA_CONTENT_RECOMMENDATIONS?.mount(result, contentId);
       animalForm.hidden = true;
       document.querySelector("#animal-error").textContent = "";
       result.querySelector("[data-retry]").addEventListener("click", () => {
@@ -232,6 +234,8 @@
         window.MOLGGA_SHARE?.open({ title: `${summary} · ${profile.title}`, description: profile.intro, text: formatShareText(tr("나의 MBTI는 [") + summary + tr("] !!"), url), url });
       });
       result.hidden = false;
+      const contentId = window.MOLGGA_CONTENT_REGISTRY?.contents.find((content) => content.source?.formId === mbtiForm.id)?.id;
+      window.MOLGGA_CONTENT_RECOMMENDATIONS?.mount(result, contentId);
       mbtiForm.hidden = true;
       document.querySelector("#mbti-error").textContent = "";
       result.querySelector("[data-retry]").addEventListener("click", () => {
