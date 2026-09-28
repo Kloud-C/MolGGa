@@ -1136,5 +1136,11 @@
   "seo.title.teto-egen-test": "테토/에겐 테스트 — 나의 대화 스타일 | 몰까",
   "seo.description.teto-egen-test": "12가지 질문으로 알아보는 테토·에겐 테스트. 나의 대화와 표현 스타일을 재미로 살펴보세요.",
   "seo.title.worldcup": "이상형 월드컵: 이번 주말엔 뭐 하지? — 몰까",
-  "seo.description.worldcup": "이번 주말, 집에서 쉴까요 아니면 밖으로 나가볼까요? 지금 마음이 더 가는 쪽을 골라 나다운 주말을 찾아보세요."
+  "seo.description.worldcup": "이번 주말, 집에서 쉴까요 아니면 밖으로 나가볼까요? 지금 마음이 더 가는 쪽을 골라 나다운 주말을 찾아보세요.",
+  "category.taste": "취향",
+  "category.worldcup": "이상형 월드컵",
+  "category.fun": "재미",
+  "category.relationships": "연애·관계",
+  "category.personality": "심리·성격",
+  "category.lifestyle": "생활"
 }

@@ -1136,5 +1136,11 @@
   "seo.title.teto-egen-test": "Teto/Egen Quiz | molgga",
   "seo.description.teto-egen-test": "Explore your communication and expression style with a lighthearted quiz.",
   "seo.title.worldcup": "Weekend Matchup: What Should I Do This Weekend? | molgga",
-  "seo.description.worldcup": "Stay in and recharge, or head out this weekend? Choose what feels right and find your kind of weekend."
+  "seo.description.worldcup": "Stay in and recharge, or head out this weekend? Choose what feels right and find your kind of weekend.",
+  "category.taste": "Preferences",
+  "category.worldcup": "World Cups",
+  "category.fun": "Just for fun",
+  "category.relationships": "Relationships",
+  "category.personality": "Personality",
+  "category.lifestyle": "Lifestyle"
 }

@@ -46,6 +46,29 @@ function publishedPage(pathname) {
 const locales = ["ko", "en", "ja", "zh"];
 const localeResources = Object.fromEntries(locales.map((locale) => [locale, JSON.parse(read(`${locale}.json`))]));
 const localeResourceKeys = Object.keys(localeResources.ko);
+const registrySandbox = { window: {} };
+vm.runInNewContext(read("assets/js/content-registry.js"), registrySandbox, { timeout: 1000 });
+const contentRegistry = registrySandbox.window.MOLGGA_CONTENT_REGISTRY;
+assert(contentRegistry?.schemaVersion === 1, "content registry: missing supported schema version");
+const registryCategoryIds = contentRegistry?.categories?.map((category) => category.id) || [];
+const registryContents = contentRegistry?.contents || [];
+const registryContentIds = registryContents.map((content) => content.id);
+assert(new Set(registryCategoryIds).size === registryCategoryIds.length, "content registry: duplicate category IDs");
+assert(new Set(registryContentIds).size === registryContentIds.length, "content registry: duplicate content IDs");
+for (const category of contentRegistry?.categories || []) {
+  for (const locale of locales) assert(Boolean(localeResources[locale][category.labelKey]), `${locale}.json: missing content category label ${category.labelKey}`);
+}
+for (const content of registryContents) {
+  assert(Boolean(content.id && content.type && content.page && content.source?.kind), `content registry: incomplete identity or source for ${content.id || "unknown"}`);
+  assert(content.categoryIds?.length > 0 && content.categoryIds.every((id) => registryCategoryIds.includes(id)), `content registry: invalid categories for ${content.id}`);
+  assert(content.tagIds?.length > 0 && content.tagIds.every(Boolean), `content registry: missing tags for ${content.id}`);
+  assert(Boolean(content.metrics && Number.isInteger(content.metrics.estimatedMinutes || Math.min(...Object.values(content.metrics.estimatedMinutesByBracket || {})))), `content registry: missing estimated duration for ${content.id}`);
+  assert(fs.existsSync(path.join(root, content.thumbnail?.replace(/^\//, "") || "__missing_thumbnail__")), `content registry: missing thumbnail for ${content.id}`);
+  assert(fs.existsSync(path.join(root, "ko", content.page)), `content registry: missing Korean page for ${content.id}`);
+  for (const key of [content.titleKey, content.descriptionKey]) {
+    for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} metadata translation ${key}`);
+  }
+}
 for (const locale of locales) {
   assert(localeResourceKeys.every((key) => Object.hasOwn(localeResources[locale], key)), `${locale}.json: translation keys differ from ko.json`);
 }
@@ -65,11 +88,14 @@ const homeContentSets = Object.fromEntries(locales.map((locale) => {
     .map(([whole, opening, body]) => {
       const category = opening.match(/\bdata-category=["']([^"']+)["']/i)?.[1] || "";
       const destination = body.match(/<a\b[^>]*\bhref=["']([^"']+)["']/i)?.[1] || "";
-      return `${category}|${destination}`;
+      const content = registryContents.find((entry) => entry.page === destination);
+      assert(Boolean(content), `${locale}/index.html: content card destination is not in the registry (${destination})`);
+      return `${content?.id || ""}|${category}|${destination}`;
     });
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
     .filter(([opening]) => /\bclass=["'][^"']*\bhome-disclosure\b/i.test(opening));
-  assert(cards.length === 8, `${locale}/index.html: expected eight home content cards`);
+  assert(cards.length === registryContents.length, `${locale}/index.html: home card count differs from content registry (${cards.length} vs ${registryContents.length})`);
+  assert(new Set(cards.map((card) => card.split("|")[0])).size === registryContents.length, `${locale}/index.html: content cards do not map one-to-one to the content registry`);
   assert(cards.some((card) => card.endsWith("|late-night-worldcup.html")), `${locale}/index.html: late-night matchup is missing from home`);
   assert(disclosures.length === 2, `${locale}/index.html: both home disclosure sections must remain available`);
   assert(disclosures.every(([opening]) => !/\bopen(?:\s|=|>)/i.test(opening)), `${locale}/index.html: home disclosures should start collapsed`);
@@ -178,7 +204,7 @@ for (const line of redirectLines) {
   assert(fs.existsSync(publishedPage(destination)), `_redirects: missing destination ${destination}`);
 }
 
-for (const file of [...walk("assets/js", (entry) => entry.endsWith(".js")), ...walk("functions", (entry) => entry.endsWith(".js")), "scripts/audit-integrations.mjs"]) {
+for (const file of [...walk("assets/js", (entry) => entry.endsWith(".js")), ...walk("functions", (entry) => entry.endsWith(".js")), "scripts/audit-integrations.mjs", "scripts/audit-result-distributions.mjs"]) {
   const result = spawnSync(process.execPath, ["--input-type=module", "--check"], { input: read(file), encoding: "utf8" });
   assert(result.status === 0, `${file}: JavaScript syntax check failed${result.stderr ? ` (${result.stderr.trim()})` : ""}`);
 }
@@ -239,6 +265,60 @@ const backendSandbox = {};
 vm.runInNewContext(backendSource, backendSandbox, { timeout: 1000 });
 const backendCups = backendSandbox.WORLD_CUPS;
 assert(JSON.stringify(Object.keys(frontendCups).sort()) === JSON.stringify(Object.keys(backendCups).sort()), "worldcup frontend/backend game IDs differ");
+
+const registryArchetypeSandbox = { window: {} };
+for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js"]) {
+  vm.runInNewContext(read(file), registryArchetypeSandbox, { timeout: 1000, filename: file });
+}
+const archetypeConfigs = registryArchetypeSandbox.window.MOA_ARCHETYPE_TESTS || {};
+const quizMetrics = (page, formId, profileCount) => {
+  const html = read(`ko/${page}`);
+  const form = html.match(new RegExp(`<form\\b[^>]*\\bid=["']${formId}["']`, "i"));
+  assert(Boolean(form), `${page}: registry form ${formId} is missing`);
+  const groups = new Map();
+  for (const tagMatch of html.matchAll(/<input\b[^>]*>/gi)) {
+    const attributes = Object.fromEntries([...tagMatch[0].matchAll(/([\w:-]+)\s*=\s*["']([^"']*)["']/g)].map(([, key, value]) => [key.toLowerCase(), value]));
+    if (!attributes.name || !attributes.value) continue;
+    if (formId === "animal-quiz" && !/^q\d+$/.test(attributes.name)) continue;
+    if (formId === "mbti-quiz" && !/^(?:ei|sn|tf|jp)[1-5]$/.test(attributes.name)) continue;
+    groups.set(attributes.name, (groups.get(attributes.name) || 0) + 1);
+  }
+  const choicesPerQuestion = [...new Set(groups.values())];
+  return { questionCount: groups.size, choicesPerQuestion, resultCount: profileCount };
+};
+
+for (const content of registryContents) {
+  const { metrics, source } = content;
+  if (source.kind === "worldcup") {
+    const game = frontendCups[source.id];
+    assert(Boolean(game), `content registry: unknown World Cup source ${source.id} (${content.id})`);
+    if (!game) continue;
+    assert(game.page === content.page, `content registry: ${content.id} page differs from World Cup config`);
+    assert(metrics.candidateCount === game.items.length, `content registry: ${content.id} candidateCount differs from source data (${metrics.candidateCount} vs ${game.items.length})`);
+    assert(metrics.choiceCount === 2, `content registry: ${content.id} should be a two-choice matchup`);
+    assert(JSON.stringify([...metrics.availableBrackets].sort((a, b) => a - b)) === JSON.stringify([...game.availableBrackets].sort((a, b) => a - b)), `content registry: ${content.id} bracket options differ from source data`);
+    assert(metrics.availableBrackets.every((bracket) => Number.isInteger(metrics.estimatedMinutesByBracket?.[bracket])), `content registry: ${content.id} duration is missing for an available bracket`);
+  } else if (source.kind === "legacy-form") {
+    const profiles = source.formId === "animal-quiz" ? animalProfiles : mbtiProfiles;
+    const actual = quizMetrics(content.page, source.formId, profiles.size);
+    assert(metrics.questionCount === actual.questionCount, `content registry: ${content.id} questionCount differs from form (${metrics.questionCount} vs ${actual.questionCount})`);
+    assert(actual.choicesPerQuestion.length === 1 && actual.choicesPerQuestion[0] === metrics.choicesPerQuestion, `content registry: ${content.id} choicesPerQuestion differs from form (${actual.choicesPerQuestion.join(", ")})`);
+    assert(metrics.resultCount === actual.resultCount, `content registry: ${content.id} resultCount differs from profiles (${metrics.resultCount} vs ${actual.resultCount})`);
+  } else if (source.kind === "archetype") {
+    const config = archetypeConfigs[source.id];
+    assert(Boolean(config), `content registry: unknown archetype source ${source.id} (${content.id})`);
+    if (!config) continue;
+    const choicesPerQuestion = [...new Set(config.questions.map((question) => question.choices.length))];
+    assert(config.url?.endsWith(`/${content.page}`), `content registry: ${content.id} page differs from archetype source`);
+    assert(metrics.questionCount === config.questions.length, `content registry: ${content.id} questionCount differs from source data (${metrics.questionCount} vs ${config.questions.length})`);
+    assert(choicesPerQuestion.length === 1 && choicesPerQuestion[0] === metrics.choicesPerQuestion, `content registry: ${content.id} choicesPerQuestion differs from source data (${choicesPerQuestion.join(", ")})`);
+    assert(metrics.resultCount === Object.keys(config.profiles).length, `content registry: ${content.id} resultCount differs from profiles`);
+    const statedMinutes = config.eyebrow?.match(/약\s*(\d+)분/)?.[1];
+    assert(Boolean(statedMinutes) && Number(statedMinutes) === metrics.estimatedMinutes, `content registry: ${content.id} estimatedMinutes differs from its existing content definition`);
+  } else {
+    assert(false, `content registry: unsupported source kind ${source.kind} for ${content.id}`);
+  }
+}
 
 for (const [gameId, config] of Object.entries(frontendCups)) {
   const backend = backendCups[gameId];

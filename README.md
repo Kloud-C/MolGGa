@@ -51,7 +51,9 @@ npx wrangler d1 execute molgga-worldcup-rankings --remote --file=migrations/0001
 
 데이터베이스가 연결되기 전에는 랭킹이 현재 탭에서 완주한 결과만 보여줍니다. 연결 후에는 완주 시 최종 우승 항목·대진 규모·일회성 임의 ID만 저장하며 선택 과정은 전송하지 않습니다. 저장 API는 허용된 게임·항목만 받고, 동일한 임의 ID의 중복 저장을 막으며, 요청의 `Origin`이 사이트와 일치해야 합니다. `Origin` 검사는 브라우저 교차 사이트 요청을 줄이는 장치이며 인증이나 봇 방지 기능은 아닙니다. 대량 투표 방지는 Cloudflare 대시보드의 WAF에서 `/api/worldcup-vote`의 POST 요청을 대상으로 Rate Limiting 규칙을 설정해야 합니다. 규칙을 적용하기 전 계정 요금제에서 해당 기능을 지원하는지 확인하고, 공유 네트워크 이용자가 불편을 겪지 않을 임계값을 선택하세요. [Cloudflare WAF Rate Limiting 안내](https://developers.cloudflare.com/waf/rate-limiting-rules/create-zone-dashboard/)를 참고할 수 있습니다. 이 프로젝트의 Cloudflare 계정 설정은 저장소에서 확인하거나 변경할 수 없으므로 배포 후 규칙을 직접 켜고 확인해야 합니다.
 
-연동 상태를 로컬에서 점검하려면 저장소 루트에서 `node scripts/audit-integrations.mjs`를 실행합니다. 페이지 경로와 SEO 메타데이터, 홈 카드·접이식 안내의 언어 간 일치, 홈 문구 번역, 월드컵 프런트엔드 데이터와 API 허용 목록, 문항의 결과 ID, 이미지 경로, API 요청 검증, 랭킹 바인딩 문서와 공통 번역 스크립트 캐시 토큰을 확인합니다.
+연동 상태를 로컬에서 점검하려면 저장소 루트에서 `node scripts/audit-integrations.mjs`와 `node scripts/audit-result-distributions.mjs`를 실행합니다. 첫 번째 점검은 콘텐츠 레지스트리와 언어별 홈 카드·실제 정의 데이터·번역·이미지를 대조하고, 페이지 경로와 SEO 메타데이터, API, 랭킹 문서도 확인합니다. 두 번째는 퀴즈 응답 조합을 전수 조사하거나 고정 표본으로 실행해 결과별 출현 비율과 도달 가능성을 살핍니다.
+
+공통 콘텐츠 메타데이터는 `assets/js/content-registry.js`에서 관리합니다. 현재 원본 테스트와 월드컵 구현은 기존 파일에 남아 있으며 레지스트리는 이 원본들을 연결하고 실제 수치가 일치하는지 검사하는 기반입니다. 새 콘텐츠를 추가할 때 레지스트리 항목·홈 카드·네 언어 번역·썸네일을 함께 연결하고, 기존 문구는 번역 키를 재사용하며 새 문구에는 `content.<id>.*`처럼 의미가 분명한 키를 사용한 다음 두 감사 스크립트를 실행합니다. 다음 단계에서 이 레지스트리를 Preview Modal과 카테고리/검색 UI가 읽도록 확장할 예정입니다.
 
 사이트 변경 전후의 우선순위와 검토 순서는 [사이트 품질 프레임](docs/site-quality-framework.md)을 따릅니다. 페이지 레이아웃·문항·결과·모바일 UI는 [UI 가이드](docs/ui-guidelines.md)를 함께 확인합니다.
 
