@@ -47,15 +47,18 @@ Cloudflare Pages가 저장소 루트를 정적 사이트로 제공합니다. `ma
 
 ```powershell
 npx wrangler d1 execute molgga-worldcup-rankings --remote --file=migrations/0001_worldcup_votes.sql
+npx wrangler d1 execute molgga-worldcup-rankings --remote --file=migrations/0002_content_start_counts.sql
 ```
 
-데이터베이스가 연결되기 전에는 랭킹이 현재 탭에서 완주한 결과만 보여줍니다. 연결 후에는 완주 시 최종 우승 항목·대진 규모·일회성 임의 ID만 저장하며 선택 과정은 전송하지 않습니다. 저장 API는 허용된 게임·항목만 받고, 동일한 임의 ID의 중복 저장을 막으며, 요청의 `Origin`이 사이트와 일치해야 합니다. `Origin` 검사는 브라우저 교차 사이트 요청을 줄이는 장치이며 인증이나 봇 방지 기능은 아닙니다. 대량 투표 방지는 Cloudflare 대시보드의 WAF에서 `/api/worldcup-vote`의 POST 요청을 대상으로 Rate Limiting 규칙을 설정해야 합니다. 규칙을 적용하기 전 계정 요금제에서 해당 기능을 지원하는지 확인하고, 공유 네트워크 이용자가 불편을 겪지 않을 임계값을 선택하세요. [Cloudflare WAF Rate Limiting 안내](https://developers.cloudflare.com/waf/rate-limiting-rules/create-zone-dashboard/)를 참고할 수 있습니다. 이 프로젝트의 Cloudflare 계정 설정은 저장소에서 확인하거나 변경할 수 없으므로 배포 후 규칙을 직접 켜고 확인해야 합니다.
+월드컵 랭킹에는 첫 번째 마이그레이션을, 콘텐츠 시작 횟수 인기순에는 두 번째 마이그레이션을 적용합니다. 콘텐츠 미리보기에서 시작 버튼을 누른 경우에만 콘텐츠 ID와 누적 시작 횟수를 D1에 더합니다. IP, 브라우저 ID, 답변, 결과는 애플리케이션 데이터베이스에 저장하지 않으며, 집계 이벤트를 Google Analytics나 Microsoft Clarity로 보내지 않습니다. 미리보기를 열거나 취소하면 집계하지 않습니다. 이 값은 대략적인 시작 횟수이며 순 사용자 수를 나타내거나 조작을 완전히 방지하는 통계는 아닙니다.
+
+현재 Cloudflare WAF 규칙 하나를 두 POST 경로에 모두 적용하세요. 규칙 식은 `(http.request.method eq "POST" and http.request.uri.path in {"/api/worldcup-vote" "/api/content-start"})`입니다. 저장소에서는 Cloudflare 대시보드를 변경하지 않으므로 새 API 운영 전에 직접 규칙을 저장하고 활성화해야 합니다. 적용한 임계값이 두 API 요청을 합산하는지 확인하고 공유 네트워크의 정상 이용이 막히지 않도록 조정하세요. [Cloudflare WAF Rate Limiting 안내](https://developers.cloudflare.com/waf/rate-limiting-rules/create-zone-dashboard/)와 [규칙식 문법](https://developers.cloudflare.com/ruleset-engine/rules-language/operators/)을 참고하세요. `Origin` 검사는 교차 사이트 요청을 줄이는 장치이며 인증이나 봇 방지 기능은 아닙니다.
 
 연동 상태를 로컬에서 점검하려면 저장소 루트에서 `node scripts/audit-integrations.mjs`와 `node scripts/audit-result-distributions.mjs`를 실행합니다. 첫 번째 점검은 공통 레지스트리와 실제 정의 데이터·네 언어 번역·이미지·페이지 경로를 대조하고 SEO 메타데이터, API, 랭킹 문서도 확인합니다. 두 번째는 퀴즈 응답 조합을 전수 조사하거나 고정 표본으로 실행해 결과별 출현 비율과 도달 가능성을 살핍니다.
 
 공통 콘텐츠 메타데이터는 `assets/js/content-registry.js`에서 관리합니다. 홈의 검색·분류·정렬·보기 방식·시작 전 미리보기와 결과 후 추천은 이 레지스트리를 함께 읽습니다. 새 콘텐츠는 별도 홈 카드 HTML을 만들지 않고 레지스트리에 제목·설명 키, 이미지, 분류·태그, 공개 경로, 실제 등록일과 수치를 등록합니다. 네 언어 번역과 콘텐츠 데이터·페이지를 추가하고, 문항·후보 수와 예상 시간은 감사 스크립트에서 원본과 대조합니다. 공통 스타일이나 스크립트를 바꾸면 HTML의 캐시 토큰도 갱신합니다.
 
-홈 콘텐츠 탐색은 검색·분류·기본/최신순 정렬·카드 보기 전환·즐겨찾기·최근 본 항목을 지원합니다. 최신순은 레지스트리에 기록한 실제 등록일을 사용합니다. `assets/js/content-activity.js`는 콘텐츠 ID와 열람 시각만 브라우저 `localStorage`에 보관하고, 즐겨찾기도 콘텐츠 ID만 저장합니다. 최근 기록은 홈에서 지울 수 있고 즐겨찾기는 카드의 별표로 해제할 수 있습니다. 답변·결과·개인정보는 저장하거나 서버로 보내지 않습니다. 신뢰할 수 있는 전체 콘텐츠 인기도 통계가 없어 인기순은 제공하지 않습니다.
+홈 콘텐츠 탐색은 검색·분류·인기순/최신순 정렬·카드 보기 전환·즐겨찾기·최근 본 항목을 지원합니다. 최신순은 레지스트리의 실제 등록일, 인기순은 D1의 콘텐츠별 시작 횟수 누계를 사용합니다. 집계 API나 D1을 사용할 수 없으면 인기순을 비활성화하고 최신순을 유지합니다. `assets/js/content-activity.js`는 콘텐츠 ID와 열람 시각만 브라우저 `localStorage`에 보관하고, 즐겨찾기도 콘텐츠 ID만 저장합니다. 답변·결과·개인별 콘텐츠 이력은 인기순 집계에 보내지 않습니다.
 
 사이트 변경 전후의 우선순위와 검토 순서는 [사이트 품질 프레임](docs/site-quality-framework.md)을 따릅니다. 페이지 레이아웃·문항·결과·모바일 UI는 [UI 가이드](docs/ui-guidelines.md)를 함께 확인합니다.
 

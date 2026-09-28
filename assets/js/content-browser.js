@@ -9,6 +9,9 @@
   const translate = (key, options) => window.MOA_I18N?.t(key, options) || key;
   const activity = window.MOLGGA_CONTENT_ACTIVITY;
   const cardsById = new Map();
+  const popularityCounts = new Map();
+  let popularityStatus = "loading";
+  let hasUserChosenSort = false;
 
   const make = (tag, className, text) => {
     const element = document.createElement(tag);
@@ -91,18 +94,23 @@
   sortSelect.setAttribute("aria-label", translate("contentBrowser.sort.label"));
   sortLabel.append(sortSelect);
   const sortOptions = [
-    ["catalog", "contentBrowser.sort.catalog"],
+    ["popular", "contentBrowser.sort.popular"],
     ["latest", "contentBrowser.sort.latest"]
   ];
   const refreshSortOptions = () => {
-    const previous = sortSelect.value || "catalog";
+    const previous = sortSelect.value || "latest";
     sortSelect.replaceChildren(...sortOptions.map(([value, key]) => {
       const option = document.createElement("option");
       option.value = value;
-      option.textContent = translate(key);
+      option.disabled = value === "popular" && popularityStatus !== "ready";
+      option.textContent = value === "popular" && popularityStatus !== "ready"
+        ? translate(popularityStatus === "loading" ? "contentBrowser.sort.popularLoading" : "contentBrowser.sort.popularUnavailable")
+        : translate(key);
       return option;
     }));
-    sortSelect.value = sortOptions.some(([value]) => value === previous) ? previous : "catalog";
+    sortSelect.value = sortOptions.some(([value]) => value === previous) && !(previous === "popular" && popularityStatus !== "ready")
+      ? previous
+      : "latest";
   };
   refreshSortOptions();
 
@@ -295,7 +303,9 @@
     const allowedIds = activeScope === "favorites" ? new Set(favorites) : activeScope === "recent" ? new Set(recent.map((entry) => entry.id)) : null;
     let visibleCount = 0;
     const orderedContents = registry.contents.map((content, index) => ({ content, index }));
-    if (sortSelect.value === "latest") {
+    if (sortSelect.value === "popular" && popularityStatus === "ready") {
+      orderedContents.sort((a, b) => (popularityCounts.get(b.content.id) || 0) - (popularityCounts.get(a.content.id) || 0) || a.index - b.index);
+    } else if (sortSelect.value === "latest") {
       orderedContents.sort((a, b) => Date.parse(b.content.createdAt || "") - Date.parse(a.content.createdAt || "") || a.index - b.index);
     }
     orderedContents.forEach(({ content }) => {
@@ -354,7 +364,10 @@
   updateCards();
   search.addEventListener("input", updateCards);
   categorySelect.addEventListener("change", updateCards);
-  sortSelect.addEventListener("change", updateCards);
+  sortSelect.addEventListener("change", () => {
+    hasUserChosenSort = true;
+    updateCards();
+  });
   scopeGroup.addEventListener("click", (event) => {
     const button = event.target.closest("[data-content-scope]");
     if (!button || !scopeButtons.has(button.dataset.contentScope)) return;
@@ -372,7 +385,7 @@
     if (event.target.closest("[data-content-reset]")) {
       search.value = "";
       categorySelect.value = "all";
-      sortSelect.value = "catalog";
+      sortSelect.value = popularityStatus === "ready" ? "popular" : "latest";
       activeScope = "all";
       updateCards();
       search.focus();
@@ -406,6 +419,17 @@
     openPreview(content);
   });
   [close, cancel].forEach((button) => button.addEventListener("click", () => dialog.close()));
+  start.addEventListener("click", () => {
+    if (!activePreview) return;
+    fetch("/api/content-start", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ contentId: activePreview.id }),
+      credentials: "omit",
+      cache: "no-store",
+      keepalive: true
+    }).catch(() => { /* Popularity is best-effort and never blocks starting content. */ });
+  });
   dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
 
   const refreshLabels = () => {
@@ -447,4 +471,26 @@
     window.i18next.on("languageChanged", refreshLabels);
   }
   window.addEventListener("molgga:content-activity-change", updateCards);
+
+  fetch("/api/content-starts", { credentials: "omit", cache: "no-store", headers: { accept: "application/json" } })
+    .then((response) => {
+      if (!response.ok) throw new Error("content_start_counts_unavailable");
+      return response.json();
+    })
+    .then((data) => {
+      if (!Array.isArray(data.counts)) throw new Error("invalid_content_start_counts");
+      data.counts.forEach(({ contentId, starts }) => {
+        if (typeof contentId === "string" && Number.isSafeInteger(starts) && starts >= 0) popularityCounts.set(contentId, starts);
+      });
+      popularityStatus = "ready";
+      const currentSort = sortSelect.value;
+      refreshSortOptions();
+      if (!hasUserChosenSort && currentSort === "latest") sortSelect.value = "popular";
+      updateCards();
+    })
+    .catch(() => {
+      popularityStatus = "unavailable";
+      refreshSortOptions();
+      updateCards();
+    });
 })();

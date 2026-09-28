@@ -80,7 +80,8 @@ for (const locale of locales) {
 }
 const phaseTwoTranslationKeys = [
   "contentBrowser.search.label", "contentBrowser.search.placeholder", "contentBrowser.category.label",
-  "contentBrowser.category.all", "contentBrowser.sort.label", "contentBrowser.sort.catalog", "contentBrowser.sort.latest",
+  "contentBrowser.category.all", "contentBrowser.sort.label", "contentBrowser.sort.popular", "contentBrowser.sort.popularLoading",
+  "contentBrowser.sort.popularUnavailable", "contentBrowser.sort.latest",
   "contentBrowser.view.label", "contentBrowser.view.grid",
   "contentBrowser.view.compact", "contentBrowser.view.list", "contentBrowser.results.count",
   "contentBrowser.results.empty", "contentBrowser.results.reset", "contentBrowser.metrics.label",
@@ -95,9 +96,9 @@ const phaseThreeTranslationKeys = [
   "contentActivity.scope.recent", "contentActivity.favorite.add", "contentActivity.favorite.remove",
   "contentActivity.empty.favorites", "contentActivity.empty.recent", "contentActivity.recent.title",
   "contentActivity.recent.clear", "contentActivity.suggestions.title", "contentActivity.suggestions.open",
-  "privacy.quizAnswers", "privacy.localContentPreferences", "privacy.storageNotice",
+  "privacy.quizAnswers", "privacy.localContentPreferences", "privacy.contentStartCounts", "privacy.storageNotice",
   "privacy.adCookiesDisclosure", "privacy.adSettingsIntro", "privacy.adSettingsMiddle", "privacy.adSettingsSuffix",
-  "2026년 9월 28일", "PRIVACY · 시행일 2026년 9월 28일", "aboutads.info 광고 선택"
+  "2026년 9월 29일", "PRIVACY · 시행일 2026년 9월 29일", "aboutads.info 광고 선택"
 ];
 for (const locale of locales) {
   for (const key of phaseTwoTranslationKeys) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing phase 2 UI translation ${key}`);
@@ -138,8 +139,8 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20260929-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
-  assert(html.includes('content-activity.css?v=20260929-2'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
+  assert(html.includes('content-registry.js?v=20260929-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-2'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-activity.css?v=20260929-3'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
     .filter(([opening]) => /\bclass=["'][^"']*\bhome-disclosure\b/i.test(opening));
@@ -164,8 +165,9 @@ for (const page of allHtml) {
   const slug = path.posix.basename(page, ".html");
   if (slug === "privacy") {
     assert(html.includes('data-i18n="privacy.adCookiesDisclosure"'), `${page}: Google ad cookie disclosure is missing`);
+    assert(html.includes('data-i18n="privacy.contentStartCounts"'), `${page}: aggregate popularity disclosure is missing`);
     assert(html.includes('href="https://adssettings.google.com/"') && html.includes('href="https://www.aboutads.info/choices/"'), `${page}: ad preference controls are missing`);
-    assert(html.includes('2026년 9월 28일'), `${page}: privacy policy update date is stale`);
+    assert(html.includes('2026년 9월 29일'), `${page}: privacy policy update date is stale`);
   }
   if (slug === "index" || registryContents.some((content) => path.posix.basename(content.page, ".html") === slug)) {
     assert(html.includes('content-activity.js?v=20260928-1'), `${page}: local content activity script is missing or stale`);
@@ -483,18 +485,29 @@ for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHET
 function loadApi(relativePath, exportedName, sandbox) {
   const source = read(relativePath)
     .replace(/^import \{ WORLD_CUPS \} from [^;]+;\s*/m, "")
+    .replace(/^import \{ CONTENT_START_IDS \} from [^;]+;\s*/m, "")
     .replace(`export async function ${exportedName}`, `globalThis.${exportedName} = async function`);
   vm.runInNewContext(source, sandbox, { timeout: 1000 });
   return sandbox[exportedName];
 }
 
-const apiContext = () => ({ WORLD_CUPS: backendCups, URL, Request, Response, JSON, Number, Object, RegExp, TextDecoder, Uint8Array });
+const contentStartConfigSandbox = {};
+vm.runInNewContext(read("functions/_shared/content-start-config.js").replace("export const CONTENT_START_IDS =", "globalThis.CONTENT_START_IDS ="), contentStartConfigSandbox, { timeout: 1000 });
+const contentStartIds = contentStartConfigSandbox.CONTENT_START_IDS;
+assert(JSON.stringify(contentStartIds) === JSON.stringify(registryContentIds), "content-start allow-list differs from the shared content registry");
+const apiContext = () => ({ WORLD_CUPS: backendCups, CONTENT_START_IDS: contentStartIds, URL, Request, Response, JSON, Number, Object, RegExp, TextDecoder, Uint8Array });
 const onRequestPost = loadApi("functions/api/worldcup-vote.js", "onRequestPost", apiContext());
 const onRequestGet = loadApi("functions/api/worldcup-rankings.js", "onRequestGet", apiContext());
+const onContentStartPost = loadApi("functions/api/content-start.js", "onRequestPost", apiContext());
+const onContentStartsGet = loadApi("functions/api/content-starts.js", "onRequestGet", apiContext());
 const writes = [];
 const mockDb = {
   prepare(sql) {
     return {
+      async all() {
+        if (/FROM content_start_counts/i.test(sql)) return { results: [{ contentId: "travel-role", starts: 9 }, { contentId: "weekend", starts: 3 }] };
+        return { results: [{ itemId: "cup-ramyeon", wins: 3 }] };
+      },
       bind(...values) {
         return {
           async run() { writes.push({ sql, values }); return { meta: { changes: 1 } }; },
@@ -541,12 +554,42 @@ assert(response.status === 200 && body.items?.[0]?.itemId === "cup-ramyeon", "ra
 response = await onRequestGet({ request: new Request("https://molgga.com/api/worldcup-rankings?gameId=unknown"), env: { MOLGGA_DB: mockDb } });
 assert(response.status === 400, "ranking API accepts an unknown game ID");
 
+const postContentStart = (body, origin = "https://molgga.com", db = mockDb) => onContentStartPost({
+  request: new Request("https://molgga.com/api/content-start", {
+    method: "POST", headers: { origin, "content-type": "application/json" }, body: JSON.stringify(body)
+  }), env: { MOLGGA_DB: db }
+});
+const beforeStartWrites = writes.length;
+response = await postContentStart({ contentId: "travel-role" });
+body = await response.json();
+assert(response.status === 200 && body.accepted === true, "content-start API rejects a registered content ID");
+assert(writes.length === beforeStartWrites + 1 && writes.at(-1).values.join("|") === "travel-role", "content-start API stores data beyond the content ID counter");
+assert(/content_start_counts/i.test(writes.at(-1).sql) && /starts\s*=\s*starts\s*\+\s*1/i.test(writes.at(-1).sql), "content-start API does not increment the aggregate counter atomically");
+response = await postContentStart({ contentId: "travel-role" }, "https://attacker.example");
+assert(response.status === 403, "content-start API accepts a mismatched Origin");
+response = await onContentStartPost({ request: new Request("https://molgga.com/api/content-start", { method: "POST", body: JSON.stringify({ contentId: "weekend" }) }), env: { MOLGGA_DB: mockDb } });
+assert(response.status === 403, "content-start API accepts a request without an Origin header");
+response = await postContentStart({ contentId: "unknown-content" });
+assert(response.status === 400, "content-start API accepts an unregistered content ID");
+response = await onContentStartPost({ request: new Request("https://molgga.com/api/content-start", { method: "POST", headers: { origin: "https://molgga.com" }, body: "x".repeat(1024) }), env: { MOLGGA_DB: mockDb } });
+assert(response.status === 413, "content-start API accepts an oversized body without a Content-Length header");
+response = await onContentStartPost({ request: new Request("https://molgga.com/api/content-start", { method: "POST", headers: { origin: "https://molgga.com" }, body: "{" }), env: { MOLGGA_DB: mockDb } });
+assert(response.status === 400, "content-start API accepts malformed JSON");
+response = await postContentStart({ contentId: "weekend" }, "https://molgga.com", null);
+assert(response.status === 503, "content-start API does not report a missing database binding");
+response = await onContentStartsGet({ request: new Request("https://molgga.com/api/content-starts"), env: { MOLGGA_DB: mockDb } });
+body = await response.json();
+assert(response.status === 200 && body.counts?.[0]?.contentId === "travel-role" && body.counts?.[0]?.starts === 9, "content-start API fails to return aggregate popularity counts");
+response = await onContentStartsGet({ request: new Request("https://molgga.com/api/content-starts"), env: {} });
+assert(response.status === 503, "content-start API does not gracefully handle a missing D1 binding");
+
 const readme = read("README.md");
 const documentedDatabase = readme.match(/D1 데이터베이스 `([^`]+)`/)?.[1];
 const migrationCommand = readme.match(/wrangler d1 execute ([^\s`]+)/)?.[1];
 assert(Boolean(documentedDatabase) && documentedDatabase === migrationCommand, "README: D1 database name differs from migration command");
-assert(readme.includes("MOLGGA_DB") && read("functions/api/worldcup-vote.js").includes("env.MOLGGA_DB") && read("functions/api/worldcup-rankings.js").includes("env.MOLGGA_DB"), "D1 binding name differs between documentation and API routes");
-assert(readme.includes("Rate Limiting 규칙") && readme.includes("Origin"), "README does not document Origin validation and the external rate-limiting requirement");
+assert(readme.includes("MOLGGA_DB") && ["functions/api/worldcup-vote.js", "functions/api/worldcup-rankings.js", "functions/api/content-start.js", "functions/api/content-starts.js"].every((route) => read(route).includes("env.MOLGGA_DB")), "D1 binding name differs between documentation and API routes");
+assert(readme.includes("Cloudflare WAF 규칙") && readme.includes("Origin") && readme.includes("/api/worldcup-vote" ) && readme.includes("/api/content-start"), "README does not document the shared Origin and rate-limit requirements");
+assert(readme.includes("migrations/0002_content_start_counts.sql"), "README does not document the popularity counter migration");
 const i18nScriptVersions = new Set();
 for (const page of allHtml) {
   const references = [...read(page).matchAll(/assets\/js\/i18n\.js(?:\?v=([^"']+))?/g)];
@@ -568,6 +611,13 @@ assert(/vote_id\s+TEXT\s+PRIMARY KEY/i.test(migration), "D1 vote ID is not a pri
 assert(/CHECK\s*\(bracket_size\s+IN\s*\(8,\s*16,\s*32\)\)/i.test(migration), "D1 bracket constraint differs from supported bracket sizes");
 assert(/INSERT\s+OR\s+IGNORE\s+INTO\s+worldcup_votes/i.test(read("functions/api/worldcup-vote.js")), "vote API is missing idempotent insert behavior");
 assert(/GROUP\s+BY\s+item_id[\s\S]*ORDER\s+BY\s+wins\s+DESC[\s\S]*LIMIT\s+10/i.test(read("functions/api/worldcup-rankings.js")), "ranking query does not aggregate and limit top items");
+const startCountMigration = read("migrations/0002_content_start_counts.sql");
+assert(/content_id\s+TEXT\s+PRIMARY KEY/i.test(startCountMigration) && /starts\s+INTEGER\s+NOT NULL\s+DEFAULT\s+0/i.test(startCountMigration), "content-start migration is missing its aggregate count schema");
+assert(/CHECK\s*\(starts\s*>=\s*0\)/i.test(startCountMigration), "content-start migration allows negative totals");
+assert(/ON\s+CONFLICT\s*\(content_id\)\s+DO\s+UPDATE\s+SET\s+starts\s*=\s*starts\s*\+\s*1/i.test(read("functions/api/content-start.js")), "content-start route does not atomically increment aggregate counts");
+assert(/CONTENT_START_IDS\.includes\(contentId\)/.test(read("functions/api/content-start.js")), "content-start route does not enforce its content allow-list");
+assert(!/CF-Connecting-IP|ip\.src|navigator\.userAgent|localStorage|sendBeacon/i.test(read("functions/api/content-start.js") + read("assets/js/content-browser.js").match(/fetch\("\/api\/content-start"[\s\S]*?\}\);/)?.[0]), "content-start collection adds a client or IP identifier");
+assert(read("assets/js/content-browser.js").includes('start.addEventListener("click"') && read("assets/js/content-browser.js").includes('fetch("/api/content-starts"'), "explorer does not submit and read aggregate content-start counts");
 
 if (errors.length) {
   console.error(`Integration audit failed (${errors.length} issues across ${checks} checks):`);
