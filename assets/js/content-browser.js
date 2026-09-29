@@ -320,10 +320,20 @@
     } else {
       orderedContents.sort((a, b) => pinNewFirst(a, b) || a.index - b.index);
     }
+    const orderedCards = orderedContents
+      .map(({ content }) => cardsById.get(content.id))
+      .filter(Boolean);
+    const currentCards = [...grid.children];
+    const orderChanged = orderedCards.length !== currentCards.length
+      || orderedCards.some((card, index) => card !== currentCards[index]);
+    if (orderChanged) {
+      const fragment = document.createDocumentFragment();
+      orderedCards.forEach((card) => fragment.append(card));
+      grid.append(fragment);
+    }
     orderedContents.forEach(({ content, isNew }) => {
       const card = cardsById.get(content.id);
       if (!card) return;
-      grid.append(card);
       const badge = card.querySelector("[data-content-new-badge]");
       if (badge) {
         badge.textContent = translate("contentBadge.new");
@@ -425,7 +435,6 @@
     if (favorite) {
       event.preventDefault();
       activity?.toggleFavorite?.(favorite.dataset.contentFavorite);
-      updateCards();
       return;
     }
     const link = event.target.closest("a[data-content-start]");
