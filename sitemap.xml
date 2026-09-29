@@ -448,4 +448,36 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/travel-role-test" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/travel-role-test" />
   </url>
+  <url>
+    <loc>https://molgga.com/ko/romance-style-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/romance-style-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/en/romance-style-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/romance-style-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/ja/romance-style-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/romance-style-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/zh/romance-style-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/romance-style-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/romance-style-test" />
+  </url>
 </urlset>

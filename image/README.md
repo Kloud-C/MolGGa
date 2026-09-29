@@ -105,3 +105,7 @@
 ## 친구 여행 역할 테스트 이미지
 
 `tests/travel-role-test`에는 8개 결과를 위한 생성 이미지가 있습니다. `assets/js/travel-role-data.js`에서 결과 프로필 ID와 파일 경로를 관리합니다. 각 사진은 여행 총무, 길잡이, 맛집 탐험, 사진 담당, 분위기 메이커, 정산 담당, 케어 담당, 즉흥 코스 개척자 역할을 장면과 행동으로 표현합니다. 상세한 파일명 매핑과 교체 기준은 [`tests/travel-role-test/README.md`](tests/travel-role-test/README.md)를 확인하세요.
+
+## 연애 스타일 테스트 이미지
+
+`tests/romance-style`에는 12개 연애 스타일 결과를 위한 생성 실사풍 이미지가 있습니다. 모바일 전송량을 줄이도록 900×1125 JPEG로 최적화했습니다. `assets/js/romance-style-data.js`의 결과 프로필 ID와 파일 경로를 맞춰 관리합니다. 각 결과 이미지와 장면 설명의 대응은 [`tests/romance-style/README.md`](tests/romance-style/README.md)에서 확인할 수 있습니다.

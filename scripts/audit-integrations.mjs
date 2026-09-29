@@ -75,6 +75,7 @@ for (const content of registryContents) {
   }
 }
 assert(registryContents.some((content) => content.id === "travel-role" && content.source?.kind === "archetype" && content.page === "travel-role-test.html"), "content registry: travel-role quiz is not registered for the shared archetype engine");
+assert(registryContents.some((content) => content.id === "romance-style" && content.source?.kind === "archetype" && content.page === "romance-style-test.html"), "content registry: romance-style quiz is not registered for the shared archetype engine");
 for (const locale of locales) {
   assert(localeResourceKeys.every((key) => Object.hasOwn(localeResources[locale], key)), `${locale}.json: translation keys differ from ko.json`);
   if (locale !== "ko") {
@@ -143,7 +144,7 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20260929-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-3'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-registry.js?v=20260929-2') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-3'), `${locale}/index.html: shared content browser scripts are missing or stale`);
   assert(html.includes('content-activity.css?v=20260929-4'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
@@ -205,7 +206,7 @@ for (const page of allHtml) {
   for (const key of i18nKeys) assert(Object.hasOwn(localeResources[locale], key), `${page}: ${locale}.json is missing data-i18n key ${key}`);
   const hasContentResult = /data-(?:quiz|worldcup)-result\b|id=["'](?:animal-result|mbti-result)["']/.test(html);
   if (hasContentResult) {
-    assert(html.includes('content-registry.js?v=20260929-1'), `${page}: result recommendations lack the shared content registry`);
+    assert(html.includes('content-registry.js?v=20260929-2'), `${page}: result recommendations lack the shared content registry`);
     assert(html.includes('content-recommendations.js?v=20260928-1'), `${page}: shared result recommendations are not loaded`);
   }
   for (const [, declaration] of html.matchAll(/\bdata-i18n-attr=["']([^"']+)["']/gi)) {
@@ -345,7 +346,7 @@ assert(frontendCups.weekend?.items.length === 50, `weekend World Cup must draw f
 assert(/shuffle\(config\.items\)\.slice\(0,\s*bracketSize\)/.test(read("assets/js/worldcup.js")), "World Cup must randomly draw the selected bracket size from the complete candidate list");
 
 const registryArchetypeSandbox = { window: {} };
-for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js"]) {
+for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js", "assets/js/romance-style-data.js"]) {
   vm.runInNewContext(read(file), registryArchetypeSandbox, { timeout: 1000, filename: file });
 }
 const archetypeConfigs = registryArchetypeSandbox.window.MOA_ARCHETYPE_TESTS || {};
@@ -464,7 +465,8 @@ const archetypeFiles = [
   "assets/js/attachment-data.js",
   "assets/js/past-life-data.js",
   "assets/js/spending-habits-data.js",
-  "assets/js/travel-role-data.js"
+  "assets/js/travel-role-data.js",
+  "assets/js/romance-style-data.js"
 ];
 const archetypeSandbox = { window: {} };
 for (const file of archetypeFiles) vm.runInNewContext(read(file), archetypeSandbox, { timeout: 1000 });

@@ -7,5 +7,6 @@ export const CONTENT_START_IDS = [
   "attachment-style",
   "past-life",
   "spending-habits",
-  "travel-role"
+  "travel-role",
+  "romance-style"
 ];

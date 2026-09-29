@@ -134,6 +134,20 @@
       thumbnail: "/image/tests/travel-role-test/planner.png",
       source: { kind: "archetype", id: "travel-role" },
       metrics: { questionCount: 9, choicesPerQuestion: 2, resultCount: 8, estimatedMinutes: 2 }
+    },
+    {
+      id: "romance-style",
+      createdAt: "2026-09-29",
+      cardLabelKey: "content.romance-style.cardLabel",
+      type: "quiz",
+      categoryIds: ["relationships", "personality"],
+      tagIds: ["relationships", "dating", "communication", "self-reflection"],
+      titleKey: "romanceStyle.title",
+      descriptionKey: "romanceStyle.description",
+      page: "romance-style-test.html",
+      thumbnail: "/image/tests/romance-style/direct.jpg",
+      source: { kind: "archetype", id: "romance-style" },
+      metrics: { questionCount: 15, choicesPerQuestion: 3, resultCount: 12, estimatedMinutes: 4 }
     }
   ];
 
