@@ -239,7 +239,7 @@
     share.className = "button button-small button-quiet";
     share.textContent = tr("결과 공유");
     share.addEventListener("click", () => window.MOLGGA_SHARE?.open({
-      title: localize(winner.name),
+      title: `${localize(config.title)} [${localize(winner.name)}]`,
       description: localize(winner.detail),
       imageUrl: winner.image,
       buttonTitle: tr("나도 월드컵 해보기"),

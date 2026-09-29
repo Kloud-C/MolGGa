@@ -71,7 +71,7 @@ window.MOA_ARCHETYPE_TESTS["spending-habits"] = {
     frugal: {
       name: "짠테크형 · 알뜰한 실속파", emoji: "🌱", image: "../image/spending-habits/frugal-saver.png", color: "#318d69",
       catchphrase: "작은 차이를 모아, 나에게 필요한 여유를 만들어요.",
-      description: "가격과 필요를 꼼꼼히 살피고, 작은 절약도 꾸준히 이어가는 편이에요. 합리적인 선택에서 만족을 느끼며 미래를 위한 여유를 차근차근 쌓아갑니다.",
+      description: "가격과 필요를 꼼꼼히 살피고, 작은 절약도 꾸준히 이어가는 편이에요. 합리적인 선택에서 만족을 느끼며 미래를 위한 여유를 차근차근 쌓아갑니다.", shareDescription: "resultShare.spending-habits.frugal",
       details: [
         { title: "잘하는 점 🌿", icon: "leaf", text: "지출을 살펴보고 더 나은 선택을 찾는 힘이 있어요. 계획적으로 모은 여유 자금은 예상하지 못한 상황이나 중요한 목표에 도움이 됩니다." },
         { title: "작은 균형 팁 💡", icon: "bulb", text: "아끼는 일만큼 지금의 만족도 소중해요. 꼭 필요한 즐거움에는 미리 작은 예산을 정해 두면 절약과 경험을 함께 챙길 수 있어요." }
@@ -80,7 +80,7 @@ window.MOA_ARCHETYPE_TESTS["spending-habits"] = {
     flex: {
       name: "플렉스형 · 경험을 즐기는 소비자", emoji: "✨", image: "../image/spending-habits/flex-spender.png", color: "#b7833d",
       catchphrase: "돈으로 바꾼 좋은 경험은 오래 기억에 남아요.",
-      description: "가격만큼이나 만족감과 경험의 가치를 중요하게 여겨요. 나와 소중한 사람을 위한 소비에서 기쁨을 얻고, 의미 있다고 느끼는 순간을 아끼지 않는 편입니다.",
+      description: "가격만큼이나 만족감과 경험의 가치를 중요하게 여겨요. 나와 소중한 사람을 위한 소비에서 기쁨을 얻고, 의미 있다고 느끼는 순간을 아끼지 않는 편입니다.", shareDescription: "resultShare.spending-habits.flex",
       details: [
         { title: "잘하는 점 🌟", icon: "star", text: "무엇이 나에게 기쁨과 가치를 주는지 잘 알아요. 만족도 높은 경험에 집중하면 소비가 좋은 추억과 동기가 될 수 있습니다." },
         { title: "작은 균형 팁 💡", icon: "bulb", text: "큰 지출을 하기 전에 이번 달 여유 금액을 확인해 보세요. 즐거움을 위한 예산을 먼저 정하면 마음 편하게 경험을 누릴 수 있어요." }
@@ -89,7 +89,7 @@ window.MOA_ARCHETYPE_TESTS["spending-habits"] = {
     planned: {
       name: "계획소비형 · 예산을 설계하는 소비자", emoji: "📒", image: "../image/spending-habits/planned-spender.png", color: "#4d8290",
       catchphrase: "미리 세운 계획이 마음 편한 선택을 도와줘요.",
-      description: "예산과 우선순위를 정해 두고 그 안에서 소비하는 편이에요. 목표를 작은 단계로 나누고 진행 상황을 살펴서, 필요한 지출과 미래 준비를 균형 있게 챙깁니다.",
+      description: "예산과 우선순위를 정해 두고 그 안에서 소비하는 편이에요. 목표를 작은 단계로 나누고 진행 상황을 살펴서, 필요한 지출과 미래 준비를 균형 있게 챙깁니다.", shareDescription: "resultShare.spending-habits.planned",
       details: [
         { title: "잘하는 점 🧭", icon: "compass", text: "무엇을 위해 돈을 쓰는지 분명하게 알고 있어요. 예산을 나눠 관리하면 목표에 필요한 준비를 꾸준히 이어갈 수 있습니다." },
         { title: "작은 균형 팁 💡", icon: "bulb", text: "계획은 상황에 따라 조금 바뀌어도 괜찮아요. 즐거운 즉흥 지출을 위한 여유 항목을 두면 계획을 지키면서 유연함도 얻을 수 있어요." }
@@ -98,7 +98,7 @@ window.MOA_ARCHETYPE_TESTS["spending-habits"] = {
     impulse: {
       name: "충동소비형 · 마음에 솔직한 즉흥파", emoji: "🎈", image: "../image/spending-habits/impulse-spender.png", color: "#bd7180",
       catchphrase: "마음이 끌리는 순간을 놓치고 싶지 않아요.",
-      description: "지금 느끼는 설렘과 필요에 솔직하게 반응하는 편이에요. 새로운 물건이나 경험을 빠르게 즐길 수 있지만, 예상보다 지출이 커질 때도 있어요.",
+      description: "지금 느끼는 설렘과 필요에 솔직하게 반응하는 편이에요. 새로운 물건이나 경험을 빠르게 즐길 수 있지만, 예상보다 지출이 커질 때도 있어요.", shareDescription: "resultShare.spending-habits.impulse",
       details: [
         { title: "잘하는 점 🎉", icon: "celebration", text: "좋아하는 것을 발견하고 바로 즐기는 추진력이 있어요. 새로운 경험을 시작하는 데 망설임이 적고, 순간의 기쁨을 잘 알아차립니다." },
         { title: "작은 균형 팁 💡", icon: "bulb", text: "큰 금액은 장바구니에 담아 하루 뒤 다시 확인해 보세요. 월간 자유 예산을 정해 두면 즉흥적인 즐거움도 부담을 줄이며 이어갈 수 있어요." }

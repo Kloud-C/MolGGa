@@ -74,7 +74,7 @@ window.MOA_ARCHETYPE_TESTS["attachment-style"] = {
     secure: { image: "../image/tests/attachment-style/secure.jpg",
       name: "안정형 · 편안한 연결자", emoji: "🤝", color: "#318d69",
       catchphrase: "가까움도 나다움도 함께 지켜요.",
-      description: "마음을 나누면서도 서로의 차이와 시간을 존중하는 편이에요. 서운함이 생기면 대화로 풀어가고, 필요할 때 도움을 주고받으려 해요.",
+      description: "마음을 나누면서도 서로의 차이와 시간을 존중하는 편이에요. 서운함이 생기면 대화로 풀어가고, 필요할 때 도움을 주고받으려 해요.", shareDescription: "resultShare.attachment-style.secure",
       details: [
         { title: "연애할 때 💌", icon: "heart", text: "애정과 고마움을 자연스럽게 표현해요. 갈등이 있어도 관계를 단정하기보다 함께 풀 방법을 찾습니다." },
         { title: "인간관계에서 🌿", icon: "leaf", text: "친밀함과 각자의 생활을 균형 있게 이어가요. 부탁하거나 도움을 받는 일을 관계의 일부로 여겨요." },
@@ -84,7 +84,7 @@ window.MOA_ARCHETYPE_TESTS["attachment-style"] = {
     avoidant: { image: "../image/tests/attachment-style/avoidant.jpg",
       name: "회피형 · 나만의 페이스", emoji: "🐢", color: "#397b96",
       catchphrase: "혼자 정리할 시간이 있어야 마음도 편해요.",
-      description: "감정이 복잡할 때 혼자 생각을 정리하고 자기 리듬을 지키려는 편이에요. 가까운 관계에서도 독립성과 개인 공간이 중요할 수 있어요.",
+      description: "감정이 복잡할 때 혼자 생각을 정리하고 자기 리듬을 지키려는 편이에요. 가까운 관계에서도 독립성과 개인 공간이 중요할 수 있어요.", shareDescription: "resultShare.attachment-style.avoidant",
       details: [
         { title: "연애할 때 💌", icon: "heart", text: "마음이 있어도 표현을 서두르지 않을 수 있어요. 부담을 느끼면 잠시 거리를 두고 차분해진 뒤 이야기하는 편입니다." },
         { title: "인간관계에서 🌿", icon: "leaf", text: "스스로 해결하는 데 익숙하고 사적인 시간을 소중히 여겨요. 상대에게 필요한 거리를 말로 알려주면 오해를 줄일 수 있어요." },
@@ -94,7 +94,7 @@ window.MOA_ARCHETYPE_TESTS["attachment-style"] = {
     anxious: { image: "../image/tests/attachment-style/anxious.jpg",
       name: "불안형 · 마음 확인 레이더", emoji: "💌", color: "#b86b82",
       catchphrase: "소중한 관계일수록 마음을 자주 확인하고 싶어요.",
-      description: "관계를 중요하게 여겨 상대의 반응과 분위기 변화에 민감할 수 있어요. 확신이 줄어들면 마음을 확인하고 안심을 얻고 싶어지는 편이에요.",
+      description: "관계를 중요하게 여겨 상대의 반응과 분위기 변화에 민감할 수 있어요. 확신이 줄어들면 마음을 확인하고 안심을 얻고 싶어지는 편이에요.", shareDescription: "resultShare.attachment-style.anxious",
       details: [
         { title: "연애할 때 💌", icon: "heart", text: "애정 표현과 꾸준한 연락에서 안정감을 느껴요. 걱정이 커질 때는 추측을 키우기보다 원하는 연락이나 표현을 구체적으로 말해보세요." },
         { title: "인간관계에서 🌿", icon: "leaf", text: "친구의 기분과 관계의 온도를 세심하게 살펴요. 상대의 모든 반응을 혼자 책임질 필요는 없다는 점도 기억해 주세요." },
@@ -104,7 +104,7 @@ window.MOA_ARCHETYPE_TESTS["attachment-style"] = {
     fearful: { image: "../image/tests/attachment-style/fearful.jpg",
       name: "혼란형 · 가까움과 조심 사이", emoji: "🌗", color: "#7864a8",
       catchphrase: "다가가고 싶은 마음과 지키고 싶은 마음이 함께해요.",
-      description: "친밀해지고 싶은 마음과 상처를 피하고 싶은 마음이 함께 들 수 있어요. 상대를 믿고 싶으면서도 마음을 여는 순간에는 신중해지는 편이에요.",
+      description: "친밀해지고 싶은 마음과 상처를 피하고 싶은 마음이 함께 들 수 있어요. 상대를 믿고 싶으면서도 마음을 여는 순간에는 신중해지는 편이에요.", shareDescription: "resultShare.attachment-style.fearful",
       details: [
         { title: "연애할 때 💌", icon: "heart", text: "상대가 다가오면 반갑다가도 부담스럽고, 거리가 생기면 다시 가까워지고 싶을 수 있어요. 내게 편안한 속도를 알아가는 게 도움이 됩니다." },
         { title: "인간관계에서 🌿", icon: "leaf", text: "관계의 작은 변화도 크게 느껴질 수 있어요. 안전하다고 느끼는 사람과 천천히 신뢰를 쌓아가도 괜찮아요." },

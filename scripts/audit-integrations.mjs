@@ -94,7 +94,7 @@ const phaseTwoTranslationKeys = [
   "contentBrowser.preview.close", "contentBrowser.preview.cancel", "contentBrowser.preview.start",
   "contentBrowser.preview.pool", "contentBrowser.preview.actionLabel", "contentBrowser.recommendations.title",
   "contentBrowser.recommendations.description", "contentBrowser.recommendations.start",
-  "나도 테스트하기", "나도 월드컵 해보기"
+  "나도 테스트하기", "나도 월드컵 해보기", "animal.sharePrompt", "mbti.sharePrompt"
 ];
 const phaseThreeTranslationKeys = [
   "contentActivity.scope.label", "contentActivity.scope.all", "contentActivity.scope.favorites",
@@ -144,13 +144,13 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20260929-2') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-3'), `${locale}/index.html: shared content browser scripts are missing or stale`);
-  assert(html.includes('content-activity.css?v=20260929-4'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
+  assert(html.includes('content-registry.js?v=20260929-2') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-4'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-activity.css?v=20260929-5'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
     .filter(([opening]) => /\bclass=["'][^"']*\bhome-disclosure\b/i.test(opening));
   assert(staticCards.length === 0, `${locale}/index.html: cards are duplicated in HTML instead of generated from the shared registry`);
-  assert(html.includes('<div class="category-grid" data-category-list>'), `${locale}/index.html: dynamic registry card mount point is missing`);
+  assert(/<div\b(?=[^>]*\bclass=["'][^"']*\bcategory-grid\b[^"']*["'])(?=[^>]*\bdata-category-list(?:\s|=|>))[^>]*>/i.test(html), `${locale}/index.html: dynamic registry card mount point is missing`);
   assert(read("assets/js/content-browser.js").includes("registry.contents.forEach") && read("assets/js/content-browser.js").includes("const makeCard ="), `${locale}/index.html: shared registry card renderer is missing`);
   const cards = registryContents.map((content) => `${content.id}|${content.categoryIds[0]}|${content.page}`);
   assert(cards.length === registryContents.length && new Set(cards.map((card) => card.split("|")[0])).size === registryContents.length, `${locale}/index.html: registry card data does not map one-to-one`);
@@ -399,9 +399,11 @@ for (const content of registryContents) {
     for (const [resultId, profile] of Object.entries(config.profiles)) {
       const image = profile.image || profile.imageFile;
       assert(Boolean(image) && fs.existsSync(path.resolve(root, "ko", image)), `${content.id}/${resultId}: configured result image is missing (${image || "none"})`);
-      for (const key of [profile.name, profile.catchphrase, profile.description]) {
+      assert(Boolean(profile.shareDescription) && profile.shareDescription !== profile.description, `${content.id}/${resultId}: result-screen and share descriptions must be separate fields`);
+      for (const key of [profile.name, profile.catchphrase, profile.description, profile.shareDescription]) {
         for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id}/${resultId} result text ${key}`);
       }
+      for (const locale of locales) assert(!/[○•]/u.test(localeResources[locale][profile.shareDescription]), `${locale}.json: share description for ${content.id}/${resultId} contains a screen-only marker`);
     }
     for (const [questionIndex, question] of config.questions.entries()) {
       for (const key of [question.prompt, ...question.choices.map((choice) => choice.text)]) {
@@ -419,10 +421,12 @@ assert(resultShareSource.includes("title: current.title") && resultShareSource.i
 assert(resultShareSource.includes("translate(current.buttonTitle || \"결과 확인하기\")"), "result sharing: Kakao feed button does not support a per-content start label");
 const archetypeShareSource = read("assets/js/archetype-test.js");
 assert(archetypeShareSource.includes("imageUrl: imagePath") && archetypeShareSource.includes(".replace(/\\.html$/, \"\")"), "archetype result sharing: result image or clean same-content route is missing");
-assert(archetypeShareSource.includes("tr(config.sharePrompt || config.title)") && archetypeShareSource.includes("title: `${shareQuestion} ${resultName}`"), "archetype result sharing: test context is missing from the result title");
+assert(archetypeShareSource.includes("tr(config.sharePrompt || config.title)") && archetypeShareSource.includes("title: resultLine") && archetypeShareSource.includes("`${shareQuestion} [${resultName}]`"), "archetype result sharing: test context or bracketed result name is missing from the result title");
+assert(archetypeShareSource.includes("tr(profile.shareDescription)") && archetypeShareSource.includes("renderResultSentences(tr(profile.description))") && archetypeShareSource.includes('aria-hidden="true">•</span> '), "archetype result copy: screen and share descriptions or sentence markers are not separated");
 assert(read("assets/js/archetype-test.js").includes("Math.imul(hash, 0x01000193)") && read("assets/js/app.js").includes("Math.imul(tieHash, 0x01000193)"), "quiz scoring: deterministic answer-based tie-breaking must be consistent across archetype and animal quizzes");
-assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: winner image or same-game CTA is missing");
-assert(read("assets/js/app.js").includes("imageUrl: profile.image") && read("assets/js/app.js").includes("description: tr(profile.text)"), "legacy quiz result sharing: result image or translated description is missing");
+assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("title: `${localize(config.title)} [${localize(winner.name)}]`") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: contextual bracketed title, winner image, or same-game CTA is missing");
+const legacyQuizSource = read("assets/js/app.js");
+assert(legacyQuizSource.includes("imageUrl: profile.image") && legacyQuizSource.includes('tr("animal.sharePrompt")') && legacyQuizSource.includes('tr("mbti.sharePrompt")') && legacyQuizSource.includes("const resultLine = `${sharePrompt} [${resultName}]`") && legacyQuizSource.includes("renderResultSentences(tr(profile.daily))") && legacyQuizSource.includes('aria-hidden="true">•</span> '), "legacy quiz result sharing context or sentence-formatted result descriptions are missing");
 
 for (const [gameId, config] of Object.entries(frontendCups)) {
   const backend = backendCups[gameId];

@@ -21,6 +21,11 @@
   const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[char]);
+  const renderResultSentences = (text) => {
+    const normalized = String(text).replace(/\s+/gu, " ").trim();
+    const sentences = normalized.match(/[^.!?。！？]+(?:[.!?。！？]+|$)/gu)?.map((sentence) => sentence.trim()).filter(Boolean) || [normalized];
+    return sentences.map((sentence) => `<span aria-hidden="true">•</span> ${escapeHtml(sentence)}`).join("<br>");
+  };
   const addChoiceScores = (scores, entries) => {
     entries.forEach((entry) => {
       const id = typeof entry === "string" ? entry : entry.id;
@@ -85,14 +90,14 @@
     const imageCredit = config.imageCredits?.[winner];
     const compatNames = (ids) => ids.map((id) => tr(config.profiles[id].name)).join(" · ");
     const extraContent = profile.details?.length
-      ? `<div class="info-grid archetype-result-card__details">${profile.details.map((item) => `<article class="info-card"><h3>${item.icon ? `<img class="result-detail-icon" src="../image/result-icons/${escapeHtml(item.icon)}.png" alt="" aria-hidden="true">` : ""}${escapeHtml(tr(item.title).replace(/\s*[\p{Extended_Pictographic}\uFE0F\u200D]+/gu, "").trim())}</h3><p>${escapeHtml(tr(item.text))}</p></article>`).join("")}</div>`
+      ? `<div class="info-grid archetype-result-card__details">${profile.details.map((item) => `<article class="info-card"><h3>${item.icon ? `<img class="result-detail-icon" src="../image/result-icons/${escapeHtml(item.icon)}.png" alt="" aria-hidden="true">` : ""}${escapeHtml(tr(item.title).replace(/\s*[\p{Extended_Pictographic}\uFE0F\u200D]+/gu, "").trim())}</h3><p>${renderResultSentences(tr(item.text))}</p></article>`).join("")}</div>`
       : `<div class="archetype-result-card__compat"><div><span>${escapeHtml(tr("찰떡 궁합"))}</span><strong>${escapeHtml(compatNames(profile.good))}</strong></div><div><span>${escapeHtml(tr("서로 알아가면 좋은 유형"))}</span><strong>${escapeHtml(compatNames(profile.tricky))}</strong></div></div>`;
 
     root.querySelector("[data-quiz-navigation]").hidden = true;
     root.querySelector("[data-quiz-progress-wrap]").hidden = true;
     stage.hidden = true;
     result.style.setProperty("--result-accent", profile.color);
-    result.innerHTML = `<article class="archetype-result-card"><div class="archetype-result-card__top"><span class="archetype-result-card__brand">molgga PLAY · ${escapeHtml(tr(config.title))}</span>${imagePath ? `<img class="archetype-result-card__image" src="${escapeHtml(imagePath)}" alt="${escapeHtml(tr(profile.name))} ${escapeHtml(tr("content.result.imageAlt"))}" loading="lazy" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true"> <span class="archetype-result-card__emoji" aria-hidden="true"><img src="../image/result-icons/puzzle.png" alt="" aria-hidden="true"></span>${imageCredit ? `<p class="image-credit">${escapeHtml(tr("이미지 출처:"))} <a href="${escapeHtml(imageCredit.source)}" target="_blank" rel="noopener noreferrer">${escapeHtml(imageCredit.artist)}</a> · <a href="${escapeHtml(imageCredit.licenseUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(imageCredit.license)}</a></p>` : ""}` : `<span class="archetype-result-card__emoji" aria-hidden="true"><img src="../image/result-icons/puzzle.png" alt="" aria-hidden="true"></span>`}<p class="archetype-result-card__label">${escapeHtml(tr(resultLabel))}</p><h3 tabindex="-1">${escapeHtml(tr(profile.name))}</h3><p class="archetype-result-card__catchphrase">${escapeHtml(tr(profile.catchphrase))}</p></div><div class="archetype-result-card__body"><p>${escapeHtml(tr(profile.description))}</p>${extraContent}</div></article><div class="result-actions"><button class="button button-small" type="button" data-quiz-restart>${escapeHtml(tr("다시 해보기"))}</button><button class="button button-small button-quiet" type="button" data-quiz-share>${escapeHtml(tr("결과 공유"))}</button></div><p class="share-status" role="status" aria-live="polite" data-quiz-share-status></p>`;
+    result.innerHTML = `<article class="archetype-result-card"><div class="archetype-result-card__top"><span class="archetype-result-card__brand">molgga PLAY · ${escapeHtml(tr(config.title))}</span>${imagePath ? `<img class="archetype-result-card__image" src="${escapeHtml(imagePath)}" alt="${escapeHtml(tr(profile.name))} ${escapeHtml(tr("content.result.imageAlt"))}" loading="lazy" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true"> <span class="archetype-result-card__emoji" aria-hidden="true"><img src="../image/result-icons/puzzle.png" alt="" aria-hidden="true"></span>${imageCredit ? `<p class="image-credit">${escapeHtml(tr("이미지 출처:"))} <a href="${escapeHtml(imageCredit.source)}" target="_blank" rel="noopener noreferrer">${escapeHtml(imageCredit.artist)}</a> · <a href="${escapeHtml(imageCredit.licenseUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(imageCredit.license)}</a></p>` : ""}` : `<span class="archetype-result-card__emoji" aria-hidden="true"><img src="../image/result-icons/puzzle.png" alt="" aria-hidden="true"></span>`}<p class="archetype-result-card__label">${escapeHtml(tr(resultLabel))}</p><h3 tabindex="-1">${escapeHtml(tr(profile.name))}</h3><p class="archetype-result-card__catchphrase">${escapeHtml(tr(profile.catchphrase))}</p></div><div class="archetype-result-card__body"><p>${renderResultSentences(tr(profile.description))}</p>${extraContent}</div></article><div class="result-actions"><button class="button button-small" type="button" data-quiz-restart>${escapeHtml(tr("다시 해보기"))}</button><button class="button button-small button-quiet" type="button" data-quiz-share>${escapeHtml(tr("결과 공유"))}</button></div><p class="share-status" role="status" aria-live="polite" data-quiz-share-status></p>`;
     result.hidden = false;
     window.MOLGGA_CONTENT_RECOMMENDATIONS?.mount(result, root.dataset.archetypeTest);
     if (focusResult) result.querySelector("h3").focus({ preventScroll: true });
@@ -110,10 +115,11 @@
       const url = localizedQuizUrl(config.url);
       const shareQuestion = tr(config.sharePrompt || config.title);
       const resultName = tr(profile.name);
-      const resultDescription = `${tr(profile.catchphrase)} ${tr(profile.description)}`;
-      const shareText = `${shareQuestion}\n${resultName}\n${resultDescription}\n---------------------------------------------------\n${tr("나도 테스트 해보고 싶다면?")}\n${url}`;
+      const resultDescription = `${tr(profile.catchphrase)} ${tr(profile.shareDescription)}`;
+      const resultLine = `${shareQuestion} [${resultName}]`;
+      const shareText = `${resultLine}\n${resultDescription}\n---------------------------------------------------\n${tr("나도 테스트 해보고 싶다면?")}\n${url}`;
       status.textContent = "";
-      window.MOLGGA_SHARE?.open({ title: `${shareQuestion} ${resultName}`, description: resultDescription, imageUrl: imagePath, buttonTitle: tr("나도 테스트하기"), text: shareText, url });
+      window.MOLGGA_SHARE?.open({ title: resultLine, description: resultDescription, imageUrl: imagePath, buttonTitle: tr("나도 테스트하기"), text: shareText, url });
     });
   };
 
