@@ -1,4 +1,5 @@
 .category-card { position: relative; }
+#content-list { scroll-margin-top: 84px; }
 .category-card__topline { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 10px; margin: 14px 0 6px; }
 .category-card__topline .card-label { min-width: 0; margin: 0; }
 .category-card__new-badge:not([hidden]) { display: inline-flex; align-items: center; margin-right: .45em; padding: .22em .55em; border-radius: 999px; background: var(--mint-100); color: var(--mint-700); font-size: .62em; font-weight: 800; letter-spacing: .04em; line-height: 1.35; vertical-align: .12em; }
