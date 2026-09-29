@@ -1,6 +1,7 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["travel-role"] = {
   title: "travelRole.title",
+  sharePrompt: "travelRole.sharePrompt",
   eyebrow: "molgga PLAY · 친구 여행 테스트",
   estimatedMinutes: 2,
   resultLabel: "travelRole.resultLabel",

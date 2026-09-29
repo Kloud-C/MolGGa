@@ -108,9 +108,12 @@
     result.querySelector("[data-quiz-share]").addEventListener("click", () => {
       const status = result.querySelector("[data-quiz-share-status]");
       const url = localizedQuizUrl(config.url);
-      const shareText = `${tr(profile.name)} · ${tr(profile.catchphrase)}\n---------------------------------------------------\n${tr("나도 테스트 해보고 싶다면?")}\n${url}`;
+      const shareQuestion = tr(config.sharePrompt || config.title);
+      const resultName = tr(profile.name);
+      const resultDescription = `${tr(profile.catchphrase)} ${tr(profile.description)}`;
+      const shareText = `${shareQuestion}\n${resultName}\n${resultDescription}\n---------------------------------------------------\n${tr("나도 테스트 해보고 싶다면?")}\n${url}`;
       status.textContent = "";
-      window.MOLGGA_SHARE?.open({ title: tr(profile.name), description: `${tr(profile.catchphrase)} ${tr(profile.description)}`, imageUrl: imagePath, buttonTitle: tr("나도 테스트하기"), text: shareText, url });
+      window.MOLGGA_SHARE?.open({ title: `${shareQuestion} ${resultName}`, description: resultDescription, imageUrl: imagePath, buttonTitle: tr("나도 테스트하기"), text: shareText, url });
     });
   };
 

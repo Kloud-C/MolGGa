@@ -394,6 +394,8 @@ for (const content of registryContents) {
     assert(metrics.resultCount === Object.keys(config.profiles).length, `content registry: ${content.id} resultCount differs from profiles`);
     const statedMinutes = config.estimatedMinutes;
     assert(Boolean(statedMinutes) && Number(statedMinutes) === metrics.estimatedMinutes, `content registry: ${content.id} estimatedMinutes differs from its existing content definition`);
+    const sharePromptKey = config.sharePrompt || config.title;
+    for (const locale of locales) assert(Boolean(localeResources[locale][sharePromptKey]), `${locale}.json: missing ${content.id} share prompt ${sharePromptKey}`);
     for (const [resultId, profile] of Object.entries(config.profiles)) {
       const image = profile.image || profile.imageFile;
       assert(Boolean(image) && fs.existsSync(path.resolve(root, "ko", image)), `${content.id}/${resultId}: configured result image is missing (${image || "none"})`);
@@ -415,7 +417,9 @@ const resultShareSource = read("assets/js/share.js");
 assert(resultShareSource.includes("imageUrl: publicUrl(current.imageUrl)"), "result sharing: Kakao feed is not using the result-specific image URL");
 assert(resultShareSource.includes("title: current.title") && resultShareSource.includes("description: current.description || current.text"), "result sharing: Kakao feed lacks result-specific text");
 assert(resultShareSource.includes("translate(current.buttonTitle || \"결과 확인하기\")"), "result sharing: Kakao feed button does not support a per-content start label");
-assert(read("assets/js/archetype-test.js").includes("imageUrl: imagePath") && read("assets/js/archetype-test.js").includes(".replace(/\\.html$/, \"\")"), "archetype result sharing: result image or clean same-content route is missing");
+const archetypeShareSource = read("assets/js/archetype-test.js");
+assert(archetypeShareSource.includes("imageUrl: imagePath") && archetypeShareSource.includes(".replace(/\\.html$/, \"\")"), "archetype result sharing: result image or clean same-content route is missing");
+assert(archetypeShareSource.includes("tr(config.sharePrompt || config.title)") && archetypeShareSource.includes("title: `${shareQuestion} ${resultName}`"), "archetype result sharing: test context is missing from the result title");
 assert(read("assets/js/archetype-test.js").includes("Math.imul(hash, 0x01000193)") && read("assets/js/app.js").includes("Math.imul(tieHash, 0x01000193)"), "quiz scoring: deterministic answer-based tie-breaking must be consistent across archetype and animal quizzes");
 assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: winner image or same-game CTA is missing");
 assert(read("assets/js/app.js").includes("imageUrl: profile.image") && read("assets/js/app.js").includes("description: tr(profile.text)"), "legacy quiz result sharing: result image or translated description is missing");

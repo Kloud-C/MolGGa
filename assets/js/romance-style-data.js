@@ -1,6 +1,7 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["romance-style"] = {
   title: "romanceStyle.title",
+  sharePrompt: "romanceStyle.sharePrompt",
   eyebrow: "molgga PLAY · romanceStyle.eyebrow",
   estimatedMinutes: 4,
   resultLabel: "romanceStyle.resultLabel",
