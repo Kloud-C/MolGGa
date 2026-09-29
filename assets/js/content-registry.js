@@ -105,7 +105,7 @@
       page: "past-life-test.html",
       thumbnail: "/image/home-categories/past-life.jpg",
       source: { kind: "archetype", id: "past-life" },
-      metrics: { questionCount: 20, choicesPerQuestion: 2, resultCount: 20, estimatedMinutes: 3 }
+      metrics: { questionCount: 25, choicesPerQuestion: 2, resultCount: 20, estimatedMinutes: 4 }
     },
     {
       id: "spending-habits",

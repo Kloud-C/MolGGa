@@ -1,5 +1,8 @@
 (() => {
   const tr = (text) => window.MOA_I18N?.t(text) || text;
+  const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[char]);
   const prepareQuestionValidation = (form) => {
     form.noValidate = true;
     form.addEventListener("change", (event) => {
@@ -140,6 +143,29 @@
       deer: { name: "사슴형", image: "../image/tests/animal-test/deer.jpg", text: "상대의 마음을 잘 살피고 섬세하게 배려하는 분위기예요.", love: "작은 마음 씀씀이와 안정적인 대화에서 애정을 느껴요.", work: "놓치기 쉬운 부분을 챙기고 주변을 세심하게 도와요." },
       bear: { name: "곰형", image: "../image/tests/animal-test/bear.jpg", text: "느긋하고 든든하며 편안함을 나누는 분위기예요.", love: "화려한 이벤트보다 함께하는 편안한 일상을 좋아해요.", work: "꾸준하고 안정적으로 맡은 일을 마무리해 신뢰를 얻어요." }
     };
+    const result = document.querySelector("#animal-result");
+    let lastWinner = null;
+    const renderResult = (winner) => {
+      const profile = profiles[winner];
+      result.innerHTML = `<article class="archetype-result-card"><div class="archetype-result-card__top"><span class="archetype-result-card__brand">${escapeHtml(tr("molgga PLAY · 동물상 테스트"))}</span><img class="archetype-result-card__image" src="${escapeHtml(profile.image)}" alt="${escapeHtml(tr(profile.name))} ${escapeHtml(tr("content.result.imageAlt"))}" loading="lazy"><p class="archetype-result-card__label">${escapeHtml(tr("나의 동물 캐릭터"))}</p><h3 tabindex="-1">${escapeHtml(tr(profile.name))}</h3><p class="archetype-result-card__catchphrase">${escapeHtml(tr(profile.text))}</p></div><div class="archetype-result-card__body"><div class="info-grid"><article class="info-card"><h3><img class="result-detail-icon" src="../image/result-icons/heart.png" alt="" aria-hidden="true">${escapeHtml(tr("연애 모드"))}</h3><p>${escapeHtml(tr(profile.love))}</p></article><article class="info-card"><h3><img class="result-detail-icon" src="../image/result-icons/puzzle.png" alt="" aria-hidden="true">${escapeHtml(tr("일할 때"))}</h3><p>${escapeHtml(tr(profile.work))}</p></article></div></div></article><div class="result-actions"><button class="button button-small" type="button" data-retry>${escapeHtml(tr("다시 해보기"))}</button><button class="button button-small button-quiet" type="button" data-share>${escapeHtml(tr("결과 공유"))}</button></div><p class="share-status" role="status" aria-live="polite"></p>`;
+      result.querySelector(".archetype-result-card__image").addEventListener("error", (event) => { event.currentTarget.hidden = true; });
+      result.querySelector("[data-share]").addEventListener("click", () => {
+        const url = publicPageUrl("animal-test.html");
+        window.MOLGGA_SHARE?.open({ title: tr(profile.name), description: tr(profile.text), imageUrl: profile.image, buttonTitle: tr("나도 테스트하기"), text: formatShareText(tr("이번 테스트 결과는 [") + tr(profile.name) + tr("] !!"), url), url });
+      });
+      result.querySelector("[data-retry]").addEventListener("click", () => {
+        animalForm.reset();
+        animalForm.hidden = false;
+        questionFlow.reset();
+        result.hidden = true;
+        lastWinner = null;
+        document.querySelector("#animal-error").textContent = "";
+        animalForm.querySelector('input[type="radio"]').focus({ preventScroll: true });
+      });
+    };
+    window.i18next?.on("languageChanged", () => {
+      if (!result.hidden && lastWinner) renderResult(lastWinner);
+    });
     animalForm.addEventListener("submit", (event) => {
       event.preventDefault();
       if (!validateQuestions()) return;
@@ -158,26 +184,13 @@
       const highest = Math.max(...Object.values(scores));
       const winners = Object.keys(scores).filter((key) => scores[key] === highest);
       const winner = winners[Math.floor(Math.random() * winners.length)];
-      const result = document.querySelector("#animal-result");
-      result.innerHTML = `<article class="archetype-result-card"><div class="archetype-result-card__top"><span class="archetype-result-card__brand">molgga PLAY · 동물상 테스트</span><img class="archetype-result-card__image" src="${profiles[winner].image}" alt="${profiles[winner].name} 결과 이미지" loading="lazy"><p class="archetype-result-card__label">나의 동물 캐릭터</p><h3 tabindex="-1">${profiles[winner].name}</h3><p class="archetype-result-card__catchphrase">${profiles[winner].text}</p></div><div class="archetype-result-card__body"><div class="info-grid"><article class="info-card"><h3><img class="result-detail-icon" src="../image/result-icons/heart.png" alt="" aria-hidden="true">연애 모드</h3><p>${profiles[winner].love}</p></article><article class="info-card"><h3><img class="result-detail-icon" src="../image/result-icons/puzzle.png" alt="" aria-hidden="true">일할 때</h3><p>${profiles[winner].work}</p></article></div></div></article><div class="result-actions"><button class="button button-small" type="button" data-retry>다시 해보기</button><button class="button button-small button-quiet" type="button" data-share>결과 공유</button></div><p class="share-status" role="status" aria-live="polite"></p>`;
-      result.querySelector(".archetype-result-card__image").addEventListener("error", (event) => { event.currentTarget.hidden = true; });
-      result.querySelector("[data-share]").addEventListener("click", () => {
-        const url = publicPageUrl("animal-test.html");
-        window.MOLGGA_SHARE?.open({ title: profiles[winner].name, description: profiles[winner].text, imageUrl: profiles[winner].image, buttonTitle: tr("나도 테스트하기"), text: formatShareText(tr("이번 테스트 결과는 [") + tr(profiles[winner].name) + tr("] !!"), url), url });
-      });
+      lastWinner = winner;
+      renderResult(winner);
       result.hidden = false;
       const contentId = window.MOLGGA_CONTENT_REGISTRY?.contents.find((content) => content.source?.formId === animalForm.id)?.id;
       window.MOLGGA_CONTENT_RECOMMENDATIONS?.mount(result, contentId);
       animalForm.hidden = true;
       document.querySelector("#animal-error").textContent = "";
-      result.querySelector("[data-retry]").addEventListener("click", () => {
-        animalForm.reset();
-        animalForm.hidden = false;
-        questionFlow.reset();
-        result.hidden = true;
-        document.querySelector("#animal-error").textContent = "";
-        animalForm.querySelector('input[type="radio"]').focus({ preventScroll: true });
-      });
       result.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
   }
@@ -208,8 +221,32 @@
       ESTJ: { title: "일을 앞으로 보내는 추진 대장", image: "../image/MBTI image/MBTI：ESTJ.jpg", intro: "해야 할 일을 파악하면 우선순위를 정하고 실제 결과가 나올 때까지 밀고 가는 실행가예요.", daily: "모임에서 장소와 시간을 정리해 주는 역할을 맡기 쉬워요. 계획이 정해지면 마음도 한결 가벼워집니다.", love: "믿음과 약속을 중요하게 여기고 필요한 일을 챙겨줘요. 함께 목표를 세우고 응원하는 관계를 좋아해요.", work: "역할과 마감을 분명하게 정리해 팀을 움직여요. 책임감 있게 결과를 만드는 리더십이 돋보여요." },
       ESFJ: { title: "사람을 이어주는 다정한 호스트", image: "../image/MBTI image/MBTI：ESFJ.jpg", intro: "누가 어색해하는지, 누가 도움이 필요한지 빠르게 알아차리는 따뜻한 연결자예요.", daily: "모임이 끝난 뒤 모두 잘 들어갔는지 챙기고, 다음 약속을 자연스럽게 잡는 사람일 수 있어요.", love: "마음을 표현하고 서로 챙기는 일상에서 행복을 느껴요. 작은 기념일도 함께 나누면 더 특별해져요.", work: "사람들이 필요한 정보를 놓치지 않도록 연결하고 팀의 분위기를 살펴요. 협업을 매끄럽게 만드는 힘이 있어요." },
       ENFJ: { title: "응원으로 성장을 여는 코치", image: "../image/MBTI image/MBTI：ENFJ.jpg", intro: "사람의 장점을 발견하고 ‘너라면 할 수 있어’라는 말을 행동으로 전하는 격려자예요.", daily: "친구의 목표를 기억해 두었다가 먼저 진행 상황을 물어봐요. 주변의 기쁨을 자기 일처럼 반깁니다.", love: "마음을 솔직하고 따뜻하게 나누며 함께 성장하는 관계를 바라요. 상대가 빛나는 순간을 진심으로 응원해요.", work: "사람들의 의견을 모으고 같은 방향을 바라보게 해요. 팀원 각자의 가능성을 살리는 데 강점이 있어요." },
-      ENTJ: { title: "큰 그림을 현실로 만드는 지휘자", image: "../image/MBTI image/MBTI：ENTJ.jpg", intro: "목표가 보이면 전략을 세우고 사람과 자원을 몰까 실제 변화로 이어가려는 추진가예요.", daily: "여행도 ‘어디 갈까?’에서 끝나지 않고 일정·이동·예약까지 한 번에 정리할 수 있어요.", love: "서로의 능력과 야심을 존중하는 파트너십을 좋아해요. 함께 미래를 그릴 때 애정이 더 단단해져요.", work: "복잡한 과제를 구조화하고 결정을 미루지 않아요. 더 효율적인 방식을 설계하고 실행을 이끌어요." }
+      ENTJ: { title: "큰 그림을 현실로 만드는 지휘자", image: "../image/MBTI image/MBTI：ENTJ.jpg", intro: "목표가 보이면 전략을 세우고 사람과 자원을 모아 실제 변화로 이어가려는 추진가예요.", daily: "여행도 ‘어디 갈까?’에서 끝나지 않고 일정·이동·예약까지 한 번에 정리할 수 있어요.", love: "서로의 능력과 야심을 존중하는 파트너십을 좋아해요. 함께 미래를 그릴 때 애정이 더 단단해져요.", work: "복잡한 과제를 구조화하고 결정을 미루지 않아요. 더 효율적인 방식을 설계하고 실행을 이끌어요." }
     };
+    const result = document.querySelector("#mbti-result");
+    let lastSummary = null;
+    const renderResult = (summary) => {
+      const profile = typeProfiles[summary];
+      const iconless = (text) => tr(text).replace(/\s*[\p{Extended_Pictographic}\uFE0F\u200D]+/gu, "").trim();
+      result.innerHTML = `<article class="archetype-result-card"><div class="archetype-result-card__top"><span class="archetype-result-card__brand">${escapeHtml(tr("content.mbti.resultBrand"))}</span><img class="archetype-result-card__image" src="${escapeHtml(profile.image)}" alt="MBTI ${summary} ${escapeHtml(tr("content.result.imageAlt"))}" loading="lazy"><p class="archetype-result-card__label">${escapeHtml(tr("당신의 MBTI"))}</p><h3 tabindex="-1">${summary} · ${escapeHtml(tr(profile.title))}</h3><p class="archetype-result-card__catchphrase">${escapeHtml(tr(profile.intro))}</p></div><div class="archetype-result-card__body"><div class="info-grid"><article class="info-card"><h3><img class="result-detail-icon" src="../image/result-icons/sun.png" alt="" aria-hidden="true">${escapeHtml(iconless("평소의 당신 ☀️"))}</h3><p>${escapeHtml(tr(profile.daily))}</p></article><article class="info-card"><h3><img class="result-detail-icon" src="../image/result-icons/heart.png" alt="" aria-hidden="true">${escapeHtml(iconless("연애 모드 💌"))}</h3><p>${escapeHtml(tr(profile.love))}</p></article><article class="info-card"><h3><img class="result-detail-icon" src="../image/result-icons/puzzle.png" alt="" aria-hidden="true">${escapeHtml(iconless("일할 때 🧩"))}</h3><p>${escapeHtml(tr(profile.work))}</p></article></div></div></article><div class="result-actions"><button class="button button-small" type="button" data-retry>${escapeHtml(tr("다시 해보기"))}</button><button class="button button-small button-quiet" type="button" data-share>${escapeHtml(tr("결과 공유"))}</button></div><p class="share-status" role="status" aria-live="polite"></p>`;
+      result.querySelector(".archetype-result-card__image").addEventListener("error", (event) => { event.currentTarget.hidden = true; });
+      result.querySelector("[data-share]").addEventListener("click", () => {
+        const url = publicPageUrl("mbti.html");
+        window.MOLGGA_SHARE?.open({ title: `${summary} · ${tr(profile.title)}`, description: tr(profile.intro), imageUrl: profile.image, buttonTitle: tr("나도 테스트하기"), text: formatShareText(tr("나의 MBTI는 [") + summary + tr("] !!"), url), url });
+      });
+      result.querySelector("[data-retry]").addEventListener("click", () => {
+        mbtiForm.reset();
+        mbtiForm.hidden = false;
+        questionFlow.reset();
+        result.hidden = true;
+        lastSummary = null;
+        document.querySelector("#mbti-error").textContent = "";
+        mbtiForm.querySelector('input[type="radio"]').focus({ preventScroll: true });
+      });
+    };
+    window.i18next?.on("languageChanged", () => {
+      if (!result.hidden && lastSummary) renderResult(lastSummary);
+    });
     mbtiForm.addEventListener("submit", (event) => {
       event.preventDefault();
       if (!validateQuestions()) return;
@@ -225,27 +262,13 @@
         const aCount = axis.names.filter((name) => data.get(name) === axis.a).length;
         return aCount >= 3 ? axis.a : axis.b;
       }).join("");
-      const result = document.querySelector("#mbti-result");
-      const profile = typeProfiles[summary];
-      result.innerHTML = `<article class="archetype-result-card"><div class="archetype-result-card__top"><span class="archetype-result-card__brand">molgga PLAY · MBTI</span><img class="archetype-result-card__image" src="${profile.image}" alt="MBTI ${summary} 결과 이미지" loading="lazy"><p class="archetype-result-card__label">당신의 MBTI</p><h3 tabindex="-1">${summary} · ${profile.title}</h3><p class="archetype-result-card__catchphrase">${profile.intro}</p></div><div class="archetype-result-card__body"><div class="info-grid"><article class="info-card"><h3><img class="result-detail-icon" src="../image/result-icons/sun.png" alt="" aria-hidden="true">${tr("평소의 당신 ☀️").replace(/\s*[\p{Extended_Pictographic}\uFE0F\u200D]+/gu, "").trim()}</h3><p>${profile.daily}</p></article><article class="info-card"><h3><img class="result-detail-icon" src="../image/result-icons/heart.png" alt="" aria-hidden="true">${tr("연애 모드 💌").replace(/\s*[\p{Extended_Pictographic}\uFE0F\u200D]+/gu, "").trim()}</h3><p>${profile.love}</p></article><article class="info-card"><h3><img class="result-detail-icon" src="../image/result-icons/puzzle.png" alt="" aria-hidden="true">${tr("일할 때 🧩").replace(/\s*[\p{Extended_Pictographic}\uFE0F\u200D]+/gu, "").trim()}</h3><p>${profile.work}</p></article></div></div></article><div class="result-actions"><button class="button button-small" type="button" data-retry>다시 해보기</button><button class="button button-small button-quiet" type="button" data-share>결과 공유</button></div><p class="share-status" role="status" aria-live="polite"></p>`;
-      result.querySelector(".archetype-result-card__image").addEventListener("error", (event) => { event.currentTarget.hidden = true; });
-      result.querySelector("[data-share]").addEventListener("click", () => {
-        const url = publicPageUrl("mbti.html");
-        window.MOLGGA_SHARE?.open({ title: `${summary} · ${profile.title}`, description: profile.intro, imageUrl: profile.image, buttonTitle: tr("나도 테스트하기"), text: formatShareText(tr("나의 MBTI는 [") + summary + tr("] !!"), url), url });
-      });
+      lastSummary = summary;
+      renderResult(summary);
       result.hidden = false;
       const contentId = window.MOLGGA_CONTENT_REGISTRY?.contents.find((content) => content.source?.formId === mbtiForm.id)?.id;
       window.MOLGGA_CONTENT_RECOMMENDATIONS?.mount(result, contentId);
       mbtiForm.hidden = true;
       document.querySelector("#mbti-error").textContent = "";
-      result.querySelector("[data-retry]").addEventListener("click", () => {
-        mbtiForm.reset();
-        mbtiForm.hidden = false;
-        questionFlow.reset();
-        result.hidden = true;
-        document.querySelector("#mbti-error").textContent = "";
-        mbtiForm.querySelector('input[type="radio"]').focus({ preventScroll: true });
-      });
       result.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
   }

@@ -33,9 +33,12 @@
     const label = make("span", "card-label");
     label.dataset.i18n = content.cardLabelKey || registry.categories.find((category) => content.categoryIds.includes(category.id))?.labelKey || "contentBrowser.card.category";
     const heading = make("h3");
+    const newBadge = make("span", "category-card__new-badge", translate("contentBadge.new"));
+    newBadge.dataset.contentNewBadge = "true";
+    newBadge.hidden = true;
     const headingText = make("span", "", translate(content.titleKey));
     headingText.dataset.i18n = content.titleKey;
-    heading.append(headingText);
+    heading.append(newBadge, headingText);
     const description = make("p");
     const descriptionText = make("span", "", translate(content.descriptionKey));
     descriptionText.dataset.i18n = content.descriptionKey;
@@ -302,16 +305,30 @@
     const { favorites, recent } = activityState();
     const allowedIds = activeScope === "favorites" ? new Set(favorites) : activeScope === "recent" ? new Set(recent.map((entry) => entry.id)) : null;
     let visibleCount = 0;
-    const orderedContents = registry.contents.map((content, index) => ({ content, index }));
+    const now = Date.now();
+    const orderedContents = registry.contents.map((content, index) => {
+      const createdAt = Date.parse(`${content.createdAt || ""}T00:00:00Z`);
+      const isNew = Number.isFinite(createdAt) && createdAt <= now && now - createdAt < 3 * 24 * 60 * 60 * 1000;
+      return { content, index, isNew };
+    });
+    const pinNewFirst = (a, b) => Number(b.isNew) - Number(a.isNew)
+      || (a.isNew && b.isNew ? Date.parse(b.content.createdAt) - Date.parse(a.content.createdAt) : 0);
     if (sortSelect.value === "popular" && popularityStatus === "ready") {
-      orderedContents.sort((a, b) => (popularityCounts.get(b.content.id) || 0) - (popularityCounts.get(a.content.id) || 0) || a.index - b.index);
+      orderedContents.sort((a, b) => pinNewFirst(a, b) || (popularityCounts.get(b.content.id) || 0) - (popularityCounts.get(a.content.id) || 0) || a.index - b.index);
     } else if (sortSelect.value === "latest") {
-      orderedContents.sort((a, b) => Date.parse(b.content.createdAt || "") - Date.parse(a.content.createdAt || "") || a.index - b.index);
+      orderedContents.sort((a, b) => pinNewFirst(a, b) || Date.parse(b.content.createdAt || "") - Date.parse(a.content.createdAt || "") || a.index - b.index);
+    } else {
+      orderedContents.sort((a, b) => pinNewFirst(a, b) || a.index - b.index);
     }
-    orderedContents.forEach(({ content }) => {
+    orderedContents.forEach(({ content, isNew }) => {
       const card = cardsById.get(content.id);
       if (!card) return;
       grid.append(card);
+      const badge = card.querySelector("[data-content-new-badge]");
+      if (badge) {
+        badge.textContent = translate("contentBadge.new");
+        badge.hidden = !isNew;
+      }
       const categoryText = content.categoryIds.map((id) => registry.categories.find((entry) => entry.id === id)).filter(Boolean).map(getTranslatedCategory).join(" ");
       const tagText = content.tagIds.map((id) => translate(`tag.${id}`)).join(" ");
       const searchableText = [translate(content.titleKey), translate(content.descriptionKey), categoryText, tagText, ...content.tagIds].join(" ").toLocaleLowerCase();

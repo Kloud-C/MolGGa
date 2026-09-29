@@ -1,6 +1,7 @@
 .category-card { position: relative; }
 .category-card__topline { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 10px; margin: 14px 0 6px; }
 .category-card__topline .card-label { min-width: 0; margin: 0; }
+.category-card__new-badge:not([hidden]) { display: inline-flex; align-items: center; margin-right: .45em; padding: .22em .55em; border-radius: 999px; background: var(--mint-100); color: var(--mint-700); font-size: .62em; font-weight: 800; letter-spacing: .04em; line-height: 1.35; vertical-align: .12em; }
 .content-favorite-button { display: grid; width: 44px; min-width: 44px; height: 44px; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: white; color: var(--mint-700); font: inherit; font-size: 1.4rem; line-height: 1; cursor: pointer; }
 .content-favorite-button[aria-pressed="true"] { border-color: var(--mint-600); background: var(--mint-100); }
 .content-favorite-button:focus-visible, .content-browser__scope-button:focus-visible, .content-browser__recent-link:focus-visible { outline: 3px solid #9bdfc1; outline-offset: 2px; }

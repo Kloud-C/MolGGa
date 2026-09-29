@@ -24,7 +24,7 @@ window.MOA_ARCHETYPE_TESTS["travel-role"] = {
     ] },
     { prompt: "travelRole.question.5", choices: [
       { text: "travelRole.question.5.a", scores: ["caregiver", "planner"] },
-      { text: "travelRole.question.5.b", scores: ["free-spirit", "mood-maker"] }
+      { text: "travelRole.question.5.b", scores: ["free-spirit", "caregiver"] }
     ] },
     { prompt: "travelRole.question.6", choices: [
       { text: "travelRole.question.6.a", scores: ["budget-keeper", "planner"] },

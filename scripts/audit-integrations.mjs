@@ -77,6 +77,10 @@ for (const content of registryContents) {
 assert(registryContents.some((content) => content.id === "travel-role" && content.source?.kind === "archetype" && content.page === "travel-role-test.html"), "content registry: travel-role quiz is not registered for the shared archetype engine");
 for (const locale of locales) {
   assert(localeResourceKeys.every((key) => Object.hasOwn(localeResources[locale], key)), `${locale}.json: translation keys differ from ko.json`);
+  if (locale !== "ko") {
+    const untranslated = Object.entries(localeResources[locale]).filter(([, value]) => typeof value === "string" && /[\uac00-\ud7af]/.test(value));
+    assert(untranslated.length === 0, `${locale}.json: translated values still contain Korean script: ${untranslated.slice(0, 5).map(([key]) => key).join(", ")}`);
+  }
 }
 const phaseTwoTranslationKeys = [
   "contentBrowser.search.label", "contentBrowser.search.placeholder", "contentBrowser.category.label",
@@ -139,8 +143,8 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20260929-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-2'), `${locale}/index.html: shared content browser scripts are missing or stale`);
-  assert(html.includes('content-activity.css?v=20260929-3'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
+  assert(html.includes('content-registry.js?v=20260929-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-3'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-activity.css?v=20260929-4'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
     .filter(([opening]) => /\bclass=["'][^"']*\bhome-disclosure\b/i.test(opening));
@@ -213,6 +217,10 @@ for (const page of allHtml) {
   if (locale !== "ko") {
     for (const [index, value] of metadataTitles.entries()) assert(!/[\uac00-\ud7af]/.test(value), `${page}: non-Korean title ${index + 1} contains Korean text`);
     for (const [index, description] of descriptions.entries()) assert(!/[\uac00-\ud7af]/.test(description), `${page}: non-Korean description ${index + 1} contains Korean text`);
+    const untranslatedAttributes = [...html.matchAll(/\b(?:aria-label|title|placeholder|alt)=["']([^"']*)["']/gi)]
+      .map(([, value]) => value)
+      .filter((value) => /[\uac00-\ud7af]/.test(value));
+    assert(untranslatedAttributes.length === 0, `${page}: localized accessibility or form attributes still contain Korean: ${untranslatedAttributes.join(" | ")}`);
   }
   if (locale === "ko") assert(Array.from(descriptions[0]).length <= 80, `${page}: Korean description exceeds Naver's 80-character guidance`);
   for (const [, reference] of html.matchAll(/\b(?:src|href)=["']([^"']+)["']/gi)) {
@@ -220,12 +228,12 @@ for (const page of allHtml) {
   }
 }
 
-const updatedAboutOfferings = "주말·야식 월드컵, 동물상·MBTI·테토/에겐·애착 유형·전생·소비 습관·친구 여행 역할 테스트를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 20문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 각 콘텐츠의 질문과 설명은 몰까가 직접 작성합니다.";
+const updatedAboutOfferings = "주말·야식 월드컵, 동물상·MBTI·테토/에겐·애착 유형·전생·소비 습관·친구 여행 역할 테스트를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 25문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 각 콘텐츠의 질문과 설명은 몰까가 직접 작성합니다.";
 const updatedResultNote = "결과는 각 페이지에서 선택한 내용에 따른 참고 정보입니다. 월드컵은 마지막까지 선택한 항목을 보여 주며, 야식 월드컵 랭킹에는 완주한 대진의 우승 메뉴가 집계됩니다. 성향 테스트는 선택에서 드러난 경향을 살펴보는 콘텐츠입니다. 어떤 결과도 전문 심리검사나 의료·법률·교육·채용 판단을 대신하지 않습니다.";
 for (const [locale, expected] of Object.entries({
-  en: ["Explore the weekend and late-night food matchups, plus quizzes about animal styles, MBTI, Teto/Egen, attachment styles, past lives, spending habits, and your role on a trip with friends. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz now takes 20 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
-  ja: ["週末・夜食の対決、動物タイプ・MBTI・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割テストを楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは20問で遊べます。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
-  zh: ["可以体验周末和夜宵选择赛，以及动物类型、MBTI、Teto/Egen、依恋类型、前世、消费习惯和朋友旅行角色测试。夜宵选择赛会从50种菜单中随机组成16强或32强，前世测试现为20道题。依恋类型内容参考相关研究，各项问题和说明均由molgga原创。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
+  en: ["Explore the weekend and late-night food matchups, plus quizzes about animal styles, MBTI, Teto/Egen, attachment styles, past lives, spending habits, and your role on a trip with friends. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz now takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
+  ja: ["週末・夜食の対決、動物タイプ・MBTI・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割テストを楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは25問で遊べます。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
+  zh: ["可以体验周末和夜宵选择赛，以及动物类型、MBTI、Teto/Egen、依恋类型、前世、消费习惯和朋友旅行角色测试。夜宵选择赛会从50种菜单中随机组成16强或32强，前世测试现为25道题。依恋类型内容参考相关研究，各项问题和说明均由molgga原创。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
 })) {
   const aboutHtml = read(`${locale}/about.html`);
   assert(aboutHtml.includes(updatedAboutOfferings) && aboutHtml.includes(updatedResultNote), `${locale}: About page source text is out of sync with its translation keys`);
@@ -408,7 +416,7 @@ assert(resultShareSource.includes("title: current.title") && resultShareSource.i
 assert(resultShareSource.includes("translate(current.buttonTitle || \"결과 확인하기\")"), "result sharing: Kakao feed button does not support a per-content start label");
 assert(read("assets/js/archetype-test.js").includes("imageUrl: imagePath") && read("assets/js/archetype-test.js").includes(".replace(/\\.html$/, \"\")"), "archetype result sharing: result image or clean same-content route is missing");
 assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: winner image or same-game CTA is missing");
-assert(read("assets/js/app.js").includes("imageUrl: profiles[winner].image") && read("assets/js/app.js").includes("imageUrl: profile.image"), "legacy quiz result sharing: animal or MBTI image is missing");
+assert(read("assets/js/app.js").includes("imageUrl: profile.image") && read("assets/js/app.js").includes("description: tr(profile.text)"), "legacy quiz result sharing: result image or translated description is missing");
 
 for (const [gameId, config] of Object.entries(frontendCups)) {
   const backend = backendCups[gameId];

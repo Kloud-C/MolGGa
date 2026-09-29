@@ -19,7 +19,7 @@ for (const file of [
 
 const archetypes = runtime.window.MOA_ARCHETYPE_TESTS;
 const exactLimit = 2_000_000;
-const sampleSize = 100_000;
+const sampleSize = 2_000_000;
 let unreachableFindings = 0;
 let inconclusiveSampleZeroes = 0;
 
@@ -82,12 +82,12 @@ function tally(name, questions, resultIds, scoreAnswers, { randomTie = false, aw
     });
   }
   const mode = exact ? "exact" : `sample ${runs.toLocaleString("en-US")}`;
-  console.log(`\n${name}: ${mode} · answer combinations ${total.toLocaleString("en-US")} · tied ${((tiedResponses / runs) * 100).toFixed(2)}%${randomTie ? " (random ties split evenly for expected share)" : ""}`);
+  console.log(`\n${name}: ${mode} · answer combinations ${total.toLocaleString("en-US")} · tied ${((tiedResponses / runs) * 100).toFixed(3)}%${randomTie ? " (random ties split evenly for expected share)" : ""}`);
   for (const [id, count] of counts) {
-    console.log(`  ${id.padEnd(22)} ${(count / runs * 100).toFixed(2)}%`);
+    console.log(`  ${id.padEnd(22)} ${(count / runs * 100).toFixed(3)}% (${count.toLocaleString("en-US")}/${runs.toLocaleString("en-US")})`);
   }
   const nonzeroShares = [...counts.values()].filter((count) => count > 0);
-  if (nonzeroShares.length) console.log(`  observed range         ${(Math.min(...nonzeroShares) / runs * 100).toFixed(2)}%–${(Math.max(...nonzeroShares) / runs * 100).toFixed(2)}%`);
+  if (nonzeroShares.length) console.log(`  observed range         ${(Math.min(...nonzeroShares) / runs * 100).toFixed(3)}%–${(Math.max(...nonzeroShares) / runs * 100).toFixed(3)}%`);
   if (absent.length) {
     const proven = absent.filter((id) => provenUnreachable.includes(id));
     const inconclusive = absent.filter((id) => !provenUnreachable.includes(id));

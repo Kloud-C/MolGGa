@@ -2,7 +2,7 @@ window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["past-life"] = {
   title: "전생 테스트",
   eyebrow: "molgga PLAY · 전생 테스트",
-  estimatedMinutes: 3,
+  estimatedMinutes: 4,
   url: "https://molgga.com/past-life-test.html",
   questions: [
     { prompt: "낯선 마을에 도착한 첫날, 제일 먼저 할 일은?", choices: [
@@ -150,10 +150,10 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
   }
 };
 
-// Keep a broad mix of the original themes while shortening the quiz to 20
-// questions. The shared archetype engine reads this filtered list everywhere.
+// Keep the core 20-question set and add five prompts that broaden the roles
+// represented. The shared archetype engine reads this filtered list everywhere.
 const pastLifeConfig = window.MOA_ARCHETYPE_TESTS["past-life"];
 const pastLifeQuestionPool = pastLifeConfig.questions;
-pastLifeConfig.questions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 13, 16, 17, 18, 21, 22, 23, 24, 27, 28, 29]
+pastLifeConfig.questions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 27, 28, 29]
   .map((index) => pastLifeQuestionPool[index]);
 pastLifeConfig.eyebrow = "molgga PLAY · 전생 테스트";
