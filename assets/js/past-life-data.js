@@ -39,7 +39,7 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
     ] },
     { prompt: "배를 타고 멀리 떠난다면 어떤 역할이 좋아?", choices: [
       { text: "파도와 바람을 읽는 항해사", scores: ["compass", "otter"] },
-      { text: "선원들의 간식 담당", scores: ["taster", "whale"] }
+      { text: "선원들의 간식 담당", scores: ["taster", "cat"] }
     ] },
     { prompt: "마을에 축제가 열린대. 나는…", choices: [
       { text: "무대에 올라 노래나 재주를 보여준다", scores: ["bard", "rabbit"] },
@@ -67,7 +67,7 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
     ] },
     { prompt: "갑자기 왕실에서 호출이 왔다. 나는…", choices: [
       { text: "일단 가서 무슨 일인지 확인한다", scores: ["rabbit", "otter"] },
-      { text: "호출의 이유와 준비물을 먼저 알아본다", scores: ["ant", "taster"] }
+      { text: "호출의 이유와 준비물을 먼저 알아본다", scores: ["ant", "scribe"] }
     ] },
     { prompt: "내가 운영하고 싶은 작은 가게는?", choices: [
       { text: "따뜻한 수프와 차를 파는 가게", scores: ["healer", "taster"] },
@@ -86,7 +86,7 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
       { text: "잠깐 다른 얘기를 꺼내 분위기를 바꾼다", scores: ["bard", "rabbit"] }
     ] },
     { prompt: "새벽 시장에서 가장 먼저 눈길이 가는 것은?", choices: [
-      { text: "갓 구운 빵과 따끈한 먹거리", scores: ["taster", "market", "penguin"] },
+      { text: "갓 구운 빵과 따끈한 먹거리", scores: ["taster", "market"] },
       { text: "희한한 물건을 파는 수상한 좌판", scores: ["goblin", "crow", "market"] }
     ] },
     { prompt: "오래된 도서관에서 하루를 보낸다면?", choices: [

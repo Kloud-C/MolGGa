@@ -21,6 +21,22 @@
   const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[char]);
+  const addChoiceScores = (scores, entries) => {
+    entries.forEach((entry) => {
+      const id = typeof entry === "string" ? entry : entry.id;
+      const weight = typeof entry === "string" ? 1 : Number(entry.weight);
+      if (Object.prototype.hasOwnProperty.call(scores, id) && Number.isFinite(weight) && weight > 0) scores[id] += weight;
+    });
+  };
+  const stableTieIndex = (contentId, answerIndexes, candidateCount) => {
+    const pattern = `${contentId}:${answerIndexes.join(",")}`;
+    let hash = 0x811c9dc5;
+    for (let index = 0; index < pattern.length; index += 1) {
+      hash ^= pattern.charCodeAt(index);
+      hash = Math.imul(hash, 0x01000193);
+    }
+    return (hash >>> 0) % candidateCount;
+  };
 
   const renderQuestion = (animate = false, focusPrompt = true) => {
     const question = config.questions[current];
@@ -57,20 +73,13 @@
   const showResult = (focusResult = true) => {
     const scores = Object.fromEntries(Object.keys(config.profiles).map((key) => [key, 0]));
     answers.forEach((answerIndex, questionIndex) => {
-      config.questions[questionIndex].choices[answerIndex].scores.forEach((key) => {
-        if (Object.prototype.hasOwnProperty.call(scores, key)) scores[key] += 1;
-      });
+      addChoiceScores(scores, config.questions[questionIndex].choices[answerIndex].scores);
     });
     const highScore = Math.max(...Object.values(scores));
     const tied = Object.keys(scores).filter((key) => scores[key] === highScore);
-    // Resolve ties from the full answer pattern so the same answers always
-    // produce the same result without favoring the final few questions.
-    // Hash the complete answer pattern without 32-bit bitwise truncation. The
-    // mixed-radix step also handles questions that offer more than two choices.
-    const answerSeed = answers.reduce((seed, answer, index) => (
-      seed * config.questions[index].choices.length + answer
-    ) % tied.length, 0);
-    const winner = tied[answerSeed];
+    // A stable hash keeps repeated answers reproducible while distributing exact-score ties
+    // without coupling the winner to the order of questions or result profiles.
+    const winner = tied[stableTieIndex(root.dataset.archetypeTest, answers, tied.length)];
     const profile = config.profiles[winner];
     const imagePath = profile.image || profile.imageFile;
     const imageCredit = config.imageCredits?.[winner];

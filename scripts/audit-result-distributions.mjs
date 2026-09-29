@@ -24,7 +24,17 @@ const sampleSize = 2_000_000;
 let unreachableFindings = 0;
 let inconclusiveSampleZeroes = 0;
 
-function tally(name, questions, resultIds, scoreAnswers, { randomTie = false, awardLists } = {}) {
+function stableTieIndex(contentId, answerIndexes, candidateCount) {
+  const pattern = `${contentId}:${Array.from(answerIndexes).join(",")}`;
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < pattern.length; index += 1) {
+    hash ^= pattern.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0) % candidateCount;
+}
+
+function tally(name, questions, resultIds, scoreAnswers, { awardLists } = {}) {
   const total = questions.reduce((count, choices) => count * choices.length, 1);
   const exact = total <= exactLimit;
   const runs = exact ? total : sampleSize;
@@ -55,19 +65,7 @@ function tally(name, questions, resultIds, scoreAnswers, { randomTie = false, aw
 
     const winners = scoreAnswers(answers);
     if (winners.length > 1) tiedResponses += 1;
-    if (randomTie && winners.length > 1) {
-      const share = 1 / winners.length;
-      for (const id of winners) counts.set(id, (counts.get(id) || 0) + share);
-      continue;
-    }
-    let tieIndex = 0;
-    if (!randomTie) {
-      for (let index = 0; index < answers.length; index += 1) {
-        tieIndex = (tieIndex * questions[index].length + answers[index]) % winners.length;
-      }
-    } else if (winners.length > 1) {
-      tieIndex = Math.floor(random() * winners.length);
-    }
+    const tieIndex = stableTieIndex(name, answers, winners.length);
     const winner = winners[tieIndex];
     counts.set(winner, (counts.get(winner) || 0) + 1);
   }
@@ -75,15 +73,20 @@ function tally(name, questions, resultIds, scoreAnswers, { randomTie = false, aw
   const absent = [...counts].filter(([, count]) => count === 0).map(([id]) => id);
   let provenUnreachable = [];
   if (awardLists) {
-    const minimumTotalPoints = awardLists.reduce((total, choices) => total + Math.min(...choices.map((ids) => ids.length)), 0);
+    const pointsFor = (entries, resultId = null) => entries.reduce((total, entry) => {
+      const id = typeof entry === "string" ? entry : entry.id;
+      const weight = typeof entry === "string" ? 1 : Number(entry.weight);
+      return total + (resultId === null || resultId === id ? weight : 0);
+    }, 0);
+    const minimumTotalPoints = awardLists.reduce((total, choices) => total + Math.min(...choices.map((entries) => pointsFor(entries))), 0);
     const minimumPossibleWinnerScore = Math.ceil(minimumTotalPoints / resultIds.length);
     provenUnreachable = resultIds.filter((id) => {
-      const maximumScore = awardLists.reduce((total, choices) => total + Math.max(...choices.map((ids) => ids.filter((scoreId) => scoreId === id).length)), 0);
+      const maximumScore = awardLists.reduce((total, choices) => total + Math.max(...choices.map((entries) => pointsFor(entries, id))), 0);
       return maximumScore < minimumPossibleWinnerScore;
     });
   }
   const mode = exact ? "exact" : `sample ${runs.toLocaleString("en-US")}`;
-  console.log(`\n${name}: ${mode} · answer combinations ${total.toLocaleString("en-US")} · tied ${((tiedResponses / runs) * 100).toFixed(3)}%${randomTie ? " (random ties split evenly for expected share)" : ""}`);
+  console.log(`\n${name}: ${mode} · answer combinations ${total.toLocaleString("en-US")} · tied ${((tiedResponses / runs) * 100).toFixed(3)}% (ties resolved deterministically from the answer pattern)`);
   for (const [id, count] of counts) {
     console.log(`  ${id.padEnd(22)} ${(count / runs * 100).toFixed(3)}% (${count.toLocaleString("en-US")}/${runs.toLocaleString("en-US")})`);
   }
@@ -127,17 +130,18 @@ function readRadioQuestions(page, prefix, questionCount) {
   return questions;
 }
 
-const animalQuestions = readRadioQuestions("ko/animal-test.html", "q", 10);
+const animalQuestions = readRadioQuestions("ko/animal-test.html", "q", 10)
+  .map((choices) => choices.map((ids) => ids.map((id, index) => ({ id, weight: index === 0 ? 2 : 1 }))));
 const app = read("assets/js/app.js");
 const animalBlock = app.match(/const animalForm = document\.querySelector\("#animal-quiz"\);[\s\S]*?const profiles = \{([\s\S]*?)\n    \};/);
 if (!animalBlock) throw new Error("Could not locate animal result profiles in app.js");
 const animalIds = [...animalBlock[1].matchAll(/^\s{6}([a-z]+): \{/gm)].map((match) => match[1]);
 tally("animal-test", animalQuestions, animalIds, (answers) => {
   const scores = Object.fromEntries(animalIds.map((id) => [id, 0]));
-  answers.forEach((answer, index) => animalQuestions[index][answer].forEach((id) => { if (id in scores) scores[id] += 1; }));
+  answers.forEach((answer, index) => animalQuestions[index][answer].forEach(({ id, weight }) => { if (id in scores) scores[id] += weight; }));
   const high = Math.max(...Object.values(scores));
   return animalIds.filter((id) => scores[id] === high);
-}, { randomTie: true, awardLists: animalQuestions });
+}, { awardLists: animalQuestions });
 
 const mbtiHtml = read("ko/mbti.html");
 const mbtiQuestions = ["ei", "sn", "tf", "jp"].flatMap((axis) => Array.from({ length: 5 }, (_, index) => {
@@ -163,13 +167,21 @@ for (const [id, config] of Object.entries(archetypes)) {
   const resultIds = Object.keys(config.profiles);
   const unknownScores = new Set();
   for (const question of config.questions) for (const choice of question.choices) {
-    for (const scoreId of choice.scores) if (!Object.hasOwn(config.profiles, scoreId)) unknownScores.add(scoreId);
+    for (const entry of choice.scores) {
+      const scoreId = typeof entry === "string" ? entry : entry.id;
+      if (!Object.hasOwn(config.profiles, scoreId)) unknownScores.add(scoreId);
+      if (typeof entry !== "string" && (!Number.isFinite(entry.weight) || entry.weight <= 0)) throw new Error(`${id}: invalid score weight for ${scoreId}`);
+    }
   }
   if (unknownScores.size) throw new Error(`${id}: scoring references missing profiles: ${[...unknownScores].join(", ")}`);
   tally(id, questions, resultIds, (answers) => {
     const scores = Object.fromEntries(resultIds.map((resultId) => [resultId, 0]));
     answers.forEach((answer, questionIndex) => {
-      for (const profileId of config.questions[questionIndex].choices[answer].scores) scores[profileId] += 1;
+      for (const entry of config.questions[questionIndex].choices[answer].scores) {
+        const profileId = typeof entry === "string" ? entry : entry.id;
+        const weight = typeof entry === "string" ? 1 : entry.weight;
+        scores[profileId] += weight;
+      }
     });
     const high = Math.max(...Object.values(scores));
     return resultIds.filter((resultId) => scores[resultId] === high);

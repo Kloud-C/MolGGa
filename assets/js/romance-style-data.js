@@ -44,12 +44,12 @@ window.MOA_ARCHETYPE_TESTS["romance-style"] = {
     { prompt: "romanceStyle.question.8", choices: [
       { text: "romanceStyle.question.8.a", scores: ["realistic", "steady"] },
       { text: "romanceStyle.question.8.b", scores: ["thrill", "independent"] },
-      { text: "romanceStyle.question.8.c", scores: ["verbal", "playful"] }
+      { text: "romanceStyle.question.8.c", scores: ["verbal", "steady"] }
     ] },
     { prompt: "romanceStyle.question.9", choices: [
       { text: "romanceStyle.question.9.a", scores: ["caregiver", "devoted"] },
       { text: "romanceStyle.question.9.b", scores: ["mediator", "observer"] },
-      { text: "romanceStyle.question.9.c", scores: ["playful", "thrill"] }
+      { text: "romanceStyle.question.9.c", scores: ["playful", "caregiver"] }
     ] },
     { prompt: "romanceStyle.question.10", choices: [
       { text: "romanceStyle.question.10.a", scores: ["direct", "mediator"] },

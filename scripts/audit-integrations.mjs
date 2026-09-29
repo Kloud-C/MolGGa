@@ -416,6 +416,7 @@ assert(resultShareSource.includes("imageUrl: publicUrl(current.imageUrl)"), "res
 assert(resultShareSource.includes("title: current.title") && resultShareSource.includes("description: current.description || current.text"), "result sharing: Kakao feed lacks result-specific text");
 assert(resultShareSource.includes("translate(current.buttonTitle || \"결과 확인하기\")"), "result sharing: Kakao feed button does not support a per-content start label");
 assert(read("assets/js/archetype-test.js").includes("imageUrl: imagePath") && read("assets/js/archetype-test.js").includes(".replace(/\\.html$/, \"\")"), "archetype result sharing: result image or clean same-content route is missing");
+assert(read("assets/js/archetype-test.js").includes("Math.imul(hash, 0x01000193)") && read("assets/js/app.js").includes("Math.imul(tieHash, 0x01000193)"), "quiz scoring: deterministic answer-based tie-breaking must be consistent across archetype and animal quizzes");
 assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: winner image or same-game CTA is missing");
 assert(read("assets/js/app.js").includes("imageUrl: profile.image") && read("assets/js/app.js").includes("description: tr(profile.text)"), "legacy quiz result sharing: result image or translated description is missing");
 
@@ -480,7 +481,11 @@ for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHET
     assert(question.choices?.length >= 2, `${testId}: question ${questionIndex + 1} has fewer than two choices`);
     for (const choice of question.choices || []) {
       assert(choice.scores?.length > 0, `${testId}: question ${questionIndex + 1} has a choice without scores`);
-      for (const profileId of choice.scores || []) assert(profileIds.includes(profileId), `${testId}: question ${questionIndex + 1} scores unknown profile ${profileId}`);
+      for (const entry of choice.scores || []) {
+        const profileId = typeof entry === "string" ? entry : entry.id;
+        assert(profileIds.includes(profileId), `${testId}: question ${questionIndex + 1} scores unknown profile ${profileId}`);
+        if (typeof entry !== "string") assert(Number.isFinite(entry.weight) && entry.weight > 0, `${testId}: question ${questionIndex + 1} has an invalid weight for ${profileId}`);
+      }
     }
   });
   for (const [profileId, profile] of Object.entries(config.profiles || {})) {

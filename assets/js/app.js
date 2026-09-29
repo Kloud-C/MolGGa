@@ -177,13 +177,26 @@
           document.querySelector("#animal-error").textContent = "결과를 보려면 열 문항에 모두 답해 주세요.";
           return;
         }
-        answer.split(",").forEach((key) => {
-          if (Object.prototype.hasOwnProperty.call(scores, key)) scores[key] += 1;
+        // Animal answer IDs are ordered as primary then secondary evidence.
+        answer.split(",").forEach((key, index) => {
+          if (Object.prototype.hasOwnProperty.call(scores, key)) scores[key] += index === 0 ? 2 : 1;
         });
       }
       const highest = Math.max(...Object.values(scores));
       const winners = Object.keys(scores).filter((key) => scores[key] === highest);
-      const winner = winners[Math.floor(Math.random() * winners.length)];
+      // Keep ties reproducible: the same answer pattern should always return the same playful result.
+      const answerIndexes = Array.from({ length: 10 }, (_, index) => {
+        const selected = animalForm.querySelector(`input[name="q${index + 1}"]:checked`);
+        return [...animalForm.querySelectorAll(`input[name="q${index + 1}"]`)].indexOf(selected);
+      });
+      const tiePattern = `animal-test:${answerIndexes.join(",")}`;
+      let tieHash = 0x811c9dc5;
+      for (let index = 0; index < tiePattern.length; index += 1) {
+        tieHash ^= tiePattern.charCodeAt(index);
+        tieHash = Math.imul(tieHash, 0x01000193);
+      }
+      const winnerIndex = (tieHash >>> 0) % winners.length;
+      const winner = winners[winnerIndex];
       lastWinner = winner;
       renderResult(winner);
       result.hidden = false;

@@ -47,7 +47,7 @@ window.MOA_ARCHETYPE_TESTS = {
       ] },
       { prompt: "좋아하는 마음을 표현하는 방식은?", choices: [
         { text: "필요한 순간 먼저 움직여 행동으로 보여준다", scores: ["teto-guard", "teto-bold"] },
-        { text: "말과 작은 표현으로 자주 전해준다", scores: ["egen-mood", "egen-free"] }
+        { text: "말과 작은 표현으로 자주 전해준다", scores: ["egen-care", "egen-mood"] }
       ] },
       { prompt: "새로운 일을 시작할 때 나는…", choices: [
         { text: "내 방식대로 먼저 해보고 자유롭게 방향을 잡는다", scores: ["teto-cool", "egen-free"] },

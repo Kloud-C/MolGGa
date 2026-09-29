@@ -62,7 +62,7 @@ window.MOA_ARCHETYPE_TESTS["attachment-style"] = {
       { text: "고맙지만 속마음까지 드러내는 건 조금 어렵다", scores: ["fearful"] }
     ] },
     { prompt: "상대가 혼자 쉬고 싶다고 말하면 나는…", choices: [
-      { text: "각자 쉬는 시간이 관계에도 필요하다고 여긴다", scores: ["avoidant"] },
+      { text: "각자 쉬는 시간이 관계에도 필요하다고 여긴다", scores: ["secure"] },
       { text: "내가 뭔가 잘못했는지 확인하고 싶어진다", scores: ["anxious"] }
     ] },
     { prompt: "누군가와 가까워지고 싶을 때 내 마음은…", choices: [
