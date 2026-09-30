@@ -90,6 +90,17 @@ const registryContents = contentRegistry?.contents || [];
 const registryContentIds = registryContents.map((content) => content.id);
 assert(new Set(registryCategoryIds).size === registryCategoryIds.length, "content registry: duplicate category IDs");
 assert(new Set(registryContentIds).size === registryContentIds.length, "content registry: duplicate content IDs");
+const contentBrowserSource = read("assets/js/content-browser.js");
+const newContentHelperSource = contentBrowserSource.match(/const isNewContent = \(createdAt, now = new Date\(\)\) => \{[\s\S]*?\n\};/)?.[0];
+assert(Boolean(newContentHelperSource), "content browser: missing calendar-day new badge logic");
+if (newContentHelperSource) {
+  const isNewContent = vm.runInNewContext(`(() => { ${newContentHelperSource}; return isNewContent; })()`, { Date }, { timeout: 1000 });
+  assert(isNewContent("2026-10-01", new Date(2026, 9, 1, 8)), "content browser: a new item is hidden during the first local calendar day");
+  assert(isNewContent("2026-10-01", new Date(2026, 9, 3, 23)), "content browser: a new item expires before the third calendar day ends");
+  assert(!isNewContent("2026-10-01", new Date(2026, 9, 4, 0)), "content browser: a new item remains visible after three calendar days");
+  assert(!isNewContent("2026-10-02", new Date(2026, 9, 1, 8)), "content browser: future-dated content is marked new");
+  assert(!isNewContent("2026-02-30", new Date(2026, 9, 1, 8)), "content browser: an invalid date is marked new");
+}
 for (const category of contentRegistry?.categories || []) {
   for (const locale of locales) assert(Boolean(localeResources[locale][category.labelKey]), `${locale}.json: missing content category label ${category.labelKey}`);
 }
@@ -183,7 +194,7 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20261001-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-4'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-registry.js?v=20261001-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261001-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
   assert(html.includes('content-activity.css?v=20260929-5'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]

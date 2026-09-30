@@ -1,3 +1,15 @@
+const isNewContent = (createdAt, now = new Date()) => {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(createdAt || "");
+  if (!match) return false;
+  const [year, month, day] = match.slice(1).map(Number);
+  const createdDay = Date.UTC(year, month - 1, day);
+  const parsedDay = new Date(createdDay);
+  if (parsedDay.getUTCFullYear() !== year || parsedDay.getUTCMonth() !== month - 1 || parsedDay.getUTCDate() !== day) return false;
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  const ageInDays = (today - createdDay) / 86400000;
+  return ageInDays >= 0 && ageInDays < 3;
+};
+
 (() => {
   const registry = window.MOLGGA_CONTENT_REGISTRY;
   const mount = document.querySelector("[data-content-browser]");
@@ -305,10 +317,9 @@
     const { favorites, recent } = activityState();
     const allowedIds = activeScope === "favorites" ? new Set(favorites) : activeScope === "recent" ? new Set(recent.map((entry) => entry.id)) : null;
     let visibleCount = 0;
-    const now = Date.now();
+    const now = new Date();
     const orderedContents = registry.contents.map((content, index) => {
-      const createdAt = Date.parse(`${content.createdAt || ""}T00:00:00Z`);
-      const isNew = Number.isFinite(createdAt) && createdAt <= now && now - createdAt < 3 * 24 * 60 * 60 * 1000;
+      const isNew = isNewContent(content.createdAt, now);
       return { content, index, isNew };
     });
     const pinNewFirst = (a, b) => Number(b.isNew) - Number(a.isNew)
