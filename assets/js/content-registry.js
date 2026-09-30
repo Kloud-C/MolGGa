@@ -162,6 +162,20 @@
       thumbnail: "/image/home-categories/fantasy-class.jpg",
       source: { kind: "archetype", id: "fantasy-class" },
       metrics: { questionCount: 8, choicesPerQuestion: 4, resultCount: 8, estimatedMinutes: 2 }
+    },
+    {
+      id: "fantasy-shop",
+      createdAt: "2026-10-01",
+      cardLabelKey: "content.fantasy-shop.cardLabel",
+      type: "quiz",
+      categoryIds: ["fun", "lifestyle"],
+      tagIds: ["fantasy", "fun", "lifestyle"],
+      titleKey: "shopStory.title",
+      descriptionKey: "shopStory.description",
+      page: "fantasy-shop-test.html",
+      thumbnail: "/image/tests/fantasy-shop/start.webp",
+      source: { kind: "archetype", id: "fantasy-shop" },
+      metrics: { questionCount: 8, choicesPerQuestion: 4, resultCount: 6, estimatedMinutes: 4 }
     }
   ];
 

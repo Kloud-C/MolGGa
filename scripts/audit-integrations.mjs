@@ -112,6 +112,7 @@ for (const content of registryContents) {
 assert(registryContents.some((content) => content.id === "travel-role" && content.source?.kind === "archetype" && content.page === "travel-role-test.html"), "content registry: travel-role quiz is not registered for the shared archetype engine");
 assert(registryContents.some((content) => content.id === "romance-style" && content.source?.kind === "archetype" && content.page === "romance-style-test.html"), "content registry: romance-style quiz is not registered for the shared archetype engine");
 assert(registryContents.some((content) => content.id === "fantasy-class" && content.source?.kind === "archetype" && content.page === "fantasy-class-test.html"), "content registry: fantasy-class quiz is not registered for the shared archetype engine");
+assert(registryContents.some((content) => content.id === "fantasy-shop" && content.source?.kind === "archetype" && content.page === "fantasy-shop-test.html"), "content registry: fantasy-shop story quiz is not registered for the shared archetype engine");
 for (const locale of locales) {
   assert(localeResourceKeys.every((key) => Object.hasOwn(localeResources[locale], key)), `${locale}.json: translation keys differ from ko.json`);
   if (locale !== "ko") {
@@ -180,7 +181,7 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20260930-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-4'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-registry.js?v=20261001-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20260929-4'), `${locale}/index.html: shared content browser scripts are missing or stale`);
   assert(html.includes('content-activity.css?v=20260929-5'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
@@ -235,14 +236,14 @@ for (const page of allHtml) {
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
   assert(/assets\/js\/i18n\.js\?v=\d{8}-\d+/.test(html), `${page}: i18n.js is missing a cache token`);
-  assert(/assets\/css\/styles\.css\?v=20260930-2/.test(html), `${page}: shared styles are missing or stale`);
+  assert(/assets\/css\/styles\.css\?v=20261001-1/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
   for (const key of i18nKeys) assert(Object.hasOwn(localeResources[locale], key), `${page}: ${locale}.json is missing data-i18n key ${key}`);
   const hasContentResult = /data-(?:quiz|worldcup)-result\b|id=["'](?:animal-result|mbti-result)["']/.test(html);
   if (hasContentResult) {
-    assert(html.includes('content-registry.js?v=20260930-1'), `${page}: result recommendations lack the shared content registry`);
+    assert(html.includes('content-registry.js?v=20261001-1'), `${page}: result recommendations lack the shared content registry`);
     assert(html.includes('content-recommendations.js?v=20260928-1'), `${page}: shared result recommendations are not loaded`);
   }
   for (const [, declaration] of html.matchAll(/\bdata-i18n-attr=["']([^"']+)["']/gi)) {
@@ -267,17 +268,17 @@ for (const page of allHtml) {
   }
 }
 
-const updatedAboutOfferings = "주말·야식 월드컵과 MBTI·동물상·테토/에겐·애착 유형·전생·소비 습관·친구 여행 역할·연애 스타일·판타지 직업 테스트를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 25문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 질문과 설명은 몰까가 직접 작성합니다.";
+const updatedAboutOfferings = "주말·야식 월드컵과 MBTI·동물상·테토/에겐·애착 유형·전생·소비 습관·친구 여행 역할·연애 스타일·판타지 직업 테스트·판타지 마을 가게 이야기를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 25문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 질문과 설명은 몰까가 직접 작성합니다.";
 const updatedResultNote = "결과는 각 페이지에서 선택한 내용에 따른 참고 정보입니다. 월드컵은 마지막까지 선택한 항목을 보여 주며, 야식 월드컵 랭킹에는 완주한 대진의 우승 메뉴가 집계됩니다. 성향 테스트는 선택에서 드러난 경향을 살펴보는 콘텐츠입니다. 어떤 결과도 전문 심리검사나 의료·법률·교육·채용 판단을 대신하지 않습니다.";
 const expectedTermsServices = {
-  en: "molgga offers a weekend preference matchup and a late-night food tournament, along with quizzes for MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, travel roles, romance styles, and fantasy classes. All current content is free and available without registration.",
-  ja: "molggaでは、週末の好みマッチと夜食メニュー対決のほか、MBTI、動物タイプ、テト／エゲン、愛着スタイル、前世、お金の使い方、旅行での役割、恋愛スタイル、ファンタジー職業のテストを提供しています。現在のコンテンツは無料で、会員登録なしで利用できます。",
-  zh: "molgga 提供周末偏好选择赛和夜宵菜单对决，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格和奇幻职业测试。目前所有内容均免费，无需注册即可使用。"
+  en: "molgga offers a weekend preference matchup and a late-night food tournament, along with quizzes for MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, travel roles, romance styles, and fantasy classes, plus a story game about opening a shop in a fantasy village. All current content is free and available without registration.",
+  ja: "molggaでは、週末の好みマッチと夜食メニュー対決のほか、MBTI、動物タイプ、テト／エゲン、愛着スタイル、前世、お金の使い方、旅行での役割、恋愛スタイル、ファンタジー職業のテスト、ファンタジーの村でお店を開く物語コンテンツを提供しています。現在のコンテンツは無料で、会員登録なしで利用できます。",
+  zh: "molgga 提供周末偏好选择赛和夜宵菜单对决，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格和奇幻职业测试，还有在奇幻小镇开店的故事体验。目前所有内容均免费，无需注册即可使用。"
 };
 const expectedPrivacyScope = {
-  en: "molgga is a static website operated by Kloud-C. This policy applies to every page and piece of content on molgga.com, including the weekend and late-night matchups; MBTI, animal-style, Teto/Egen, attachment-style, past-life, spending-habits, travel-role, romance-style, and fantasy-class quizzes; and the About, Contact, and Terms pages.",
-  ja: "molggaはKloud-Cが運営する静的ウェブサイトです。このポリシーは、週末・夜食の対決、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・旅行での役割・恋愛スタイル・ファンタジー職業のテスト、紹介・お問い合わせ・利用案内を含む、molgga.comのすべてのページとコンテンツに適用されます。",
-  zh: "molgga 是由 Kloud-C 运营的静态网站。本政策适用于 molgga.com 的所有页面和内容，包括周末与夜宵选择赛、MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格和奇幻职业测试，以及关于我们、联系和使用说明页面。"
+  en: "molgga is a static website operated by Kloud-C. This policy applies to every page and piece of content on molgga.com, including the weekend and late-night matchups; MBTI, animal-style, Teto/Egen, attachment-style, past-life, spending-habits, travel-role, romance-style, and fantasy-class quizzes; the fantasy village shop story game; and the About, Contact, and Terms pages.",
+  ja: "molggaはKloud-Cが運営する静的ウェブサイトです。このポリシーは、週末・夜食の対決、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・旅行での役割・恋愛スタイル・ファンタジー職業のテスト、ファンタジーの村でお店を開く物語コンテンツ、紹介・お問い合わせ・利用案内を含む、molgga.comのすべてのページとコンテンツに適用されます。",
+  zh: "molgga 是由 Kloud-C 运营的静态网站。本政策适用于 molgga.com 的所有页面和内容，包括周末与夜宵选择赛、MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格和奇幻职业测试、奇幻小镇开店故事，以及关于我们、联系和使用说明页面。"
 };
 const expectedPrivacyContactForm = {
   en: "On the contact page, you may submit your name and email (both optional), a topic, and a message. Formspree processes the submission so the site operator can review and respond to it. The submission is stored in the operator's Formspree account and may be forwarded to the operator's email depending on account settings. Formspree may process information in several countries, including the United States. For details, see",
@@ -290,9 +291,9 @@ const expectedLocalQuizNote = {
   zh: "本测试仅在当前页面计算答案，不会保存。详情请参见"
 };
 for (const [locale, expected] of Object.entries({
-  en: ["Explore the weekend and late-night food matchups, plus quizzes about MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, your role on a trip with friends, romance styles, and fantasy classes. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
-  ja: ["週末・夜食の対決と、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割・恋愛スタイル・ファンタジー職業のテストを楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは25問です。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
-  zh: ["可以体验周末和夜宵选择赛，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、朋友旅行角色、恋爱风格和奇幻职业测试。夜宵选择赛会从50种菜单中随机组成16强或32强，前世测试共25道题。依恋风格内容参考相关研究，各项问题和说明均由molgga原创。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
+  en: ["Explore the weekend and late-night food matchups, plus quizzes about MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, your role on a trip with friends, romance styles, and fantasy classes. You can also follow a story game about opening a shop in a fantasy village. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
+  ja: ["週末・夜食の対決と、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割・恋愛スタイル・ファンタジー職業のテストに加え、ファンタジーの村でお店を開く物語も楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは25問です。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
+  zh: ["可以体验周末和夜宵选择赛，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、朋友旅行角色、恋爱风格和奇幻职业测试，也可以体验在奇幻小镇开店的故事。夜宵选择赛会从50种菜单中随机组成16强或32强，前世测试共25道题。依恋风格内容参考相关研究，各项问题和说明均由molgga原创。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
 })) {
   const aboutHtml = read(`${locale}/about.html`);
   assert(aboutHtml.includes(updatedAboutOfferings) && aboutHtml.includes(updatedResultNote), `${locale}: About page source text is out of sync with its translation keys`);
@@ -420,7 +421,7 @@ assert(frontendCups.weekend?.items.length === 50, `weekend World Cup must draw f
 assert(/shuffle\(config\.items\)\.slice\(0,\s*bracketSize\)/.test(read("assets/js/worldcup.js")), "World Cup must randomly draw the selected bracket size from the complete candidate list");
 
 const registryArchetypeSandbox = { window: {} };
-for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js", "assets/js/romance-style-data.js", "assets/js/fantasy-class-data.js"]) {
+for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js", "assets/js/romance-style-data.js", "assets/js/fantasy-class-data.js", "assets/js/fantasy-shop-data.js"]) {
   vm.runInNewContext(read(file), registryArchetypeSandbox, { timeout: 1000, filename: file });
 }
 const archetypeConfigs = registryArchetypeSandbox.window.MOA_ARCHETYPE_TESTS || {};
@@ -490,6 +491,17 @@ for (const content of registryContents) {
       for (const key of [question.prompt, ...question.choices.map((choice) => choice.text)]) {
         for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} question ${questionIndex + 1} text ${key}`);
       }
+      if (config.storyMode) {
+        for (const key of [question.title, question.situation, question.imageAlt, ...question.choices.map((choice) => choice.reaction)]) {
+          for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} story scene ${questionIndex + 1} text ${key}`);
+        }
+        assert(fs.existsSync(path.resolve(root, "ko", question.image)), `${content.id}: missing story scene image ${question.image}`);
+      }
+    }
+    if (config.storyMode) {
+      const storyKeys = [config.story.startTitle, config.story.startImageAlt, config.story.startButton, config.story.selectedAnswerLabel, config.story.continueButton, config.story.previousButton, config.story.resultNameTemplate, ...config.story.intro, ...Object.values(config.story.locations)];
+      for (const key of storyKeys) for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} story text ${key}`);
+      assert(fs.existsSync(path.resolve(root, "ko", config.story.startImage)), `${content.id}: missing story start image ${config.story.startImage}`);
     }
   } else {
     assert(false, `content registry: unsupported source kind ${source.kind} for ${content.id}`);
@@ -559,7 +571,8 @@ const archetypeFiles = [
   "assets/js/spending-habits-data.js",
   "assets/js/travel-role-data.js",
   "assets/js/romance-style-data.js",
-  "assets/js/fantasy-class-data.js"
+  "assets/js/fantasy-class-data.js",
+  "assets/js/fantasy-shop-data.js"
 ];
 const archetypeSandbox = { window: {} };
 for (const file of archetypeFiles) vm.runInNewContext(read(file), archetypeSandbox, { timeout: 1000 });
@@ -586,6 +599,17 @@ for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHET
     }
     const image = profile.image || profile.imageFile;
     if (image) assert(fs.existsSync(path.resolve(root, "ko", image)), `${testId}/${profileId}: missing result image ${image}`);
+  }
+  if (config.storyMode) {
+    assert(config.story?.startImage && config.story?.intro?.length && config.story?.continueButton, `${testId}: story intro or navigation data is incomplete`);
+    config.questions.forEach((question, questionIndex) => {
+      assert(question.title && question.situation && question.image && question.imageAlt, `${testId}: scene ${questionIndex + 1} is missing story copy or an image`);
+      for (const [choiceIndex, choice] of question.choices.entries()) {
+        assert(choice.reaction, `${testId}: scene ${questionIndex + 1}, choice ${choiceIndex + 1} has no follow-up reaction`);
+        if (questionIndex === 0) assert(config.story.locations?.[choice.locationId], `${testId}: opening choice ${choiceIndex + 1} has no recognized shop location`);
+      }
+    });
+    assert(fs.existsSync(path.resolve(root, "ko", config.story.startImage)), `${testId}: missing story start image`);
   }
 }
 

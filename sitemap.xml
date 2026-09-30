@@ -512,4 +512,36 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/fantasy-class-test" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/fantasy-class-test" />
   </url>
+  <url>
+    <loc>https://molgga.com/ko/fantasy-shop-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/fantasy-shop-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/en/fantasy-shop-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/fantasy-shop-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/ja/fantasy-shop-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/fantasy-shop-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/zh/fantasy-shop-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/fantasy-shop-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/fantasy-shop-test" />
+  </url>
 </urlset>

@@ -14,7 +14,8 @@ for (const file of [
   "assets/js/spending-habits-data.js",
   "assets/js/travel-role-data.js",
   "assets/js/romance-style-data.js",
-  "assets/js/fantasy-class-data.js"
+  "assets/js/fantasy-class-data.js",
+  "assets/js/fantasy-shop-data.js"
 ]) {
   vm.runInNewContext(read(file), runtime, { timeout: 1000, filename: file });
 }

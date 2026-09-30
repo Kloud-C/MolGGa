@@ -121,6 +121,10 @@
 - `merchant.jpg` — 마을 시장에서 장부와 물자를 살피는 상인
 - `bard.jpg` — 여관에서 류트를 연주하며 이야기를 들려주는 음유시인
 
+## 판타지 마을 가게 이야기 이미지
+
+`tests/fantasy-shop`에는 시작 장면 1장, 선택 장면 8장, 가게 결과 6장의 WebP 일러스트가 있습니다. `assets/js/fantasy-shop-data.js`가 파일 경로와 대체 텍스트 키를 관리합니다. 모든 그림은 따뜻한 색감의 2D 판타지 마을 배경으로 제작했으며 1600×900 크기로 최적화했습니다. 자세한 파일 목록과 장면 설명은 [`tests/fantasy-shop/README.md`](tests/fantasy-shop/README.md)를 확인해 주세요.
+
 ## 연애 스타일 테스트 이미지
 
 `tests/romance-style`에는 12개 연애 스타일 결과를 위한 생성 실사풍 이미지가 있습니다. 모바일 전송량을 줄이도록 900×1125 JPEG로 최적화했습니다. `assets/js/romance-style-data.js`의 결과 프로필 ID와 파일 경로를 맞춰 관리합니다. 각 결과 이미지와 장면 설명의 대응은 [`tests/romance-style/README.md`](tests/romance-style/README.md)에서 확인할 수 있습니다.
