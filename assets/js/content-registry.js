@@ -148,6 +148,20 @@
       thumbnail: "/image/tests/romance-style/direct.jpg",
       source: { kind: "archetype", id: "romance-style" },
       metrics: { questionCount: 15, choicesPerQuestion: 3, resultCount: 12, estimatedMinutes: 4 }
+    },
+    {
+      id: "fantasy-class",
+      createdAt: "2026-09-30",
+      cardLabelKey: "content.fantasy-class.cardLabel",
+      type: "quiz",
+      categoryIds: ["fun", "personality"],
+      tagIds: ["fantasy", "fun", "personality"],
+      titleKey: "fantasyClass.title",
+      descriptionKey: "fantasyClass.description",
+      page: "fantasy-class-test.html",
+      thumbnail: "/image/home-categories/fantasy-class.jpg",
+      source: { kind: "archetype", id: "fantasy-class" },
+      metrics: { questionCount: 8, choicesPerQuestion: 4, resultCount: 8, estimatedMinutes: 2 }
     }
   ];
 
