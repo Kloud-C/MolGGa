@@ -200,7 +200,7 @@ for (const page of allHtml) {
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
   assert(/assets\/js\/i18n\.js\?v=\d{8}-\d+/.test(html), `${page}: i18n.js is missing a cache token`);
-  assert(/assets\/css\/styles\.css\?v=20260930-1/.test(html), `${page}: shared styles are missing or stale`);
+  assert(/assets\/css\/styles\.css\?v=20260930-2/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
@@ -404,7 +404,14 @@ for (const content of registryContents) {
       for (const key of [profile.name, profile.catchphrase, profile.description, profile.shareDescription]) {
         for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id}/${resultId} result text ${key}`);
       }
-      for (const locale of locales) assert(!/[○•]/u.test(localeResources[locale][profile.shareDescription]), `${locale}.json: share description for ${content.id}/${resultId} contains a screen-only marker`);
+      for (const locale of locales) {
+        assert(!/[○•]/u.test(localeResources[locale][profile.description]), `${locale}.json: ${content.id}/${resultId} screen summary should store plain sentences for the shared bullet-list renderer`);
+        assert(!/[○•]/u.test(localeResources[locale][profile.shareDescription]), `${locale}.json: share description for ${content.id}/${resultId} contains a screen-only marker`);
+        for (const detail of profile.details || []) {
+          for (const key of [detail.title, detail.text]) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id}/${resultId} detail text ${key}`);
+          assert(!/[○•]/u.test(localeResources[locale][detail.text]), `${locale}.json: ${content.id}/${resultId} detail-card text contains a screen-only marker`);
+        }
+      }
     }
     for (const [questionIndex, question] of config.questions.entries()) {
       for (const key of [question.prompt, ...question.choices.map((choice) => choice.text)]) {
@@ -423,13 +430,13 @@ assert(resultShareSource.includes("translate(current.buttonTitle || \"결과 확
 const archetypeShareSource = read("assets/js/archetype-test.js");
 assert(archetypeShareSource.includes("imageUrl: imagePath") && archetypeShareSource.includes(".replace(/\\.html$/, \"\")"), "archetype result sharing: result image or clean same-content route is missing");
 assert(archetypeShareSource.includes("tr(config.sharePrompt || config.title)") && archetypeShareSource.includes("title: resultLine") && archetypeShareSource.includes("`${shareQuestion} [${resultName}]`"), "archetype result sharing: test context or bracketed result name is missing from the result title");
-assert(archetypeShareSource.includes("tr(profile.shareDescription)") && archetypeShareSource.includes("renderResultSentences(tr(profile.description))") && archetypeShareSource.includes('class="result-sentence"') && archetypeShareSource.includes('class="result-detail-card"') && !archetypeShareSource.includes(String.fromCodePoint(0x2022)), "archetype result copy: screen and share descriptions must be separate, consistently carded, and free of decorative bullets");
+assert(archetypeShareSource.includes("tr(profile.shareDescription)") && archetypeShareSource.includes("renderResultBullets(tr(profile.description))") && archetypeShareSource.includes('class="archetype-result-card__summary"') && archetypeShareSource.includes('<li>${escapeHtml(sentence)}</li>') && archetypeShareSource.includes("renderResultSentences(tr(item.text))") && archetypeShareSource.includes('class="result-sentence"') && archetypeShareSource.includes('class="result-detail-card"') && !archetypeShareSource.includes(String.fromCodePoint(0x2022)), "archetype result copy: summaries must render as bullets while detail cards and share descriptions remain marker-free");
 assert(read("assets/js/archetype-test.js").includes("Math.imul(hash, 0x01000193)") && read("assets/js/app.js").includes("Math.imul(tieHash, 0x01000193)"), "quiz scoring: deterministic answer-based tie-breaking must be consistent across archetype and animal quizzes");
 assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("title: `${localize(config.title)} [${localize(winner.name)}]`") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: contextual bracketed title, winner image, or same-game CTA is missing");
 const legacyQuizSource = read("assets/js/app.js");
 assert(legacyQuizSource.includes("imageUrl: profile.image") && legacyQuizSource.includes('tr("animal.sharePrompt")') && legacyQuizSource.includes('tr("mbti.sharePrompt")') && legacyQuizSource.includes("const resultLine = `${sharePrompt} [${resultName}]`") && legacyQuizSource.includes("renderResultSentences(tr(profile.daily))") && legacyQuizSource.includes('class="result-sentence"') && !legacyQuizSource.includes(String.fromCodePoint(0x2022)), "legacy quiz result sharing context or bullet-free sentence-formatted descriptions are missing");
 const sharedResultCardStyles = read("assets/css/styles.css");
-assert(sharedResultCardStyles.includes(".result-detail-card, .archetype-result-card__body .info-card") && sharedResultCardStyles.includes(".result-detail-grid, .archetype-result-card__body .info-grid") && sharedResultCardStyles.includes("background: var(--mint-50)") && sharedResultCardStyles.includes(".result-sentence + .result-sentence"), "quiz result detail cards do not share the same sentence and card layout");
+assert(sharedResultCardStyles.includes(".result-detail-card, .archetype-result-card__body .info-card") && sharedResultCardStyles.includes(".result-detail-grid, .archetype-result-card__body .info-grid") && sharedResultCardStyles.includes(".archetype-result-card__body .result-detail-card__label") && sharedResultCardStyles.includes(".archetype-result-card__summary li::marker") && sharedResultCardStyles.includes("background: var(--mint-50)") && sharedResultCardStyles.includes(".result-sentence + .result-sentence"), "quiz result summaries or detail cards do not share the required list, spacing, and card layout");
 
 for (const [gameId, config] of Object.entries(frontendCups)) {
   const backend = backendCups[gameId];
