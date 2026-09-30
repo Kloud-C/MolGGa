@@ -13,8 +13,6 @@ window.MOA_ARCHETYPE_TESTS["fantasy-shop"] = {
     startButton: "shopStory.startButton",
     startImage: "../image/tests/fantasy-shop/start.webp",
     startImageAlt: "shopStory.startImageAlt",
-    selectedAnswerLabel: "shopStory.selectedAnswerLabel",
-    continueButton: "shopStory.continueButton",
     previousButton: "shopStory.previousButton",
     resultNameTemplate: "shopStory.resultNameTemplate",
     locations: {

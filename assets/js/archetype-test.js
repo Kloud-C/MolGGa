@@ -21,7 +21,6 @@
   const preloadedStoryImages = new Set();
   let current = storyMode ? -1 : 0;
   let moving = false;
-  let storyContinueButton = null;
 
   const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -53,6 +52,13 @@
       preloadNextStoryImage();
     }, { once: true });
   };
+  const scrollStoryStep = (target = progressWrap) => {
+    if (!storyMode || !target) return;
+    const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
+    const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - 12;
+    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    window.scrollTo({ top: Math.max(0, top), behavior });
+  };
   const renderStoryIntro = () => {
     if (!storyMode) return;
     current = -1;
@@ -68,24 +74,21 @@
       progressWrap.hidden = false;
       navigation.hidden = false;
       renderQuestion(true);
+      window.requestAnimationFrame(() => scrollStoryStep());
     });
   };
-  const renderStoryFeedback = () => {
-    if (!storyMode) return;
-    const feedback = stage.querySelector("[data-story-feedback]");
-    const choice = config.questions[current]?.choices[answers[current]];
-    if (!feedback || !choice) {
-      feedback?.replaceChildren();
-      return;
-    }
-    feedback.innerHTML = `<section class="story-feedback" role="status" aria-live="polite"><h3>${escapeHtml(tr(config.story.selectedAnswerLabel))}</h3><p class="story-feedback__answer">${escapeHtml(tr(choice.text))}</p><p class="story-feedback__reaction">${escapeHtml(tr(choice.reaction))}</p></section>`;
+  const renderStoryReaction = () => {
+    if (!storyMode || current <= 0) return "";
+    const previousQuestion = config.questions[current - 1];
+    const previousChoice = previousQuestion?.choices[answers[current - 1]];
+    if (!previousChoice) return "";
+    return `<p class="story-reaction" role="status" aria-live="polite">${escapeHtml(tr(previousChoice.reaction))}</p>`;
   };
   const updateStoryNavigation = () => {
-    if (!storyMode || !storyContinueButton) return;
+    if (!storyMode) return;
     backButton.textContent = tr(config.story.previousButton);
     backButton.hidden = current === 0;
-    storyContinueButton.textContent = tr(config.story.continueButton);
-    storyContinueButton.disabled = answers[current] === null;
+    navigation.hidden = current === 0;
   };
   const addChoiceScores = (scores, entries) => {
     entries.forEach((entry) => {
@@ -138,22 +141,9 @@
     error.textContent = "";
 
     if (storyMode) {
-      stage.innerHTML = `<section class="story-scene"><figure class="story-scene__media"><img data-story-image src="${escapeHtml(question.image)}" alt="${escapeHtml(tr(question.imageAlt))}" width="1600" height="900" loading="eager" decoding="async"></figure><h2 class="story-scene__title" tabindex="-1">${escapeHtml(tr(question.title))}</h2><p class="story-scene__situation">${escapeHtml(tr(question.situation))}</p><fieldset class="archetype-question"><legend class="archetype-question__prompt">${escapeHtml(tr(question.prompt))}</legend><div class="archetype-question__choices">${question.choices.map((choice, index) => `<button class="choice-button${answers[current] === index ? " is-selected" : ""}" type="button" data-choice="${index}" aria-pressed="${answers[current] === index}"><span class="choice-button__number">0${index + 1}</span><span>${escapeHtml(tr(choice.text))}</span></button>`).join("")}</div></fieldset><div data-story-feedback></div></section>`;
+      stage.innerHTML = `<section class="story-scene">${renderStoryReaction()}<figure class="story-scene__media"><img data-story-image src="${escapeHtml(question.image)}" alt="${escapeHtml(tr(question.imageAlt))}" width="1600" height="900" loading="eager" decoding="async"></figure><h2 class="story-scene__title" tabindex="-1">${escapeHtml(tr(question.title))}</h2><p class="story-scene__situation">${escapeHtml(tr(question.situation))}</p><fieldset class="archetype-question"><legend class="archetype-question__prompt">${escapeHtml(tr(question.prompt))}</legend><div class="archetype-question__choices">${question.choices.map((choice, index) => `<button class="choice-button${answers[current] === index ? " is-selected" : ""}" type="button" data-choice="${index}" aria-pressed="${answers[current] === index}"><span class="choice-button__number">0${index + 1}</span><span>${escapeHtml(tr(choice.text))}</span></button>`).join("")}</div></fieldset></section>`;
       attachStoryImageBehavior();
       navigation.hidden = false;
-      storyContinueButton = navigation.querySelector("[data-story-continue]");
-      if (!storyContinueButton) {
-        storyContinueButton = document.createElement("button");
-        storyContinueButton.className = "button";
-        storyContinueButton.type = "button";
-        storyContinueButton.dataset.storyContinue = "";
-        navigation.append(storyContinueButton);
-      }
-      if (storyContinueButton.dataset.storyBound !== "true") {
-        storyContinueButton.addEventListener("click", () => move(1));
-        storyContinueButton.dataset.storyBound = "true";
-      }
-      renderStoryFeedback();
       updateStoryNavigation();
     } else {
       stage.innerHTML = `<fieldset class="archetype-question"><legend class="archetype-question__prompt" tabindex="-1">${current + 1}. ${escapeHtml(tr(question.prompt))}</legend><div class="archetype-question__choices">${question.choices.map((choice, index) => `<button class="choice-button${answers[current] === index ? " is-selected" : ""}" type="button" data-choice="${index}" aria-pressed="${answers[current] === index}"><span class="choice-button__number">0${index + 1}</span><span>${escapeHtml(tr(choice.text))}</span></button>`).join("")}</div></fieldset>`;
@@ -174,12 +164,7 @@
           option.setAttribute("aria-pressed", String(selected));
         });
         error.textContent = "";
-        if (storyMode) {
-          renderStoryFeedback();
-          updateStoryNavigation();
-        } else {
-          move(1);
-        }
+        move(1);
       });
     });
   };
@@ -257,11 +242,13 @@
       if (direction > 0 && current === config.questions.length - 1) {
         showResult();
         moving = false;
+        if (storyMode) window.requestAnimationFrame(() => scrollStoryStep(result));
         return;
       }
       current += direction;
       renderQuestion(true);
       moving = false;
+      if (storyMode) window.requestAnimationFrame(() => scrollStoryStep());
     }, delay);
   };
 

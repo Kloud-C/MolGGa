@@ -117,7 +117,7 @@
       defaultNS: "translation",
       keySeparator: false,
       interpolation: { escapeValue: false },
-      backend: { loadPath: "/{{lng}}.json?v=20261001-1", maxRetries: 1, retryTimeout: 350 }
+      backend: { loadPath: "/{{lng}}.json?v=20261001-2", maxRetries: 1, retryTimeout: 350 }
     })
     .then(updateMetadata)
     .catch((error) => {

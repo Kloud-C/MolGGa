@@ -113,6 +113,8 @@ assert(registryContents.some((content) => content.id === "travel-role" && conten
 assert(registryContents.some((content) => content.id === "romance-style" && content.source?.kind === "archetype" && content.page === "romance-style-test.html"), "content registry: romance-style quiz is not registered for the shared archetype engine");
 assert(registryContents.some((content) => content.id === "fantasy-class" && content.source?.kind === "archetype" && content.page === "fantasy-class-test.html"), "content registry: fantasy-class quiz is not registered for the shared archetype engine");
 assert(registryContents.some((content) => content.id === "fantasy-shop" && content.source?.kind === "archetype" && content.page === "fantasy-shop-test.html"), "content registry: fantasy-shop story quiz is not registered for the shared archetype engine");
+const fantasyShopCardLabels = { ko: "판타지 가게", en: "Fantasy shop", ja: "ファンタジーのお店", zh: "奇幻商店" };
+for (const locale of locales) assert(localeResources[locale]["content.fantasy-shop.cardLabel"] === fantasyShopCardLabels[locale], `${locale}.json: fantasy-shop card label should stay concise`);
 for (const locale of locales) {
   assert(localeResourceKeys.every((key) => Object.hasOwn(localeResources[locale], key)), `${locale}.json: translation keys differ from ko.json`);
   if (locale !== "ko") {
@@ -236,7 +238,7 @@ for (const page of allHtml) {
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
   assert(/assets\/js\/i18n\.js\?v=\d{8}-\d+/.test(html), `${page}: i18n.js is missing a cache token`);
-  assert(/assets\/css\/styles\.css\?v=20261001-1/.test(html), `${page}: shared styles are missing or stale`);
+  assert(/assets\/css\/styles\.css\?v=20261001-2/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
@@ -499,7 +501,7 @@ for (const content of registryContents) {
       }
     }
     if (config.storyMode) {
-      const storyKeys = [config.story.startTitle, config.story.startImageAlt, config.story.startButton, config.story.selectedAnswerLabel, config.story.continueButton, config.story.previousButton, config.story.resultNameTemplate, ...config.story.intro, ...Object.values(config.story.locations)];
+      const storyKeys = [config.story.startTitle, config.story.startImageAlt, config.story.startButton, config.story.previousButton, config.story.resultNameTemplate, ...config.story.intro, ...Object.values(config.story.locations)];
       for (const key of storyKeys) for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} story text ${key}`);
       assert(fs.existsSync(path.resolve(root, "ko", config.story.startImage)), `${content.id}: missing story start image ${config.story.startImage}`);
     }
@@ -601,7 +603,13 @@ for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHET
     if (image) assert(fs.existsSync(path.resolve(root, "ko", image)), `${testId}/${profileId}: missing result image ${image}`);
   }
   if (config.storyMode) {
-    assert(config.story?.startImage && config.story?.intro?.length && config.story?.continueButton, `${testId}: story intro or navigation data is incomplete`);
+    assert(config.story?.startImage && config.story?.intro?.length && config.story?.previousButton && !config.story?.continueButton, `${testId}: story intro or navigation data is incomplete`);
+    for (const locale of locales) {
+      const storyPage = read(`${locale}/fantasy-shop-test.html`);
+      assert(!storyPage.includes("data-story-continue"), `${locale}: story selections should advance without a continue button`);
+    }
+    const storyRenderer = read("assets/js/archetype-test.js");
+    assert(storyRenderer.includes("const renderStoryReaction") && storyRenderer.includes("scrollStoryStep") && storyRenderer.includes("move(1);"), `${testId}: selected reactions, automatic scene progression, or progress scrolling are missing`);
     config.questions.forEach((question, questionIndex) => {
       assert(question.title && question.situation && question.image && question.imageAlt, `${testId}: scene ${questionIndex + 1} is missing story copy or an image`);
       for (const [choiceIndex, choice] of question.choices.entries()) {
