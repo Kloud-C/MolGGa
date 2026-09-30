@@ -34,6 +34,41 @@ function checkLocalReference(page, reference) {
   assert(fs.existsSync(target), `${page}: missing local reference ${reference}`);
 }
 
+function visibleUnlocalizedKorean(html) {
+  const source = html.replace(/<!--[\s\S]*?-->|<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, "");
+  const voidTags = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"]);
+  const stack = [];
+  const leaks = [];
+  for (const match of source.matchAll(/<\/?([a-z][\w:-]*)\b([^>]*)>|([^<]+)/gi)) {
+    if (match[3]) {
+      if (/[^\S\r\n]*[\uac00-\ud7af]/.test(match[3]) && !stack.some((entry) => entry.translated || entry.languageSelector)) {
+        leaks.push(match[3].trim().replace(/\s+/g, " "));
+      }
+      continue;
+    }
+    const tag = match[1].toLowerCase();
+    if (match[0][1] === "/") {
+      for (let index = stack.length - 1; index >= 0; index -= 1) {
+        if (stack[index].tag === tag) {
+          stack.length = index;
+          break;
+        }
+      }
+      continue;
+    }
+    const raw = match[2];
+    const isVoid = voidTags.has(tag) || /\/\s*$/.test(raw);
+    if (!isVoid) {
+      stack.push({
+        tag,
+        translated: /\bdata-i18n\s*=/.test(raw),
+        languageSelector: /\bdata-language-select\b|\bclass\s*=\s*["'][^"']*\blanguage-select\b/i.test(raw)
+      });
+    }
+  }
+  return leaks;
+}
+
 function publishedPage(pathname) {
   const decoded = decodeURIComponent(pathname);
   const relative = decoded.startsWith("/") ? decoded.slice(1) : decoded;
@@ -223,6 +258,8 @@ for (const page of allHtml) {
       .map(([, value]) => value)
       .filter((value) => /[\uac00-\ud7af]/.test(value));
     assert(untranslatedAttributes.length === 0, `${page}: localized accessibility or form attributes still contain Korean: ${untranslatedAttributes.join(" | ")}`);
+    const untranslatedVisibleText = visibleUnlocalizedKorean(html);
+    assert(untranslatedVisibleText.length === 0, `${page}: visible Korean text is missing data-i18n translation: ${untranslatedVisibleText.join(" | ")}`);
   }
   if (locale === "ko") assert(Array.from(descriptions[0]).length <= 80, `${page}: Korean description exceeds Naver's 80-character guidance`);
   for (const [, reference] of html.matchAll(/\b(?:src|href)=["']([^"']+)["']/gi)) {
@@ -230,12 +267,32 @@ for (const page of allHtml) {
   }
 }
 
-const updatedAboutOfferings = "주말·야식 월드컵, 동물상·MBTI·테토/에겐·애착 유형·전생·소비 습관·친구 여행 역할 테스트를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 25문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 각 콘텐츠의 질문과 설명은 몰까가 직접 작성합니다.";
+const updatedAboutOfferings = "주말·야식 월드컵과 MBTI·동물상·테토/에겐·애착 유형·전생·소비 습관·친구 여행 역할·연애 스타일·판타지 직업 테스트를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 25문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 질문과 설명은 몰까가 직접 작성합니다.";
 const updatedResultNote = "결과는 각 페이지에서 선택한 내용에 따른 참고 정보입니다. 월드컵은 마지막까지 선택한 항목을 보여 주며, 야식 월드컵 랭킹에는 완주한 대진의 우승 메뉴가 집계됩니다. 성향 테스트는 선택에서 드러난 경향을 살펴보는 콘텐츠입니다. 어떤 결과도 전문 심리검사나 의료·법률·교육·채용 판단을 대신하지 않습니다.";
+const expectedTermsServices = {
+  en: "molgga offers a weekend preference matchup and a late-night food tournament, along with quizzes for MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, travel roles, romance styles, and fantasy classes. All current content is free and available without registration.",
+  ja: "molggaでは、週末の好みマッチと夜食メニュー対決のほか、MBTI、動物タイプ、テト／エゲン、愛着スタイル、前世、お金の使い方、旅行での役割、恋愛スタイル、ファンタジー職業のテストを提供しています。現在のコンテンツは無料で、会員登録なしで利用できます。",
+  zh: "molgga 提供周末偏好选择赛和夜宵菜单对决，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格和奇幻职业测试。目前所有内容均免费，无需注册即可使用。"
+};
+const expectedPrivacyScope = {
+  en: "molgga is a static website operated by Kloud-C. This policy applies to every page and piece of content on molgga.com, including the weekend and late-night matchups; MBTI, animal-style, Teto/Egen, attachment-style, past-life, spending-habits, travel-role, romance-style, and fantasy-class quizzes; and the About, Contact, and Terms pages.",
+  ja: "molggaはKloud-Cが運営する静的ウェブサイトです。このポリシーは、週末・夜食の対決、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・旅行での役割・恋愛スタイル・ファンタジー職業のテスト、紹介・お問い合わせ・利用案内を含む、molgga.comのすべてのページとコンテンツに適用されます。",
+  zh: "molgga 是由 Kloud-C 运营的静态网站。本政策适用于 molgga.com 的所有页面和内容，包括周末与夜宵选择赛、MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格和奇幻职业测试，以及关于我们、联系和使用说明页面。"
+};
+const expectedPrivacyContactForm = {
+  en: "On the contact page, you may submit your name and email (both optional), a topic, and a message. Formspree processes the submission so the site operator can review and respond to it. The submission is stored in the operator's Formspree account and may be forwarded to the operator's email depending on account settings. Formspree may process information in several countries, including the United States. For details, see",
+  ja: "お問い合わせページでは、氏名とメールアドレス（いずれも任意）、お問い合わせの種類、内容を入力して送信できます。入力内容は確認と返信のためFormspreeに送信され、運営者のFormspreeアカウントに保存されます。アカウント設定により運営者のメールアドレスにも転送される場合があります。Formspreeは米国を含む複数の国で情報を処理することがあります。詳しくは",
+  zh: "你可以在联系页面填写姓名和电子邮箱（均为选填）、反馈类型和内容并提交。提交的信息会发送至 Formspree，以便网站运营者确认并回复；信息保存在运营者的 Formspree 账户中。根据账户设置，信息也可能转发至运营者邮箱。Formspree 可能会在包括美国在内的多个国家或地区处理信息。详情请参见"
+};
+const expectedLocalQuizNote = {
+  en: "This quiz calculates your answers on this page and does not save them. For details, see",
+  ja: "このテストはこのページ内で回答を計算し、保存しません。詳しくは",
+  zh: "本测试仅在当前页面计算答案，不会保存。详情请参见"
+};
 for (const [locale, expected] of Object.entries({
-  en: ["Explore the weekend and late-night food matchups, plus quizzes about animal styles, MBTI, Teto/Egen, attachment styles, past lives, spending habits, and your role on a trip with friends. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz now takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
-  ja: ["週末・夜食の対決、動物タイプ・MBTI・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割テストを楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは25問で遊べます。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
-  zh: ["可以体验周末和夜宵选择赛，以及动物类型、MBTI、Teto/Egen、依恋类型、前世、消费习惯和朋友旅行角色测试。夜宵选择赛会从50种菜单中随机组成16强或32强，前世测试现为25道题。依恋类型内容参考相关研究，各项问题和说明均由molgga原创。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
+  en: ["Explore the weekend and late-night food matchups, plus quizzes about MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, your role on a trip with friends, romance styles, and fantasy classes. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
+  ja: ["週末・夜食の対決と、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割・恋愛スタイル・ファンタジー職業のテストを楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは25問です。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
+  zh: ["可以体验周末和夜宵选择赛，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、朋友旅行角色、恋爱风格和奇幻职业测试。夜宵选择赛会从50种菜单中随机组成16强或32强，前世测试共25道题。依恋风格内容参考相关研究，各项问题和说明均由molgga原创。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
 })) {
   const aboutHtml = read(`${locale}/about.html`);
   assert(aboutHtml.includes(updatedAboutOfferings) && aboutHtml.includes(updatedResultNote), `${locale}: About page source text is out of sync with its translation keys`);
@@ -253,7 +310,23 @@ for (const [locale, expected] of Object.entries({
     .filter((value) => translate(value) === value);
   assert(untranslatedHomeCopy.length === 0, `${locale}: home page has missing translations: ${untranslatedHomeCopy.join(" | ")}`);
   assert(translate("about.offerings.current") === expected[0], `${locale}: About offerings paragraph translation is missing or stale`);
+  assert(translate("terms.services.current") === expectedTermsServices[locale], `${locale}: Terms service list translation is missing or stale`);
+  assert(translate("privacy.scope") === expectedPrivacyScope[locale], `${locale}: Privacy scope translation is missing or stale`);
+  assert(translate("privacy.contactForm") === expectedPrivacyContactForm[locale], `${locale}: Privacy contact-form translation is missing or stale`);
+  assert(translate("privacy.localQuizNote") === expectedLocalQuizNote[locale], `${locale}: Quiz privacy-note translation is missing or stale`);
   assert(translate(updatedResultNote) === expected[1], `${locale}: result interpretation paragraph translation is missing or stale`);
+  const termsHtml = read(`${locale}/terms.html`);
+  assert(termsHtml.includes('data-i18n="terms.services.current"'), `${locale}: Terms service list is not connected to its translation`);
+  const privacyHtml = read(`${locale}/privacy.html`);
+  assert(privacyHtml.includes('data-i18n="privacy.scope"') && privacyHtml.includes('data-i18n="privacy.contactForm"'), `${locale}: Privacy scope or contact-form copy is not connected to its translation`);
+  const contactHtml = read(`${locale}/contact.html`);
+  for (const option of ["선택해 주세요", "오류 제보", "개선 의견", "콘텐츠 제안", "기타 문의"]) {
+    assert(contactHtml.includes(`data-i18n="${option}"`), `${locale}: contact option is missing its translation: ${option}`);
+  }
+  const topicSelect = contactHtml.match(/<select\b[^>]*id="contact-topic"[^>]*>[\s\S]*?<\/select>/i)?.[0] || "";
+  assert(topicSelect && !/<option\b(?![^>]*\bdata-i18n=)[^>]*>[^<]*[\uac00-\ud7af]/i.test(topicSelect), `${locale}: a contact option still displays untranslated Korean`);
+  const spendingHtml = read(`${locale}/spending-habits-test.html`);
+  assert(spendingHtml.includes('data-i18n="privacy.localQuizNote"'), `${locale}: spending quiz privacy note is not connected to its translation`);
   if (locale === "ja") {
     assert(!/ナダム/.test(translate("가까움도 나다움도 함께 지켜요.")), "ja: attachment result copy contains a transliteration error");
     assert(!/制格/.test(translate("전생의 당신은 궁과 마을 사이를 오가던 심부름꾼 토끼였어요. 발이 빨라 급한 소식을 전하는 데 늘 제격이었고, 가는 길에 새로운 친구도 자주 만들었죠.")), "ja: past-life result copy contains a mistranslation");

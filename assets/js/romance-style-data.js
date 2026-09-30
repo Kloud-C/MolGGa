@@ -6,6 +6,7 @@ window.MOA_ARCHETYPE_TESTS["romance-style"] = {
   estimatedMinutes: 4,
   resultLabel: "romanceStyle.resultLabel",
   url: "https://molgga.com/romance-style-test.html",
+  balanceResultExposure: true,
   questions: [
     { prompt: "romanceStyle.question.1", choices: [
       { text: "romanceStyle.question.1.a", scores: ["direct", "verbal"] },

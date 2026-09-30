@@ -4,6 +4,7 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
   eyebrow: "molgga PLAY · 전생 테스트",
   estimatedMinutes: 4,
   url: "https://molgga.com/past-life-test.html",
+  balanceResultExposure: true,
   questions: [
     { prompt: "낯선 마을에 도착한 첫날, 제일 먼저 할 일은?", choices: [
       { text: "사람들이 모인 장터부터 구경한다", scores: ["market", "crow"] },

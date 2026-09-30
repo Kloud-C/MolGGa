@@ -24,6 +24,8 @@ const exactLimit = 2_000_000;
 const sampleSize = 2_000_000;
 let unreachableFindings = 0;
 let inconclusiveSampleZeroes = 0;
+let distributionFloorFindings = 0;
+const minimumResultShare = 0.03;
 
 function stableTieIndex(contentId, answerIndexes, candidateCount) {
   const pattern = `${contentId}:${Array.from(answerIndexes).join(",")}`;
@@ -93,6 +95,11 @@ function tally(name, questions, resultIds, scoreAnswers, { awardLists } = {}) {
   }
   const nonzeroShares = [...counts.values()].filter((count) => count > 0);
   if (nonzeroShares.length) console.log(`  observed range         ${(Math.min(...nonzeroShares) / runs * 100).toFixed(3)}%–${(Math.max(...nonzeroShares) / runs * 100).toFixed(3)}%`);
+  const belowMinimum = [...counts].filter(([, count]) => count / runs < minimumResultShare);
+  if (belowMinimum.length) {
+    distributionFloorFindings += belowMinimum.length;
+    console.log(`  BELOW 3% FLOOR         ${belowMinimum.map(([id, count]) => `${id} ${(count / runs * 100).toFixed(3)}%`).join(", ")}`);
+  }
   if (absent.length) {
     const proven = absent.filter((id) => provenUnreachable.includes(id));
     const inconclusive = absent.filter((id) => !provenUnreachable.includes(id));
@@ -164,30 +171,40 @@ tally("mbti", mbtiQuestions, mbtiIds, (answers) => {
 });
 
 for (const [id, config] of Object.entries(archetypes)) {
-  const questions = config.questions.map((question) => question.choices);
   const resultIds = Object.keys(config.profiles);
   const unknownScores = new Set();
+  const opportunities = Object.fromEntries(resultIds.map((resultId) => [resultId, 0]));
   for (const question of config.questions) for (const choice of question.choices) {
     for (const entry of choice.scores) {
       const scoreId = typeof entry === "string" ? entry : entry.id;
       if (!Object.hasOwn(config.profiles, scoreId)) unknownScores.add(scoreId);
       if (typeof entry !== "string" && (!Number.isFinite(entry.weight) || entry.weight <= 0)) throw new Error(`${id}: invalid score weight for ${scoreId}`);
+      opportunities[scoreId] += (typeof entry === "string" ? 1 : entry.weight) / question.choices.length;
     }
   }
   if (unknownScores.size) throw new Error(`${id}: scoring references missing profiles: ${[...unknownScores].join(", ")}`);
+  const opportunityValues = Object.values(opportunities).filter((value) => value > 0);
+  const averageOpportunity = opportunityValues.reduce((total, value) => total + value, 0) / opportunityValues.length;
+  const scoreMultipliers = Object.fromEntries(Object.entries(opportunities).map(([resultId, value]) => [
+    resultId,
+    config.balanceResultExposure && value > 0 ? Math.round(1_000_000 * Math.pow(averageOpportunity / value, 0.95)) : 1
+  ]));
+  const questions = config.questions.map((question) => question.choices.map((choice) => choice.scores.map((entry) => {
+    const scoreId = typeof entry === "string" ? entry : entry.id;
+    const weight = typeof entry === "string" ? 1 : entry.weight;
+    return { id: scoreId, weight: weight * scoreMultipliers[scoreId] };
+  })));
   tally(id, questions, resultIds, (answers) => {
     const scores = Object.fromEntries(resultIds.map((resultId) => [resultId, 0]));
     answers.forEach((answer, questionIndex) => {
-      for (const entry of config.questions[questionIndex].choices[answer].scores) {
-        const profileId = typeof entry === "string" ? entry : entry.id;
-        const weight = typeof entry === "string" ? 1 : entry.weight;
-        scores[profileId] += weight;
+      for (const entry of questions[questionIndex][answer]) {
+        scores[entry.id] += entry.weight;
       }
     });
     const high = Math.max(...Object.values(scores));
     return resultIds.filter((resultId) => scores[resultId] === high);
-  }, { awardLists: config.questions.map((question) => question.choices.map((choice) => choice.scores)) });
+  }, { awardLists: questions });
 }
 
-console.log(`\nDistribution audit complete. Proven/exhaustive unreachable results: ${unreachableFindings}; inconclusive sampled zeroes: ${inconclusiveSampleZeroes}.`);
-if (unreachableFindings) process.exitCode = 1;
+console.log(`\nDistribution audit complete. Below 3%: ${distributionFloorFindings}; proven/exhaustive unreachable results: ${unreachableFindings}; inconclusive sampled zeroes: ${inconclusiveSampleZeroes}.`);
+if (unreachableFindings || distributionFloorFindings) process.exitCode = 1;

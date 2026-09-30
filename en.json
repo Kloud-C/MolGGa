@@ -12,7 +12,7 @@
   "갓 구운 빵과 따끈한 먹거리": "Freshly baked bread and hot food",
   "먼저 인사를 나누며 대화에 들어간다": "First, say hello and start a conversation.",
   "내가 주말에 하고 싶은 건 [": "My ideal weekend is [",
-  "문의 페이지에서 이름(선택), 이메일(선택), 문의 종류, 문의 내용을 입력해 제출할 수 있습니다. 입력한 정보는 문의 확인과 답변을 위해 Formspree로 전달되고 Formspree 계정에 저장되며, 설정에 따라 운영자 이메일로 전송됩니다. Formspree는 미국을 포함한 여러 국가에서 정보를 처리할 수 있습니다. 자세한 내용은": "On the inquiry page, you can submit by entering your name (optional), email (optional), inquiry type, and inquiry content. The information you enter will be forwarded to Formspree for confirmation and response to inquiries, saved in your Formspree account, and sent to the administrator's email address depending on your settings. Formspree may process information in a number of countries, including the United States. For more information",
+  "문의 페이지에서 이름(선택), 이메일(선택), 문의 종류, 문의 내용을 입력해 제출할 수 있습니다. 입력한 정보는 문의 확인과 답변을 위해 Formspree로 전달되고 Formspree 계정에 저장되며, 설정에 따라 운영자 이메일로 전송됩니다. Formspree는 미국을 포함한 여러 국가에서 정보를 처리할 수 있습니다. 자세한 내용은": "On the contact page, you may submit your name and email (both optional), a topic, and a message. Formspree processes the submission so the site operator can review and respond to it. The submission is stored in the operator's Formspree account and may be forwarded to the operator's email depending on account settings. Formspree may process information in several countries, including the United States. For details, see",
   "이메일": "Email",
   "상황이 있겠거니 하고 하던 일을 이어간다": "I assume there will be a situation and continue what I was doing.",
   "상대가 나를 어떻게 생각하는지 확인하고 싶어진다": "I want to find out what the other person thinks of me",
@@ -1224,7 +1224,7 @@
   "tag.travel": "travel",
   "tag.friends": "friends",
   "tag.group-trip": "group trip",
-  "about.offerings.current": "Explore the weekend and late-night food matchups, plus quizzes about animal styles, MBTI, Teto/Egen, attachment styles, past lives, spending habits, and your role on a trip with friends. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz now takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.",
+  "about.offerings.current": "Explore the weekend and late-night food matchups, plus quizzes about MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, your role on a trip with friends, romance styles, and fantasy classes. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.",
   "seo.title.travel-role-test": "What's My Role on a Trip with Friends? — molgga",
   "seo.description.travel-role-test": "Find out which role you naturally take when traveling with friends.",
   "travelRole.title": "What's My Role on a Trip with Friends?",
@@ -1601,5 +1601,9 @@
   "fantasyClass.profile.bard.gear": "An instrument, travel journal, and light weapon help you along the way.",
   "fantasyClass.profile.bard.skill": "Marching Song — help companions keep a steady pace.",
   "fantasyClass.profile.bard.role": "Support companions, gather rumors, and record the adventure.",
-  "fantasyClass.profile.bard.teammate": "Merchant — together you can find supplies and news as you travel between towns."
+  "fantasyClass.profile.bard.teammate": "Merchant — together you can find supplies and news as you travel between towns.",
+  "terms.services.current": "molgga offers a weekend preference matchup and a late-night food tournament, along with quizzes for MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, travel roles, romance styles, and fantasy classes. All current content is free and available without registration.",
+  "privacy.scope": "molgga is a static website operated by Kloud-C. This policy applies to every page and piece of content on molgga.com, including the weekend and late-night matchups; MBTI, animal-style, Teto/Egen, attachment-style, past-life, spending-habits, travel-role, romance-style, and fantasy-class quizzes; and the About, Contact, and Terms pages.",
+  "privacy.contactForm": "On the contact page, you may submit your name and email (both optional), a topic, and a message. Formspree processes the submission so the site operator can review and respond to it. The submission is stored in the operator's Formspree account and may be forwarded to the operator's email depending on account settings. Formspree may process information in several countries, including the United States. For details, see",
+  "privacy.localQuizNote": "This quiz calculates your answers on this page and does not save them. For details, see"
 }

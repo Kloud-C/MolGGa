@@ -31,9 +31,32 @@
     entries.forEach((entry) => {
       const id = typeof entry === "string" ? entry : entry.id;
       const weight = typeof entry === "string" ? 1 : Number(entry.weight);
-      if (Object.prototype.hasOwnProperty.call(scores, id) && Number.isFinite(weight) && weight > 0) scores[id] += weight;
+      const normalization = scoreMultipliers[id] || 1;
+      if (Object.prototype.hasOwnProperty.call(scores, id) && Number.isFinite(weight) && weight > 0) scores[id] += weight * normalization;
     });
   };
+  // Balance profiles with different numbers of answer opportunities. Rounded integer scales preserve exact ties.
+  const scoreMultipliers = (() => {
+    if (!config.balanceResultExposure) return {};
+    const opportunities = Object.fromEntries(Object.keys(config.profiles).map((id) => [id, 0]));
+    config.questions.forEach((question) => {
+      question.choices.forEach((choice) => {
+        choice.scores.forEach((entry) => {
+          const id = typeof entry === "string" ? entry : entry.id;
+          const weight = typeof entry === "string" ? 1 : Number(entry.weight);
+          if (Object.hasOwn(opportunities, id) && Number.isFinite(weight) && weight > 0) {
+            opportunities[id] += weight / question.choices.length;
+          }
+        });
+      });
+    });
+    const values = Object.values(opportunities).filter((value) => value > 0);
+    const averageOpportunity = values.reduce((total, value) => total + value, 0) / values.length;
+    return Object.fromEntries(Object.entries(opportunities).map(([id, value]) => [
+      id,
+      value > 0 ? Math.round(1_000_000 * Math.pow(averageOpportunity / value, 0.95)) : 1
+    ]));
+  })();
   const stableTieIndex = (contentId, answerIndexes, candidateCount) => {
     const pattern = `${contentId}:${answerIndexes.join(",")}`;
     let hash = 0x811c9dc5;
