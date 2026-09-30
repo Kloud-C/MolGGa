@@ -200,7 +200,7 @@ for (const page of allHtml) {
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
   assert(/assets\/js\/i18n\.js\?v=\d{8}-\d+/.test(html), `${page}: i18n.js is missing a cache token`);
-  assert(/assets\/css\/styles\.css\?v=20260929-1/.test(html), `${page}: shared styles are missing or stale`);
+  assert(/assets\/css\/styles\.css\?v=20260930-1/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
@@ -423,11 +423,13 @@ assert(resultShareSource.includes("translate(current.buttonTitle || \"결과 확
 const archetypeShareSource = read("assets/js/archetype-test.js");
 assert(archetypeShareSource.includes("imageUrl: imagePath") && archetypeShareSource.includes(".replace(/\\.html$/, \"\")"), "archetype result sharing: result image or clean same-content route is missing");
 assert(archetypeShareSource.includes("tr(config.sharePrompt || config.title)") && archetypeShareSource.includes("title: resultLine") && archetypeShareSource.includes("`${shareQuestion} [${resultName}]`"), "archetype result sharing: test context or bracketed result name is missing from the result title");
-assert(archetypeShareSource.includes("tr(profile.shareDescription)") && archetypeShareSource.includes("renderResultSentences(tr(profile.description))") && archetypeShareSource.includes('aria-hidden="true">•</span> '), "archetype result copy: screen and share descriptions or sentence markers are not separated");
+assert(archetypeShareSource.includes("tr(profile.shareDescription)") && archetypeShareSource.includes("renderResultSentences(tr(profile.description))") && archetypeShareSource.includes('class="result-sentence"') && archetypeShareSource.includes('class="result-detail-card"') && !archetypeShareSource.includes(String.fromCodePoint(0x2022)), "archetype result copy: screen and share descriptions must be separate, consistently carded, and free of decorative bullets");
 assert(read("assets/js/archetype-test.js").includes("Math.imul(hash, 0x01000193)") && read("assets/js/app.js").includes("Math.imul(tieHash, 0x01000193)"), "quiz scoring: deterministic answer-based tie-breaking must be consistent across archetype and animal quizzes");
 assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("title: `${localize(config.title)} [${localize(winner.name)}]`") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: contextual bracketed title, winner image, or same-game CTA is missing");
 const legacyQuizSource = read("assets/js/app.js");
-assert(legacyQuizSource.includes("imageUrl: profile.image") && legacyQuizSource.includes('tr("animal.sharePrompt")') && legacyQuizSource.includes('tr("mbti.sharePrompt")') && legacyQuizSource.includes("const resultLine = `${sharePrompt} [${resultName}]`") && legacyQuizSource.includes("renderResultSentences(tr(profile.daily))") && legacyQuizSource.includes('aria-hidden="true">•</span> '), "legacy quiz result sharing context or sentence-formatted result descriptions are missing");
+assert(legacyQuizSource.includes("imageUrl: profile.image") && legacyQuizSource.includes('tr("animal.sharePrompt")') && legacyQuizSource.includes('tr("mbti.sharePrompt")') && legacyQuizSource.includes("const resultLine = `${sharePrompt} [${resultName}]`") && legacyQuizSource.includes("renderResultSentences(tr(profile.daily))") && legacyQuizSource.includes('class="result-sentence"') && !legacyQuizSource.includes(String.fromCodePoint(0x2022)), "legacy quiz result sharing context or bullet-free sentence-formatted descriptions are missing");
+const sharedResultCardStyles = read("assets/css/styles.css");
+assert(sharedResultCardStyles.includes(".result-detail-card, .archetype-result-card__body .info-card") && sharedResultCardStyles.includes(".result-detail-grid, .archetype-result-card__body .info-grid") && sharedResultCardStyles.includes("background: var(--mint-50)") && sharedResultCardStyles.includes(".result-sentence + .result-sentence"), "quiz result detail cards do not share the same sentence and card layout");
 
 for (const [gameId, config] of Object.entries(frontendCups)) {
   const backend = backendCups[gameId];
@@ -624,6 +626,17 @@ for (const page of allHtml) {
   }
 }
 assert(i18nScriptVersions.size === 1, `localized pages use missing or inconsistent i18n.js cache tokens: ${[...i18nScriptVersions].join(", ")}`);
+for (const assetPath of ["assets/css/styles.css", "assets/js/app.js", "assets/js/archetype-test.js", "assets/js/worldcup.js"]) {
+  const versions = new Set();
+  for (const page of allHtml) {
+    const references = [...read(page).matchAll(new RegExp(`${assetPath.replaceAll(".", "\\.")}(?:\\?v=([^"']+))?`, "g"))];
+    for (const [, version] of references) {
+      assert(Boolean(version), `${page}: ${assetPath} is missing a cache token`);
+      if (version) versions.add(version);
+    }
+  }
+  assert(versions.size > 0 && versions.size === 1, `localized pages use missing or inconsistent ${assetPath} cache tokens: ${[...versions].join(", ")}`);
+}
 assert(Object.keys(localeResources.ko).length === Object.keys(localeResources.en).length
   && Object.keys(localeResources.ko).length === Object.keys(localeResources.ja).length
   && Object.keys(localeResources.ko).length === Object.keys(localeResources.zh).length,

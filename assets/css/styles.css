@@ -231,12 +231,16 @@
     .archetype-result-card__top h3 { position: relative; z-index: 1; max-width: 100%; margin: 0 auto; font-size: clamp(1.6rem, 4.2vw, 2.7rem); line-height: 1.2; letter-spacing: -.05em; word-break: keep-all; overflow-wrap: anywhere; text-wrap: balance; }
     .archetype-result-card__top h3:focus { outline: none; }
     .archetype-result-card__catchphrase { position: relative; z-index: 1; max-width: 58ch; margin: 10px auto 0; color: var(--ink); font-size: clamp(1rem, 2.5vw, 1.25rem); font-weight: 750; text-wrap: balance; }
-    .archetype-result-card__body { padding: clamp(22px, 5vw, 36px); }
-    .archetype-result-card__body > p:first-child { margin-top: 0; font-size: 1.04rem; line-height: 1.9; }
-    .archetype-result-card__compat { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
-    .archetype-result-card__compat > div { display: grid; gap: 8px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--mint-50); }
-    .archetype-result-card__compat span { color: var(--muted); font-size: .82rem; font-weight: 700; }
-    .archetype-result-card__compat strong { color: var(--ink); }
+    .archetype-result-card__body { display: grid; gap: 20px; padding: clamp(22px, 5vw, 36px); }
+    .archetype-result-card__body > p:first-child, .archetype-result-card__summary { margin: 0; font-size: 1.04rem; line-height: 1.9; text-align: left; }
+    .result-sentence { display: block; }
+    .result-sentence + .result-sentence { margin-top: .35em; }
+    .result-detail-grid, .archetype-result-card__body .info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .result-detail-card, .archetype-result-card__body .info-card { display: grid; align-content: start; gap: 8px; min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--mint-50); }
+    .result-detail-card__label, .archetype-result-card__body .info-card h3 { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--muted); font-size: .82rem; font-weight: 750; line-height: 1.4; }
+    .result-detail-card__label .result-detail-icon, .archetype-result-card__body .info-card h3 .result-detail-icon { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; margin: 0; object-fit: contain; vertical-align: middle; }
+    .result-detail-card__text, .archetype-result-card__body .info-card p { margin: 0; color: var(--ink); line-height: 1.7; }
+    .result-detail-card__text--featured { font-weight: 750; }
     .archetype-result-card__note { margin: 20px 0 0; color: var(--muted); font-size: .82rem; }
     .quiz-step-question { margin: 0; padding: 12px 0 0; border: 0; background: transparent; }
     .quiz-step-question legend { margin-bottom: 20px; padding: 0; font-size: clamp(1.2rem, 2.5vw, 1.55rem); font-weight: 800; letter-spacing: -.04em; }
@@ -282,7 +286,7 @@
       .choice-button { min-height: 78px; }
       .result-hero { grid-template-columns: 1fr; gap: 15px; }
       .result-photo { aspect-ratio: 16 / 10; }
-      .archetype-question__choices, .archetype-result-card__compat { grid-template-columns: 1fr; }
+      .archetype-question__choices, .result-detail-grid, .archetype-result-card__body .info-grid { grid-template-columns: 1fr; }
       .archetype-stage { min-height: 0; }
       .archetype-result-card__image { height: 220px; margin-block: 18px 14px; }
     }

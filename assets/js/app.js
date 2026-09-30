@@ -6,7 +6,7 @@
   const renderResultSentences = (text) => {
     const normalized = String(text).replace(/\s+/gu, " ").trim();
     const sentences = normalized.match(/[^.!?。！？]+(?:[.!?。！？]+|$)/gu)?.map((sentence) => sentence.trim()).filter(Boolean) || [normalized];
-    return sentences.map((sentence) => `<span aria-hidden="true">•</span> ${escapeHtml(sentence)}`).join("<br>");
+    return sentences.map((sentence) => `<span class="result-sentence">${escapeHtml(sentence)}</span>`).join("");
   };
   const prepareQuestionValidation = (form) => {
     form.noValidate = true;

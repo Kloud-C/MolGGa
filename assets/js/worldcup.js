@@ -222,6 +222,7 @@
     const body = document.createElement("div");
     body.className = "archetype-result-card__body";
     const note = document.createElement("p");
+    note.className = "archetype-result-card__summary";
     note.textContent = tr("무작위로 뽑힌 선택지로 진행한 월드컵에서 가장 마지막까지 선택된 항목이에요.");
     body.append(note);
     card.append(top, body);
