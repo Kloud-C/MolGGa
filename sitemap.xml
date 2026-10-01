@@ -544,4 +544,36 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/fantasy-shop-test" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/fantasy-shop-test" />
   </url>
+  <url>
+    <loc>https://molgga.com/ko/night-train-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/night-train-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/en/night-train-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/night-train-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/ja/night-train-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/night-train-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/zh/night-train-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/night-train-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/night-train-test" />
+  </url>
 </urlset>

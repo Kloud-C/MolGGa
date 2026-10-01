@@ -176,6 +176,20 @@
       thumbnail: "/image/tests/fantasy-shop/start.webp",
       source: { kind: "archetype", id: "fantasy-shop" },
       metrics: { questionCount: 8, choicesPerQuestion: 4, resultCount: 6, estimatedMinutes: 4 }
+    },
+    {
+      id: "night-train",
+      createdAt: "2026-10-01",
+      cardLabelKey: "content.night-train.cardLabel",
+      type: "quiz",
+      categoryIds: ["fun", "lifestyle"],
+      tagIds: ["fantasy", "fun", "lifestyle"],
+      titleKey: "nightTrain.title",
+      descriptionKey: "nightTrain.description",
+      page: "night-train-test.html",
+      thumbnail: "/image/tests/night-train/start.webp",
+      source: { kind: "archetype", id: "night-train" },
+      metrics: { questionCount: 8, choicesPerQuestion: 4, resultCount: 6, estimatedMinutes: 4 }
     }
   ];
 

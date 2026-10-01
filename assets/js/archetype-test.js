@@ -180,15 +180,15 @@
     // without coupling the winner to the order of questions or result profiles.
     const winner = tied[stableTieIndex(root.dataset.archetypeTest, answers, tied.length)];
     const profile = config.profiles[winner];
-    const locationId = storyMode ? config.questions[0].choices[answers[0]].locationId : null;
-    const locationName = storyMode ? tr(config.story.locations[locationId]) : "";
-    const displayName = storyMode
-      ? tr(config.story.resultNameTemplate, { location: locationName, shop: tr(profile.name) })
-      : tr(profile.name);
+    const firstChoice = storyMode ? config.questions[0]?.choices[answers[0]] : null;
+    const locationName = firstChoice?.locationId ? tr(config.story.locations?.[firstChoice.locationId]) : "";
+    const resultName = tr(profile.name);
+    const displayName = storyMode && config.story.resultNameTemplate
+      ? tr(config.story.resultNameTemplate, { location: locationName, result: resultName, shop: resultName })
+      : resultName;
     const imagePath = profile.image || profile.imageFile;
-    const resultImageAlt = storyMode
-      ? `${displayName} ${tr("shopStory.resultImageAlt")}`
-      : `${tr(profile.name)} ${tr("content.result.imageAlt")}`;
+    const resultImageAltKey = storyMode ? profile.imageAlt || config.story.resultImageAlt || "shopStory.resultImageAlt" : "content.result.imageAlt";
+    const resultImageAlt = displayName + " " + tr(resultImageAltKey);
     const imageCredit = config.imageCredits?.[winner];
     const compatNames = (ids) => ids.map((id) => tr(config.profiles[id].name)).join(" · ");
     const extraContent = profile.details?.length
@@ -200,6 +200,13 @@
     stage.hidden = true;
     result.style.setProperty("--result-accent", profile.color);
     result.innerHTML = `<article class="archetype-result-card"><div class="archetype-result-card__top"><span class="archetype-result-card__brand">molgga PLAY · ${escapeHtml(tr(config.title))}</span>${imagePath ? `<img class="archetype-result-card__image" src="${escapeHtml(imagePath)}" alt="${escapeHtml(resultImageAlt)}" loading="lazy" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true"> <span class="archetype-result-card__emoji" aria-hidden="true"><img src="../image/result-icons/puzzle.png" alt="" aria-hidden="true"></span>${imageCredit ? `<p class="image-credit">${escapeHtml(tr("이미지 출처:"))} <a href="${escapeHtml(imageCredit.source)}" target="_blank" rel="noopener noreferrer">${escapeHtml(imageCredit.artist)}</a> · <a href="${escapeHtml(imageCredit.licenseUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(imageCredit.license)}</a></p>` : ""}` : `<span class="archetype-result-card__emoji" aria-hidden="true"><img src="../image/result-icons/puzzle.png" alt="" aria-hidden="true"></span>`}<p class="archetype-result-card__label">${escapeHtml(tr(resultLabel))}</p><h3 tabindex="-1">${escapeHtml(displayName)}</h3><p class="archetype-result-card__catchphrase">${escapeHtml(tr(profile.catchphrase))}</p></div><div class="archetype-result-card__body">${renderResultBullets(tr(profile.description))}${extraContent}</div></article><div class="result-actions"><button class="button button-small" type="button" data-quiz-restart>${escapeHtml(tr("다시 해보기"))}</button><button class="button button-small button-quiet" type="button" data-quiz-share>${escapeHtml(tr("결과 공유"))}</button></div><p class="share-status" role="status" aria-live="polite" data-quiz-share-status></p>`;
+    const finalStoryReaction = storyMode && config.story.showFinalReactionInResult ? config.questions[current]?.choices[answers[current]]?.reaction : null;
+    if (finalStoryReaction) {
+      result.querySelector(".archetype-result-card__body").insertAdjacentHTML(
+        "afterbegin",
+        "<p class=\"story-reaction\" role=\"status\" aria-live=\"polite\">" + escapeHtml(tr(finalStoryReaction)) + "</p>"
+      );
+    }
     result.hidden = false;
     window.MOLGGA_CONTENT_RECOMMENDATIONS?.mount(result, root.dataset.archetypeTest);
     if (focusResult) result.querySelector("h3").focus({ preventScroll: true });

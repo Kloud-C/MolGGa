@@ -281,7 +281,7 @@ for (const page of allHtml) {
   }
 }
 
-const updatedAboutOfferings = "주말·야식 월드컵과 MBTI·동물상·테토/에겐·애착 유형·전생·소비 습관·친구 여행 역할·연애 스타일·판타지 직업 테스트·판타지 마을 가게 이야기를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 25문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 질문과 설명은 몰까가 직접 작성합니다.";
+const updatedAboutOfferings = "주말·야식 월드컵과 MBTI·동물상·테토/에겐·애착 유형·전생·소비 습관·친구 여행 역할·연애 스타일·판타지 직업 테스트·판타지 마을 가게 이야기를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 25문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 질문과 설명은 몰까가 직접 작성합니다. 밤기차를 타고 내릴 역을 고르는 이야기 콘텐츠도 새로 추가했습니다.";
 const updatedResultNote = "결과는 각 페이지에서 선택한 내용에 따른 참고 정보입니다. 월드컵은 마지막까지 선택한 항목을 보여 주며, 야식 월드컵 랭킹에는 완주한 대진의 우승 메뉴가 집계됩니다. 성향 테스트는 선택에서 드러난 경향을 살펴보는 콘텐츠입니다. 어떤 결과도 전문 심리검사나 의료·법률·교육·채용 판단을 대신하지 않습니다.";
 const expectedTermsServices = {
   en: "molgga offers a weekend preference matchup and a late-night food tournament, along with quizzes for MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, travel roles, romance styles, and fantasy classes, plus a story game about opening a shop in a fantasy village. All current content is free and available without registration.",
@@ -303,6 +303,23 @@ const expectedLocalQuizNote = {
   ja: "このテストはこのページ内で回答を計算し、保存しません。詳しくは",
   zh: "本测试仅在当前页面计算答案，不会保存。详情请参见"
 };
+const nightTrainCopy = {
+  about: {
+    en: "A new story also follows a night train and lets you choose where to get off.",
+    ja: "夜行列車に乗り、降りる駅を選ぶ物語コンテンツも追加しました。",
+    zh: "网站还新增了乘坐夜行列车并选择下车站的故事体验。"
+  },
+  terms: {
+    en: "A night-train story lets you choose where to get off.",
+    ja: "夜行列車で降りる駅を選ぶ物語も提供しています。",
+    zh: "网站还提供乘坐夜行列车选择下车站的故事体验。"
+  },
+  privacy: {
+    en: "This also covers the night-train story content.",
+    ja: "夜行列車の物語コンテンツも対象です。",
+    zh: "本政策也适用于夜行列车故事内容。"
+  }
+};
 for (const [locale, expected] of Object.entries({
   en: ["Explore the weekend and late-night food matchups, plus quizzes about MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, your role on a trip with friends, romance styles, and fantasy classes. You can also follow a story game about opening a shop in a fantasy village. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
   ja: ["週末・夜食の対決と、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割・恋愛スタイル・ファンタジー職業のテストに加え、ファンタジーの村でお店を開く物語も楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは25問です。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
@@ -323,9 +340,9 @@ for (const [locale, expected] of Object.entries({
   const untranslatedHomeCopy = [...new Set([...homeText, ...homeLabels])]
     .filter((value) => translate(value) === value);
   assert(untranslatedHomeCopy.length === 0, `${locale}: home page has missing translations: ${untranslatedHomeCopy.join(" | ")}`);
-  assert(translate("about.offerings.current") === expected[0], `${locale}: About offerings paragraph translation is missing or stale`);
-  assert(translate("terms.services.current") === expectedTermsServices[locale], `${locale}: Terms service list translation is missing or stale`);
-  assert(translate("privacy.scope") === expectedPrivacyScope[locale], `${locale}: Privacy scope translation is missing or stale`);
+  assert(translate("about.offerings.current").startsWith(expected[0]) && translate("about.offerings.current").includes(nightTrainCopy.about[locale]), `${locale}: About offerings paragraph is missing the night-train story or its previous service list`);
+  assert(translate("terms.services.current").startsWith(expectedTermsServices[locale]) && translate("terms.services.current").includes(nightTrainCopy.terms[locale]), `${locale}: Terms service list is missing the night-train story or its previous service list`);
+  assert(translate("privacy.scope").startsWith(expectedPrivacyScope[locale]) && translate("privacy.scope").includes(nightTrainCopy.privacy[locale]), `${locale}: Privacy scope is missing the night-train story or its previous service list`);
   assert(translate("privacy.contactForm") === expectedPrivacyContactForm[locale], `${locale}: Privacy contact-form translation is missing or stale`);
   assert(translate("privacy.localQuizNote") === expectedLocalQuizNote[locale], `${locale}: Quiz privacy-note translation is missing or stale`);
   assert(translate(updatedResultNote) === expected[1], `${locale}: result interpretation paragraph translation is missing or stale`);
@@ -434,7 +451,7 @@ assert(frontendCups.weekend?.items.length === 50, `weekend World Cup must draw f
 assert(/shuffle\(config\.items\)\.slice\(0,\s*bracketSize\)/.test(read("assets/js/worldcup.js")), "World Cup must randomly draw the selected bracket size from the complete candidate list");
 
 const registryArchetypeSandbox = { window: {} };
-for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js", "assets/js/romance-style-data.js", "assets/js/fantasy-class-data.js", "assets/js/fantasy-shop-data.js"]) {
+for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js", "assets/js/romance-style-data.js", "assets/js/fantasy-class-data.js", "assets/js/fantasy-shop-data.js", "assets/js/night-train-data.js"]) {
   vm.runInNewContext(read(file), registryArchetypeSandbox, { timeout: 1000, filename: file });
 }
 const archetypeConfigs = registryArchetypeSandbox.window.MOA_ARCHETYPE_TESTS || {};
@@ -512,7 +529,7 @@ for (const content of registryContents) {
       }
     }
     if (config.storyMode) {
-      const storyKeys = [config.story.startTitle, config.story.startImageAlt, config.story.startButton, config.story.previousButton, config.story.resultNameTemplate, ...config.story.intro, ...Object.values(config.story.locations)];
+      const storyKeys = [config.story.startTitle, config.story.startImageAlt, config.story.startButton, config.story.previousButton, config.story.resultNameTemplate, ...config.story.intro, ...Object.values(config.story.locations || {})];
       for (const key of storyKeys) for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} story text ${key}`);
       assert(fs.existsSync(path.resolve(root, "ko", config.story.startImage)), `${content.id}: missing story start image ${config.story.startImage}`);
     }
@@ -585,7 +602,8 @@ const archetypeFiles = [
   "assets/js/travel-role-data.js",
   "assets/js/romance-style-data.js",
   "assets/js/fantasy-class-data.js",
-  "assets/js/fantasy-shop-data.js"
+  "assets/js/fantasy-shop-data.js",
+  "assets/js/night-train-data.js"
 ];
 const archetypeSandbox = { window: {} };
 for (const file of archetypeFiles) vm.runInNewContext(read(file), archetypeSandbox, { timeout: 1000 });
@@ -616,16 +634,19 @@ for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHET
   if (config.storyMode) {
     assert(config.story?.startImage && config.story?.intro?.length && config.story?.previousButton && !config.story?.continueButton, `${testId}: story intro or navigation data is incomplete`);
     for (const locale of locales) {
-      const storyPage = read(`${locale}/fantasy-shop-test.html`);
+      const storyContent = registryContents.find((content) => content.id === testId);
+      assert(storyContent?.page, testId + ": story page is not registered");
+      const storyPage = read(locale + "/" + storyContent.page);
       assert(!storyPage.includes("data-story-continue"), `${locale}: story selections should advance without a continue button`);
     }
     const storyRenderer = read("assets/js/archetype-test.js");
     assert(storyRenderer.includes("const renderStoryReaction") && storyRenderer.includes("scrollStoryStep") && storyRenderer.includes("move(1);"), `${testId}: selected reactions, automatic scene progression, or progress scrolling are missing`);
     config.questions.forEach((question, questionIndex) => {
       assert(question.title && question.situation && question.image && question.imageAlt, `${testId}: scene ${questionIndex + 1} is missing story copy or an image`);
+      assert(fs.existsSync(path.resolve(root, "ko", question.image)), testId + ": missing scene image " + question.image);
       for (const [choiceIndex, choice] of question.choices.entries()) {
         assert(choice.reaction, `${testId}: scene ${questionIndex + 1}, choice ${choiceIndex + 1} has no follow-up reaction`);
-        if (questionIndex === 0) assert(config.story.locations?.[choice.locationId], `${testId}: opening choice ${choiceIndex + 1} has no recognized shop location`);
+        if (questionIndex === 0 && config.story.locations) assert(config.story.locations?.[choice.locationId], testId + ": opening choice " + (choiceIndex + 1) + " has no recognized story location");
       }
     });
     assert(fs.existsSync(path.resolve(root, "ko", config.story.startImage)), `${testId}: missing story start image`);

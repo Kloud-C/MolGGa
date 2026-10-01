@@ -10,5 +10,6 @@ export const CONTENT_START_IDS = [
   "travel-role",
   "romance-style",
   "fantasy-class",
-  "fantasy-shop"
+  "fantasy-shop",
+  "night-train"
 ];
