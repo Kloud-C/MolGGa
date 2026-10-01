@@ -354,6 +354,7 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 .content-browser__scope { flex-wrap: wrap; }
 .content-browser__scope-button { min-height: 36px; padding: 5px 10px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font: inherit; font-size: .8rem; font-weight: 700; white-space: nowrap; cursor: pointer; }
 .content-browser__scope-button[aria-pressed="true"] { background: var(--mint-100); color: var(--mint-700); }
+.content-browser__scope-button:disabled { opacity: .48; cursor: not-allowed; }
 .content-browser__filter-actions { display: flex; justify-content: flex-end; gap: 8px; }
 .content-browser__filter-actions .button { min-height: 40px; }
 .content-browser__view-button { min-height: 36px; padding: 5px 10px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font: inherit; font-size: .82rem; font-weight: 700; white-space: nowrap; cursor: pointer; }
