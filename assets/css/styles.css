@@ -354,6 +354,7 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 .content-browser__scope { flex-wrap: wrap; }
 .content-browser__scope-button { min-height: 36px; padding: 5px 10px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font: inherit; font-size: .8rem; font-weight: 700; white-space: nowrap; cursor: pointer; }
 .content-browser__scope-button[aria-pressed="true"] { background: var(--mint-100); color: var(--mint-700); }
+.content-browser__scope-button:disabled { opacity: .48; cursor: not-allowed; }
 .content-browser__filter-actions { display: flex; justify-content: flex-end; gap: 8px; }
 .content-browser__filter-actions .button { min-height: 40px; }
 .content-browser__view-button { min-height: 36px; padding: 5px 10px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font: inherit; font-size: .82rem; font-weight: 700; white-space: nowrap; cursor: pointer; }
@@ -381,7 +382,7 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 .related-content__card img { width: 52px; height: 52px; border-radius: 14px; object-fit: cover; }
 .related-content__card h3 { margin: 10px 0 4px; font-size: 1rem; }
 .related-content__card p { margin: 0 0 12px; color: var(--muted); font-size: .84rem; }
-.related-content__card .button { min-height: 40px; margin-top: auto; }
+.related-content__card .button { width: 100%; min-height: 48px; justify-content: center; margin-top: auto; background: var(--mint-50); border-color: var(--mint-100); font-size: .95rem; font-weight: 800; }
 
 @media (max-width: 920px) {
   .related-content__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

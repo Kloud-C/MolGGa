@@ -295,6 +295,7 @@ const isNewContent = (createdAt, now = new Date()) => {
       const key = scope === "all" ? "contentActivity.scope.all" : `contentActivity.scope.${scope}`;
       button.textContent = translate(key, count === null ? undefined : { count });
       button.setAttribute("aria-pressed", String(scope === activeScope));
+      button.disabled = scope !== "all" && count === 0;
     });
     clearRecent.hidden = recent.length === 0;
   };
@@ -384,6 +385,9 @@ const isNewContent = (createdAt, now = new Date()) => {
     const selectedTopics = selectedTopicIds();
     const selectedFormats = selectedFormatIds();
     const { favorites, recent } = activityState();
+    if ((activeScope === "favorites" && favorites.length === 0) || (activeScope === "recent" && recent.length === 0)) {
+      activeScope = "all";
+    }
     const allowedIds = activeScope === "favorites" ? new Set(favorites) : activeScope === "recent" ? new Set(recent.map((entry) => entry.id)) : null;
     let visibleCount = 0;
     const now = new Date();
