@@ -97,11 +97,64 @@ const isNewContent = (createdAt, now = new Date()) => {
   search.setAttribute("aria-label", translate("contentBrowser.search.label"));
   searchLabel.append(search);
 
-  const categoryLabel = make("label", "content-browser__category");
-  categoryLabel.append(make("span", "content-browser__field-label", translate("contentBrowser.category.label")));
-  const categorySelect = document.createElement("select");
-  categorySelect.setAttribute("aria-label", translate("contentBrowser.category.label"));
-  categoryLabel.append(categorySelect);
+  const filtersDisclosure = document.createElement("details");
+  filtersDisclosure.className = "content-browser__filters";
+  const filtersSummary = document.createElement("summary");
+  filtersSummary.className = "content-browser__filters-summary";
+  const filtersSummaryText = make("span", "content-browser__filters-label", translate("contentBrowser.filters.toggle"));
+  const filtersActiveCount = make("span", "content-browser__filters-count");
+  filtersActiveCount.hidden = true;
+  const filtersChevron = make("span", "content-browser__filters-chevron", "⌄");
+  filtersChevron.setAttribute("aria-hidden", "true");
+  filtersSummary.append(filtersSummaryText, filtersActiveCount, filtersChevron);
+
+  const filterGrid = make("div", "content-browser__filter-grid");
+  const topicGroup = document.createElement("fieldset");
+  topicGroup.className = "content-browser__filter-group";
+  const topicLegend = make("legend", "content-browser__field-label", translate("contentBrowser.filters.topic"));
+  const topicChoices = make("div", "content-browser__filter-choices");
+  topicGroup.append(topicLegend, topicChoices);
+  const topicInputs = new Map();
+  registry.categories.forEach((category) => {
+    const label = make("label", "content-browser__check-option");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.value = category.id;
+    input.dataset.topicFilter = category.id;
+    const labelText = make("span", "content-browser__check-label", translate(category.labelKey));
+    labelText.dataset.filterLabelKey = category.labelKey;
+    const count = registry.contents.filter((content) => content.categoryIds.includes(category.id)).length;
+    const countText = make("span", "content-browser__check-count", translate("contentBrowser.filters.count", { count }));
+    countText.setAttribute("aria-hidden", "true");
+    label.append(input, labelText, countText);
+    topicChoices.append(label);
+    topicInputs.set(category.id, input);
+  });
+
+  const formatGroup = document.createElement("fieldset");
+  formatGroup.className = "content-browser__filter-group";
+  const formatLegend = make("legend", "content-browser__field-label", translate("contentBrowser.filters.format"));
+  const formatChoices = make("div", "content-browser__filter-choices content-browser__filter-choices--formats");
+  formatGroup.append(formatLegend, formatChoices);
+  const formatIds = ["worldcup", "quiz", "story"];
+  const formatInputs = new Map();
+  formatIds.forEach((formatId) => {
+    const label = make("label", "content-browser__check-option");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.value = formatId;
+    input.dataset.formatFilter = formatId;
+    const labelKey = `contentBrowser.format.${formatId}`;
+    const labelText = make("span", "content-browser__check-label", translate(labelKey));
+    labelText.dataset.filterLabelKey = labelKey;
+    const count = registry.contents.filter((content) => content.formatId === formatId).length;
+    const countText = make("span", "content-browser__check-count", translate("contentBrowser.filters.count", { count }));
+    countText.setAttribute("aria-hidden", "true");
+    label.append(input, labelText, countText);
+    formatChoices.append(label);
+    formatInputs.set(formatId, input);
+  });
+  filterGrid.append(topicGroup, formatGroup);
 
   const sortLabel = make("label", "content-browser__sort");
   sortLabel.append(make("span", "content-browser__field-label", translate("contentBrowser.sort.label")));
@@ -156,26 +209,34 @@ const isNewContent = (createdAt, now = new Date()) => {
     scopeButtons.set(scope, button);
   });
 
-  const toolbar = make("div", "content-browser__toolbar");
-  toolbar.append(searchLabel, categoryLabel, sortLabel, viewGroup);
-  const status = make("p", "content-browser__status");
-  status.setAttribute("role", "status");
-  status.setAttribute("aria-live", "polite");
-  const reset = make("button", "button button-small button-quiet content-browser__reset", translate("contentBrowser.results.reset"));
-  reset.type = "button";
-  reset.dataset.contentReset = "true";
-
-  const recentSection = make("section", "content-browser__recent");
-  recentSection.setAttribute("aria-labelledby", "recent-content-title");
-  const recentHeading = make("h3", "content-browser__recent-title", translate("contentActivity.recent.title"));
-  recentHeading.id = "recent-content-title";
+  const viewControl = make("div", "content-browser__control");
+  const viewControlLabel = make("span", "content-browser__field-label", translate("contentBrowser.view.label"));
+  viewControlLabel.dataset.controlLabelKey = "contentBrowser.view.label";
+  viewControl.append(viewControlLabel, viewGroup);
+  const scopeControl = make("div", "content-browser__control");
+  const scopeControlLabel = make("span", "content-browser__field-label", translate("contentActivity.scope.label"));
+  scopeControlLabel.dataset.controlLabelKey = "contentActivity.scope.label";
+  scopeControl.append(scopeControlLabel, scopeGroup);
   const clearRecent = make("button", "button button-small button-quiet content-browser__clear-recent", translate("contentActivity.recent.clear"));
   clearRecent.type = "button";
   clearRecent.dataset.contentClearRecent = "true";
-  const recentHeader = make("div", "content-browser__recent-header");
-  recentHeader.append(recentHeading, clearRecent);
-  const recentList = make("div", "content-browser__recent-list");
-  recentSection.append(recentHeader, recentList);
+  const controlRow = make("div", "content-browser__control-row");
+  controlRow.append(sortLabel, viewControl, scopeControl);
+  const filterActions = make("div", "content-browser__filter-actions");
+  filterActions.append(clearRecent);
+  const reset = make("button", "button button-small button-quiet content-browser__reset", translate("contentBrowser.results.reset"));
+  reset.type = "button";
+  reset.dataset.contentReset = "true";
+  filterActions.append(reset);
+  const filterPanel = make("div", "content-browser__filter-panel");
+  filterPanel.append(filterGrid, controlRow, filterActions);
+  filtersDisclosure.append(filtersSummary, filterPanel);
+
+  const toolbar = make("div", "content-browser__toolbar");
+  toolbar.append(searchLabel, filtersDisclosure);
+  const status = make("p", "content-browser__status");
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
 
   const suggestions = make("section", "content-browser__suggestions");
   suggestions.setAttribute("aria-labelledby", "content-suggestions-title");
@@ -183,7 +244,7 @@ const isNewContent = (createdAt, now = new Date()) => {
   suggestionsHeading.id = "content-suggestions-title";
   const suggestionsList = make("div", "content-browser__suggestions-list");
   suggestions.append(suggestionsHeading, suggestionsList);
-  mount.replaceChildren(toolbar, scopeGroup, recentSection, status, suggestions, reset);
+  mount.replaceChildren(toolbar, status, suggestions);
 
   const dialog = make("dialog", "content-preview-dialog");
   dialog.setAttribute("aria-labelledby", "content-preview-title");
@@ -217,20 +278,46 @@ const isNewContent = (createdAt, now = new Date()) => {
   } catch { /* Storage can be unavailable in private browsing. */ }
 
   const getTranslatedCategory = (category) => translate(category.labelKey);
-  const refreshCategoryOptions = () => {
-    const previous = categorySelect.value;
-    categorySelect.replaceChildren();
-    const all = document.createElement("option");
-    all.value = "all";
-    all.textContent = translate("contentBrowser.category.all");
-    categorySelect.append(all);
-    registry.categories.forEach((category) => {
-      const option = document.createElement("option");
-      option.value = category.id;
-      option.textContent = getTranslatedCategory(category);
-      categorySelect.append(option);
+  const selectedTopicIds = () => [...topicInputs].filter(([, input]) => input.checked).map(([id]) => id);
+  const selectedFormatIds = () => [...formatInputs].filter(([, input]) => input.checked).map(([id]) => id);
+  const refreshFilterSummary = () => {
+    const activeCount = selectedTopicIds().length + selectedFormatIds().length + Number(activeScope !== "all");
+    filtersActiveCount.hidden = activeCount === 0;
+    filtersActiveCount.textContent = translate("contentBrowser.filters.active", { count: activeCount });
+    filtersSummary.setAttribute("aria-label", activeCount
+      ? `${translate("contentBrowser.filters.toggle")}, ${translate("contentBrowser.filters.active", { count: activeCount })}`
+      : translate("contentBrowser.filters.toggle"));
+  };
+  const refreshScopeButtons = () => {
+    const { favorites, recent } = activityState();
+    scopeButtons.forEach((button, scope) => {
+      const count = scope === "favorites" ? favorites.length : scope === "recent" ? recent.length : null;
+      const key = scope === "all" ? "contentActivity.scope.all" : `contentActivity.scope.${scope}`;
+      button.textContent = translate(key, count === null ? undefined : { count });
+      button.setAttribute("aria-pressed", String(scope === activeScope));
     });
-    if ([...categorySelect.options].some((option) => option.value === previous)) categorySelect.value = previous;
+    clearRecent.hidden = recent.length === 0;
+  };
+  const refreshFilterLabels = () => {
+    filterPanel.querySelectorAll("[data-filter-label-key]").forEach((element) => {
+      element.textContent = translate(element.dataset.filterLabelKey);
+    });
+    topicLegend.textContent = translate("contentBrowser.filters.topic");
+    formatLegend.textContent = translate("contentBrowser.filters.format");
+    filtersSummaryText.textContent = translate("contentBrowser.filters.toggle");
+    clearRecent.textContent = translate("contentActivity.recent.clear");
+    reset.textContent = translate("contentBrowser.results.reset");
+    sortLabel.querySelector(".content-browser__field-label").textContent = translate("contentBrowser.sort.label");
+    viewControlLabel.textContent = translate("contentBrowser.view.label");
+    scopeControlLabel.textContent = translate("contentActivity.scope.label");
+    const updateCounts = (inputs, getCount) => inputs.forEach((input, id) => {
+      const count = input.closest(".content-browser__check-option")?.querySelector(".content-browser__check-count");
+      if (count) count.textContent = translate("contentBrowser.filters.count", { count: getCount(id) });
+    });
+    updateCounts(topicInputs, (id) => registry.contents.filter((content) => content.categoryIds.includes(id)).length);
+    updateCounts(formatInputs, (id) => registry.contents.filter((content) => content.formatId === id).length);
+    refreshFilterSummary();
+    refreshScopeButtons();
   };
 
   const metricText = (content) => {
@@ -265,38 +352,19 @@ const isNewContent = (createdAt, now = new Date()) => {
     });
   };
 
-  const renderRecent = () => {
-    const { recent, favorites } = activityState();
-    recentList.replaceChildren();
-    recent.forEach((entry) => {
-      const content = registry.contents.find((candidate) => candidate.id === entry.id);
-      if (!content) return;
-      const link = make("a", "content-browser__recent-link", translatedTitle(content));
-      link.href = content.page;
-      link.dataset.contentStart = content.id;
-      recentList.append(link);
-    });
-    recentSection.hidden = !recent.length || search.value.trim() !== "" || categorySelect.value !== "all" || activeScope !== "all";
-    clearRecent.hidden = !recent.length;
-    scopeButtons.forEach((button, scope) => {
-      const count = scope === "favorites" ? favorites.length : scope === "recent" ? recent.length : null;
-      const key = scope === "all" ? "contentActivity.scope.all" : `contentActivity.scope.${scope}`;
-      button.textContent = translate(key, count === null ? undefined : { count });
-      button.setAttribute("aria-pressed", String(scope === activeScope));
-    });
-  };
-
-  const renderSuggestions = (query, selectedCategory) => {
+  const renderSuggestions = (query, selectedTopics, selectedFormats) => {
     suggestionsList.replaceChildren();
     const terms = query.split(/[\s,·/]+/).map((term) => term.trim()).filter(Boolean);
     const candidates = registry.contents.map((content, index) => {
       const categoryText = content.categoryIds.map((id) => registry.categories.find((entry) => entry.id === id)).filter(Boolean).map(getTranslatedCategory).join(" ");
+      const formatText = translate(`contentBrowser.format.${content.formatId}`);
       const tagText = content.tagIds.map((id) => translate(`tag.${id}`)).join(" ");
-      const fields = [translatedTitle(content), translate(content.descriptionKey), categoryText, tagText, ...content.tagIds].map((text) => text.toLocaleLowerCase());
+      const fields = [translatedTitle(content), translate(content.descriptionKey), categoryText, formatText, tagText, ...content.tagIds].map((text) => text.toLocaleLowerCase());
       const queryScore = terms.reduce((score, term) => score + (fields.some((field) => field.includes(term.toLocaleLowerCase())) ? 1 : 0), 0);
-      const categoryScore = selectedCategory !== "all" && content.categoryIds.includes(selectedCategory) ? 2 : 0;
-      return { content, score: queryScore + categoryScore, index };
-    }).filter(({ content, score }) => score > 0 && !(selectedCategory !== "all" && !content.categoryIds.includes(selectedCategory)))
+      const topicScore = selectedTopics.some((id) => content.categoryIds.includes(id)) ? 2 : 0;
+      const formatScore = selectedFormats.includes(content.formatId) ? 2 : 0;
+      return { content, score: queryScore + topicScore + formatScore, index };
+    }).filter(({ score }) => score > 0)
       .sort((a, b) => b.score - a.score || a.index - b.index)
       .slice(0, 3);
     candidates.forEach(({ content }) => {
@@ -313,7 +381,8 @@ const isNewContent = (createdAt, now = new Date()) => {
 
   const updateCards = () => {
     const query = search.value.trim().toLocaleLowerCase();
-    const selectedCategory = categorySelect.value || "all";
+    const selectedTopics = selectedTopicIds();
+    const selectedFormats = selectedFormatIds();
     const { favorites, recent } = activityState();
     const allowedIds = activeScope === "favorites" ? new Set(favorites) : activeScope === "recent" ? new Set(recent.map((entry) => entry.id)) : null;
     let visibleCount = 0;
@@ -351,12 +420,14 @@ const isNewContent = (createdAt, now = new Date()) => {
         badge.hidden = !isNew;
       }
       const categoryText = content.categoryIds.map((id) => registry.categories.find((entry) => entry.id === id)).filter(Boolean).map(getTranslatedCategory).join(" ");
+      const formatText = translate(`contentBrowser.format.${content.formatId}`);
       const tagText = content.tagIds.map((id) => translate(`tag.${id}`)).join(" ");
-      const searchableText = [translate(content.titleKey), translate(content.descriptionKey), categoryText, tagText, ...content.tagIds].join(" ").toLocaleLowerCase();
-      const matchesCategory = selectedCategory === "all" || content.categoryIds.includes(selectedCategory);
+      const searchableText = [translate(content.titleKey), translate(content.descriptionKey), categoryText, formatText, tagText, ...content.tagIds].join(" ").toLocaleLowerCase();
+      const matchesTopic = selectedTopics.length === 0 || selectedTopics.some((id) => content.categoryIds.includes(id));
+      const matchesFormat = selectedFormats.length === 0 || selectedFormats.includes(content.formatId);
       const matchesSearch = !query || searchableText.includes(query);
       const matchesScope = !allowedIds || allowedIds.has(content.id);
-      card.hidden = !(matchesCategory && matchesSearch && matchesScope);
+      card.hidden = !(matchesTopic && matchesFormat && matchesSearch && matchesScope);
       card.classList.toggle("category-card--compact", activeView === "compact");
       if (!card.hidden) visibleCount += 1;
       const metric = card.querySelector("[data-content-metrics]");
@@ -374,9 +445,11 @@ const isNewContent = (createdAt, now = new Date()) => {
           ? translate("contentActivity.empty.recent")
           : translate("contentBrowser.results.empty");
     status.classList.toggle("content-browser__status--empty", visibleCount === 0);
-    reset.hidden = visibleCount > 0;
-    renderRecent();
-    renderSuggestions(query, selectedCategory);
+    const hasActiveFilters = selectedTopics.length > 0 || selectedFormats.length > 0 || activeScope !== "all" || query.length > 0;
+    reset.hidden = !hasActiveFilters;
+    refreshFilterSummary();
+    refreshScopeButtons();
+    renderSuggestions(query, selectedTopics, selectedFormats);
     refreshFavoriteButtons();
   };
 
@@ -397,11 +470,12 @@ const isNewContent = (createdAt, now = new Date()) => {
     close.focus({ preventScroll: true });
   };
 
-  refreshCategoryOptions();
+  refreshFilterLabels();
   refreshSortOptions();
   updateCards();
   search.addEventListener("input", updateCards);
-  categorySelect.addEventListener("change", updateCards);
+  topicGroup.addEventListener("change", updateCards);
+  formatGroup.addEventListener("change", updateCards);
   sortSelect.addEventListener("change", () => {
     hasUserChosenSort = true;
     updateCards();
@@ -422,7 +496,8 @@ const isNewContent = (createdAt, now = new Date()) => {
   mount.addEventListener("click", (event) => {
     if (event.target.closest("[data-content-reset]")) {
       search.value = "";
-      categorySelect.value = "all";
+      topicInputs.forEach((input) => { input.checked = false; });
+      formatInputs.forEach((input) => { input.checked = false; });
       sortSelect.value = popularityStatus === "ready" ? "popular" : "latest";
       activeScope = "all";
       updateCards();
@@ -472,17 +547,13 @@ const isNewContent = (createdAt, now = new Date()) => {
   const refreshLabels = () => {
     search.placeholder = translate("contentBrowser.search.placeholder");
     search.setAttribute("aria-label", translate("contentBrowser.search.label"));
-    categorySelect.setAttribute("aria-label", translate("contentBrowser.category.label"));
     sortSelect.setAttribute("aria-label", translate("contentBrowser.sort.label"));
     viewGroup.setAttribute("aria-label", translate("contentBrowser.view.label"));
     scopeGroup.setAttribute("aria-label", translate("contentActivity.scope.label"));
-    recentHeading.textContent = translate("contentActivity.recent.title");
-    clearRecent.textContent = translate("contentActivity.recent.clear");
     suggestionsHeading.textContent = translate("contentActivity.suggestions.title");
     toolbar.querySelector(".content-browser__search .content-browser__field-label").textContent = translate("contentBrowser.search.label");
-    toolbar.querySelector(".content-browser__category .content-browser__field-label").textContent = translate("contentBrowser.category.label");
-    toolbar.querySelector(".content-browser__sort .content-browser__field-label").textContent = translate("contentBrowser.sort.label");
     viewButtons.forEach((button, mode) => { button.textContent = translate(viewLabels[mode]); });
+    refreshFilterLabels();
     dialogEyebrow.textContent = translate("contentBrowser.preview.label");
     if (activePreview) {
       dialogTitle.textContent = translate(activePreview.titleKey);
@@ -497,8 +568,6 @@ const isNewContent = (createdAt, now = new Date()) => {
     close.setAttribute("aria-label", translate("contentBrowser.preview.close"));
     cancel.textContent = translate("contentBrowser.preview.cancel");
     start.textContent = translate("contentBrowser.preview.start");
-    reset.textContent = translate("contentBrowser.results.reset");
-    refreshCategoryOptions();
     refreshSortOptions();
     updateCards();
   };

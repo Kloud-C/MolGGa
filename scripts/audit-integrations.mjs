@@ -88,6 +88,7 @@ assert(contentRegistry?.schemaVersion === 1, "content registry: missing supporte
 const registryCategoryIds = contentRegistry?.categories?.map((category) => category.id) || [];
 const registryContents = contentRegistry?.contents || [];
 const registryContentIds = registryContents.map((content) => content.id);
+const supportedFormatIds = ["worldcup", "quiz", "story"];
 assert(new Set(registryCategoryIds).size === registryCategoryIds.length, "content registry: duplicate category IDs");
 assert(new Set(registryContentIds).size === registryContentIds.length, "content registry: duplicate content IDs");
 const contentBrowserSource = read("assets/js/content-browser.js");
@@ -106,6 +107,9 @@ for (const category of contentRegistry?.categories || []) {
 }
 for (const content of registryContents) {
   assert(Boolean(content.id && content.type && content.page && content.source?.kind), `content registry: incomplete identity or source for ${content.id || "unknown"}`);
+  assert(supportedFormatIds.includes(content.formatId), `content registry: unsupported format for ${content.id}`);
+  assert((content.formatId === "worldcup" && content.type === "worldcup") || (["quiz", "story"].includes(content.formatId) && content.type === "quiz"), `content registry: format and renderer type differ for ${content.id}`);
+  for (const locale of locales) assert(Boolean(localeResources[locale][`contentBrowser.format.${content.formatId}`]), `${locale}.json: missing ${content.id} format label contentBrowser.format.${content.formatId}`);
   assert(Boolean(content.cardLabelKey && content.createdAt && /^\d{4}-\d{2}-\d{2}$/.test(content.createdAt)), `content registry: card label or creation date is missing for ${content.id}`);
   for (const locale of locales) assert(Boolean(localeResources[locale][content.cardLabelKey]), `${locale}.json: missing ${content.id} card label translation ${content.cardLabelKey}`);
   assert(content.categoryIds?.length > 0 && content.categoryIds.every((id) => registryCategoryIds.includes(id)), `content registry: invalid categories for ${content.id}`);
@@ -120,6 +124,10 @@ for (const content of registryContents) {
     for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} metadata translation ${key}`);
   }
 }
+for (const categoryId of registryCategoryIds) assert(registryContents.some((content) => content.categoryIds.includes(categoryId)), `content registry: topic filter ${categoryId} has no content`);
+for (const formatId of supportedFormatIds) assert(registryContents.some((content) => content.formatId === formatId), `content registry: format filter ${formatId} has no content`);
+assert(contentBrowserSource.includes('input.dataset.topicFilter = category.id') && contentBrowserSource.includes('input.dataset.formatFilter = formatId') && contentBrowserSource.includes('input.type = "checkbox"'), "content browser: topic and format filters must use native checkboxes");
+assert(contentBrowserSource.includes('filtersDisclosure.className = "content-browser__filters"') && !contentBrowserSource.includes('filtersDisclosure.open = true'), "content browser: advanced filters should start collapsed");
 assert(registryContents.some((content) => content.id === "travel-role" && content.source?.kind === "archetype" && content.page === "travel-role-test.html"), "content registry: travel-role quiz is not registered for the shared archetype engine");
 assert(registryContents.some((content) => content.id === "romance-style" && content.source?.kind === "archetype" && content.page === "romance-style-test.html"), "content registry: romance-style quiz is not registered for the shared archetype engine");
 assert(registryContents.some((content) => content.id === "fantasy-class" && content.source?.kind === "archetype" && content.page === "fantasy-class-test.html"), "content registry: fantasy-class quiz is not registered for the shared archetype engine");
@@ -135,7 +143,10 @@ for (const locale of locales) {
 }
 const phaseTwoTranslationKeys = [
   "contentBrowser.search.label", "contentBrowser.search.placeholder", "contentBrowser.category.label",
-  "contentBrowser.category.all", "contentBrowser.sort.label", "contentBrowser.sort.popular", "contentBrowser.sort.popularLoading",
+  "contentBrowser.category.all", "contentBrowser.filters.toggle", "contentBrowser.filters.active",
+  "contentBrowser.filters.topic", "contentBrowser.filters.format", "contentBrowser.filters.count",
+  "contentBrowser.format.worldcup", "contentBrowser.format.quiz", "contentBrowser.format.story",
+  "contentBrowser.sort.label", "contentBrowser.sort.popular", "contentBrowser.sort.popularLoading",
   "contentBrowser.sort.popularUnavailable", "contentBrowser.sort.latest",
   "contentBrowser.view.label", "contentBrowser.view.grid",
   "contentBrowser.view.compact", "contentBrowser.view.list", "contentBrowser.results.count",
@@ -194,7 +205,7 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20261001-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261001-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-registry.js?v=20261001-3') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261001-2'), `${locale}/index.html: shared content browser scripts are missing or stale`);
   assert(html.includes('content-activity.css?v=20260929-5'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
@@ -248,15 +259,15 @@ for (const page of allHtml) {
   assert(descriptions.every(Boolean), `${page}: description/Open Graph/Twitter description metadata is incomplete`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
-  assert(/assets\/js\/i18n\.js\?v=\d{8}-\d+/.test(html), `${page}: i18n.js is missing a cache token`);
-  assert(/assets\/css\/styles\.css\?v=20261001-2/.test(html), `${page}: shared styles are missing or stale`);
+  assert(html.includes("assets/js/i18n.js?v=20261001-3"), `${page}: i18n.js is missing or has a stale cache token`);
+  assert(/assets\/css\/styles\.css\?v=20261001-3/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
   for (const key of i18nKeys) assert(Object.hasOwn(localeResources[locale], key), `${page}: ${locale}.json is missing data-i18n key ${key}`);
   const hasContentResult = /data-(?:quiz|worldcup)-result\b|id=["'](?:animal-result|mbti-result)["']/.test(html);
   if (hasContentResult) {
-    assert(html.includes('content-registry.js?v=20261001-1'), `${page}: result recommendations lack the shared content registry`);
+    assert(html.includes('content-registry.js?v=20261001-3'), `${page}: result recommendations lack the shared content registry`);
     assert(html.includes('content-recommendations.js?v=20260928-1'), `${page}: shared result recommendations are not loaded`);
   }
   for (const [, declaration] of html.matchAll(/\bdata-i18n-attr=["']([^"']+)["']/gi)) {
