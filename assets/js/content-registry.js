@@ -216,6 +216,21 @@
       thumbnail: "/image/worldcup/month-stay/jeju-stone-house.jpg",
       source: { kind: "worldcup", id: "month-stay" },
       metrics: { candidateCount: 50, choiceCount: 2, availableBrackets: [16, 32], estimatedMinutesByBracket: { 16: 3, 32: 5 } }
+    },
+    {
+      id: "rest-style",
+      createdAt: "2026-10-02",
+      cardLabelKey: "content.rest-style.cardLabel",
+      type: "quiz",
+      formatId: "quiz",
+      categoryIds: ["taste"],
+      tagIds: ["lifestyle", "leisure", "self-reflection"],
+      titleKey: "content.rest-style.title",
+      descriptionKey: "content.rest-style.description",
+      page: "rest-style-test.html",
+      thumbnail: "/image/tests/rest-style/quiet-charge.png",
+      source: { kind: "archetype", id: "rest-style" },
+      metrics: { questionCount: 7, choicesPerQuestion: 5, resultCount: 5, estimatedMinutes: 2 }
     }
   ];
 

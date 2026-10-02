@@ -137,6 +137,10 @@
 
 `tests/romance-style`에는 12개 연애 스타일 결과를 위한 생성 실사풍 이미지가 있습니다. 모바일 전송량을 줄이도록 900×1125 JPEG로 최적화했습니다. `assets/js/romance-style-data.js`의 결과 프로필 ID와 파일 경로를 맞춰 관리합니다. 각 결과 이미지와 장면 설명의 대응은 [`tests/romance-style/README.md`](tests/romance-style/README.md)에서 확인할 수 있습니다.
 
+## 휴식 취향 테스트 이미지
+
+`tests/rest-style`에는 다섯 휴식 유형의 결과를 설명하는 2×2 네 컷 카툰 PNG가 있습니다. 조용히 쉬기, 가볍게 움직이기, 가까운 사람과 이야기하기, 취미에 몰입하기, 새로운 장소를 둘러보기의 장면 변화를 간결하게 담습니다. 각 파일은 `assets/js/rest-style-data.js`의 프로필 이미지 경로와 연결되며, 결과 카드와 콘텐츠 탐색 카드에서 함께 사용합니다. 글자나 말풍선 없이 표정과 행동으로 뜻을 전달하는 단순한 초록·크림색 카툰 스타일입니다.
+
 ## 한 달 살기 월드컵 이미지
 
 `worldcup/month-stay`에는 후보별 생활 공간과 주변 풍경을 함께 보여주는 생성 이미지 50장이 있습니다. 파일은 800×600 JPEG이며 `assets/js/worldcup-data.js`의 후보 ID와 같은 이름을 사용합니다. 특정 예약 숙소를 나타내지 않는 콘셉트 이미지입니다. 파일명과 후보 이름의 대응은 [`worldcup/month-stay/README.md`](worldcup/month-stay/README.md)를 확인하세요.

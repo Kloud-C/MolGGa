@@ -608,4 +608,36 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/month-stay-worldcup" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/month-stay-worldcup" />
   </url>
+  <url>
+    <loc>https://molgga.com/ko/rest-style-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/rest-style-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/en/rest-style-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/rest-style-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/ja/rest-style-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/rest-style-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/zh/rest-style-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/rest-style-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/rest-style-test" />
+  </url>
 </urlset>

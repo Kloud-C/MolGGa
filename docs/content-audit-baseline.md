@@ -73,3 +73,10 @@ No unresolved P1 or P2 content-count, translation-key, result-linkage, or reacha
 - 2026-10-01: completed the initial 12-entry baseline; corrected stale weekend and Past Life counts, extended Chinese residual scanning to inline World Cup text, and verified all result distributions.
 - 2026-10-02: added `night-train` to the baseline after integration checks, an exact outcome-distribution review, and confirmation of its four-locale page and asset mapping.
 - 2026-10-02: added `month-stay` after the four-locale content, bracket flow, share templates, route metadata, and 50-image integration checks.
+
+## 2026-10-02 rest-style content
+
+- Added `rest-style` as a seven-question, five-choice archetype quiz with five outcomes: quiet, movement, connection, immersion, and novelty. Each outcome is represented once in every question, all five outcomes are reachable, and exact-score ties use the shared deterministic resolver.
+- Added matching Korean, English, Japanese, and Simplified Chinese page copy, quiz strings, metadata, share copy, and result guidance. The copy frames results as lighthearted preferences rather than a diagnosis.
+- Added five square 2×2 cartoon result illustrations and linked the quiet-recharge image as the content-discovery thumbnail. Each comic presents four clear everyday scenes with no text or speech bubbles.
+- Registered the content in the shared explorer, content-start allow-list, and sitemap. The available review was limited to manual source, locale, result mapping, image-path, and route inspection; automated integration and score-distribution audits were not run.
