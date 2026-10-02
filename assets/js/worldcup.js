@@ -43,6 +43,10 @@
   };
   const roundTitle = (size) => tr(({ 32: "32강", 16: "16강", 8: "8강", 4: "4강", 2: "결승" })[size] || "월드컵");
   const pageUrl = () => `https://molgga.com/${language}/${config.page.replace(/\.html$/, "")}`;
+  const fillTemplate = (template, item) => localize(template)
+    .replaceAll("{name}", localize(item.name))
+    .replaceAll("{detail}", localize(item.detail))
+    .replaceAll("{url}", pageUrl());
   let fallbackVotes = {};
   const currentItems = () => config.items;
   const showStart = () => {
@@ -211,19 +215,23 @@
     photo.alt = `${localize(winner.name)} ${tr("우승 항목 사진")}`;
     const label = document.createElement("p");
     label.className = "archetype-result-card__label";
-    label.textContent = tr("나의 최종 선택");
+    label.textContent = config.resultLabel ? localize(config.resultLabel) : tr("나의 최종 선택");
     const heading = document.createElement("h3");
     heading.tabIndex = -1;
     heading.textContent = localize(winner.name);
     const catchphrase = document.createElement("p");
     catchphrase.className = "archetype-result-card__catchphrase";
-    catchphrase.textContent = localize(winner.detail);
+    catchphrase.textContent = config.resultCatchphraseTemplate
+      ? fillTemplate(config.resultCatchphraseTemplate, winner)
+      : localize(winner.detail);
     top.append(brand, photo, label, heading, catchphrase);
     const body = document.createElement("div");
     body.className = "archetype-result-card__body";
     const note = document.createElement("p");
     note.className = "archetype-result-card__summary";
-    note.textContent = tr("무작위로 뽑힌 선택지로 진행한 월드컵에서 가장 마지막까지 선택된 항목이에요.");
+    note.textContent = config.resultBodyTemplate
+      ? fillTemplate(config.resultBodyTemplate, winner)
+      : tr("무작위로 뽑힌 선택지로 진행한 월드컵에서 가장 마지막까지 선택된 항목이에요.");
     body.append(note);
     card.append(top, body);
     result.append(card);
@@ -233,18 +241,22 @@
     const retry = document.createElement("button");
     retry.type = "button";
     retry.className = "button button-small";
-    retry.textContent = tr("다시 해보기");
+    retry.textContent = config.retryLabel ? localize(config.retryLabel) : tr("다시 해보기");
     retry.addEventListener("click", reset);
     const share = document.createElement("button");
     share.type = "button";
     share.className = "button button-small button-quiet";
     share.textContent = tr("결과 공유");
     share.addEventListener("click", () => window.MOLGGA_SHARE?.open({
-      title: `${localize(config.title)} [${localize(winner.name)}]`,
+      title: config.shareTitleTemplate
+        ? fillTemplate(config.shareTitleTemplate, winner)
+        : `${localize(config.title)} [${localize(winner.name)}]`,
       description: localize(winner.detail),
       imageUrl: winner.image,
       buttonTitle: tr("나도 월드컵 해보기"),
-      text: formatShareText(tr("이번 월드컵 최종 우승은 [") + localize(winner.name) + tr("] !!"), pageUrl()),
+      text: config.shareTextTemplate
+        ? fillTemplate(config.shareTextTemplate, winner)
+        : formatShareText(tr("이번 월드컵 최종 우승은 [") + localize(winner.name) + tr("] !!"), pageUrl()),
       url: pageUrl()
     }));
     actions.append(retry, share);

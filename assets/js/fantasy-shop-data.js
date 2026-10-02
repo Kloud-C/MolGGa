@@ -15,6 +15,7 @@ window.MOA_ARCHETYPE_TESTS["fantasy-shop"] = {
     startImageAlt: "shopStory.startImageAlt",
     previousButton: "shopStory.previousButton",
     resultNameTemplate: "shopStory.resultNameTemplate",
+    resultImageAlt: "shopStory.resultImageAlt",
     locations: {
       road: "shopStory.location.road",
       square: "shopStory.location.square",

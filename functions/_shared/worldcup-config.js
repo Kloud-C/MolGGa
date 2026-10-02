@@ -19,5 +19,15 @@ export const WORLD_CUPS = {
       "chicken-skewer", "fish-cake-skewer", "hotteok", "bungeoppang", "twisted-donut", "korean-pizza", "cheese-balls", "sweet-potato-fries", "fruit-cup", "ice-cream",
       "hamburger", "french-fries", "nachos", "cream-pasta", "grilled-eel", "egg-toast", "tuna-rice-ball", "fried-seaweed-roll", "spicy-pork", "cup-ramyeon"
     ]
+  },
+  "month-stay": {
+    brackets: [16, 32],
+    items: [
+      "jeju-stone-house", "seoul-highrise-apartment", "gangneung-beach-house", "jeonju-hanok", "busan-sea-apartment", "gangwon-log-cabin", "namhae-fishing-house", "gyeongju-old-neighborhood", "jirisan-country-house", "west-sea-island-inn",
+      "tokyo-residential-apartment", "kyoto-machiya", "osaka-market-house", "hokkaido-snow-house", "taipei-night-market-home", "chiang-mai-garden-home", "bali-ricefield-villa", "hawaii-beach-bungalow", "singapore-city-apartment", "hoi-an-riverside-house",
+      "paris-bakery-apartment", "london-park-house", "rome-lane-apartment", "barcelona-beach-house", "lisbon-hillside-house", "amsterdam-canal-house", "prague-old-town-apartment", "swiss-mountain-chalet", "italian-country-farmhouse", "greek-seaside-house",
+      "new-york-neighborhood-apartment", "vancouver-forest-home", "australian-coastal-home", "new-zealand-lakeside-house", "canadian-mountain-cabin", "finnish-lakeside-sauna-house", "norwegian-fjord-house", "icelandic-field-house", "french-village-house", "spanish-olive-grove-house",
+      "forest-treehouse", "canal-houseboat", "large-garden-country-house", "campervan", "bookshop-attic", "mountain-hot-spring-lodge", "lighthouse-coastal-lodge", "creative-studio-home", "small-animal-farmhouse", "city-rooftop-garden-house"
+    ]
   }
 };

@@ -201,6 +201,21 @@
       thumbnail: "/image/tests/night-train/start.webp",
       source: { kind: "archetype", id: "night-train" },
       metrics: { questionCount: 8, choicesPerQuestion: 4, resultCount: 6, estimatedMinutes: 4 }
+    },
+    {
+      id: "month-stay",
+      createdAt: "2026-10-02",
+      cardLabelKey: "content.month-stay.cardLabel",
+      type: "worldcup",
+      formatId: "worldcup",
+      categoryIds: ["taste"],
+      tagIds: ["travel", "leisure", "preference"],
+      titleKey: "content.month-stay.title",
+      descriptionKey: "content.month-stay.description",
+      page: "month-stay-worldcup.html",
+      thumbnail: "/image/worldcup/month-stay/jeju-stone-house.jpg",
+      source: { kind: "worldcup", id: "month-stay" },
+      metrics: { candidateCount: 50, choiceCount: 2, availableBrackets: [16, 32], estimatedMinutesByBracket: { 16: 3, 32: 5 } }
     }
   ];
 

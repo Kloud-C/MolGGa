@@ -7,6 +7,7 @@ This document is the shared implementation template for new and updated pages. F
 - For a standard informational or form page, follow the structure in `ko/contact.html` or `ko/about.html`.
 - For a multi-question quiz with one question shown at a time, follow `ko/mbti.html` and its shared behavior in `assets/js/app.js`.
 - For a choice-based personality result, follow `ko/spending-habits-test.html` and the result-card renderer in `assets/js/archetype-test.js`.
+- For a scene-based story quiz with choice reactions and choice-dependent results, follow [the interactive story content template](interactive-story-content-template.md) and reuse the shared archetype renderer's `storyMode`.
 - For a tournament, follow `ko/worldcup.html` or `ko/late-night-worldcup.html` and reuse `assets/js/worldcup.js`.
 - Build the Korean structure first, then keep the same component order and class names in `en/`, `ja/`, and `zh/`. Add each page to the sitemap and the relevant navigation/content list when appropriate.
 - Prefer these existing templates over copying markup from a screenshot or introducing page-specific inline CSS.
@@ -110,6 +111,8 @@ The template defines hierarchy and behavior, not identical wording or identical 
 - Use readable namespaced keys such as `nav.contact` for new copy. Legacy Korean sentence keys remain only for existing content compatibility; do not add new literal-sentence keys. Keep `keySeparator: false` while legacy keys are present.
 - Keep the active language, `<html lang>`, page title and descriptions, canonical URL, Open Graph URL, and language alternates in sync when the language selector changes. Add a new language only after its translation JSON and localized static metadata are complete and reviewed.
 - Localize each page's static `<title>`, description, Open Graph title/description, and Twitter title/description in its HTML file; crawlers and link previews may read these before client-side translation runs. Keep Korean descriptions within Naver's 80-character guidance.
+- Review translations against their Korean source in page context. Preserve unspecified gender, point of view, tense, and meaning; use natural target-language phrasing and punctuation instead of literal word-for-word wording. Keep each content name consistent across cards, page headings, metadata, calls to action, and accessibility labels. Use the target language's natural term for a playful quiz; in Japanese, `診断` can be a casual label when the nonclinical scope is clear. For financial or medical topics, avoid labels that imply professional assessment.
+- Treat the existing catalog in [the content audit baseline](content-audit-baseline.md) as frozen during unrelated work. Re-review only the content the user names or the new/changed content and its directly connected copy.
 - Use the same extensionless public route in canonical URLs, every `hreflang`, `og:url`, the sitemap, and tournament share links. The source files may still end in `.html`; that is an implementation detail, not the preferred public URL.
 - When changing shared CSS or JavaScript, add or increment its `?v=...` cache token in every HTML page that loads it, including currently unversioned references.
 - Compare corresponding language pages for matching sections, controls, and accessible labels before publishing.

@@ -576,4 +576,36 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/night-train-test" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/night-train-test" />
   </url>
+  <url>
+    <loc>https://molgga.com/ko/month-stay-worldcup</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/month-stay-worldcup" />
+  </url>
+  <url>
+    <loc>https://molgga.com/en/month-stay-worldcup</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/month-stay-worldcup" />
+  </url>
+  <url>
+    <loc>https://molgga.com/ja/month-stay-worldcup</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/month-stay-worldcup" />
+  </url>
+  <url>
+    <loc>https://molgga.com/zh/month-stay-worldcup</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/month-stay-worldcup" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/month-stay-worldcup" />
+  </url>
 </urlset>

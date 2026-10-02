@@ -141,6 +141,19 @@ for (const locale of locales) {
     assert(untranslated.length === 0, `${locale}.json: translated values still contain Korean script: ${untranslated.slice(0, 5).map(([key]) => key).join(", ")}`);
   }
 }
+const englishFunctionWords = new Set("a an the and or but to of in on at for with if when what where who how i we you they he she it my our your their this that is are was were be been do does did can could should would will have has had not so than then because before after while as by from into onto up down out about both each more less".split(" "));
+const looksLikeUntranslatedEnglishInChinese = (value) => {
+  if (typeof value !== "string") return false;
+  const words = value.match(/[A-Za-z]+(?:['’][A-Za-z]+)*/gu) || [];
+  if (words.length < 3) return false;
+  return words.some((word) => englishFunctionWords.has(word.toLowerCase().replace(/['’].*$/u, "")));
+};
+assert(looksLikeUntranslatedEnglishInChinese("What if you find a fruit you’ve never seen before?"), "zh.json audit: English sentence detector misses a sentence with a curly apostrophe");
+assert(looksLikeUntranslatedEnglishInChinese("请留意：Listen calmly to the situation and check your emotions."), "zh.json audit: English sentence detector misses English embedded in Chinese text");
+assert(!looksLikeUntranslatedEnglishInChinese("在森林里发现从未见过的果实，你会怎么办？"), "zh.json audit: English sentence detector flags Chinese text");
+assert(!looksLikeUntranslatedEnglishInChinese("MBTI"), "zh.json audit: English sentence detector flags a short acronym");
+const untranslatedChineseEnglish = Object.entries(localeResources.zh).filter(([, value]) => looksLikeUntranslatedEnglishInChinese(value));
+assert(untranslatedChineseEnglish.length === 0, `zh.json: likely untranslated English text: ${untranslatedChineseEnglish.slice(0, 10).map(([key]) => key).join(", ")}`);
 const phaseTwoTranslationKeys = [
   "contentBrowser.search.label", "contentBrowser.search.placeholder", "contentBrowser.category.label",
   "contentBrowser.category.all", "contentBrowser.filters.toggle", "contentBrowser.filters.active",
@@ -205,7 +218,7 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20261001-3') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261001-2'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-registry.js?v=20261002-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261001-3'), `${locale}/index.html: shared content browser scripts are missing or stale`);
   assert(html.includes('content-activity.css?v=20260929-5'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
@@ -260,15 +273,19 @@ for (const page of allHtml) {
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
   assert(html.includes("assets/js/i18n.js?v=20261001-3"), `${page}: i18n.js is missing or has a stale cache token`);
-  assert(/assets\/css\/styles\.css\?v=20261001-3/.test(html), `${page}: shared styles are missing or stale`);
+  assert(/assets\/css\/styles\.css\?v=20261001-4/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
   for (const key of i18nKeys) assert(Object.hasOwn(localeResources[locale], key), `${page}: ${locale}.json is missing data-i18n key ${key}`);
   const hasContentResult = /data-(?:quiz|worldcup)-result\b|id=["'](?:animal-result|mbti-result)["']/.test(html);
   if (hasContentResult) {
-    assert(html.includes('content-registry.js?v=20261001-3'), `${page}: result recommendations lack the shared content registry`);
+    assert(html.includes('content-registry.js?v=20261002-1'), `${page}: result recommendations lack the shared content registry`);
     assert(html.includes('content-recommendations.js?v=20260928-1'), `${page}: shared result recommendations are not loaded`);
+  }
+  const registeredPageContent = registryContents.find((content) => content.page === `${slug}.html`);
+  if (registeredPageContent?.source?.kind === "archetype") {
+    assert(html.includes('archetype-test.js?v=20261002-2'), `${page}: shared archetype renderer cache token is missing or stale`);
   }
   for (const [, declaration] of html.matchAll(/\bdata-i18n-attr=["']([^"']+)["']/gi)) {
     for (const entry of declaration.split(";")) {
@@ -459,6 +476,15 @@ vm.runInNewContext(backendSource, backendSandbox, { timeout: 1000 });
 const backendCups = backendSandbox.WORLD_CUPS;
 assert(JSON.stringify(Object.keys(frontendCups).sort()) === JSON.stringify(Object.keys(backendCups).sort()), "worldcup frontend/backend game IDs differ");
 assert(frontendCups.weekend?.items.length === 50, `weekend World Cup must draw from 50 unique candidates (found ${frontendCups.weekend?.items.length ?? 0})`);
+const monthStayCup = frontendCups["month-stay"];
+assert(monthStayCup?.items.length === 50, `month-stay World Cup must draw from 50 unique candidates (found ${monthStayCup?.items.length ?? 0})`);
+for (const locale of locales) {
+  assert(Boolean(monthStayCup?.resultLabel?.[locale]), `month-stay: missing ${locale} result title`);
+  assert(monthStayCup?.resultCatchphraseTemplate?.[locale]?.includes("{name}"), `month-stay: ${locale} result intro is missing the winner placeholder`);
+  assert(monthStayCup?.resultBodyTemplate?.[locale]?.includes("{detail}"), `month-stay: ${locale} result body is missing the candidate description placeholder`);
+  assert(Boolean(monthStayCup?.retryLabel?.[locale]), `month-stay: missing ${locale} retry label`);
+  assert(monthStayCup?.shareTextTemplate?.[locale]?.includes("{name}") && monthStayCup?.shareTextTemplate?.[locale]?.includes("{url}"), `month-stay: ${locale} share text is missing the winner or page link`);
+}
 assert(/shuffle\(config\.items\)\.slice\(0,\s*bracketSize\)/.test(read("assets/js/worldcup.js")), "World Cup must randomly draw the selected bracket size from the complete candidate list");
 
 const registryArchetypeSandbox = { window: {} };
@@ -519,6 +545,7 @@ for (const content of registryContents) {
       for (const key of [profile.name, profile.catchphrase, profile.description, profile.shareDescription]) {
         for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id}/${resultId} result text ${key}`);
       }
+      if (profile.imageAlt) for (const locale of locales) assert(Boolean(localeResources[locale][profile.imageAlt]), `${locale}.json: missing ${content.id}/${resultId} result image alt ${profile.imageAlt}`);
       for (const locale of locales) {
         assert(!/[○•]/u.test(localeResources[locale][profile.description]), `${locale}.json: ${content.id}/${resultId} screen summary should store plain sentences for the shared bullet-list renderer`);
         assert(!/[○•]/u.test(localeResources[locale][profile.shareDescription]), `${locale}.json: share description for ${content.id}/${resultId} contains a screen-only marker`);
@@ -540,9 +567,13 @@ for (const content of registryContents) {
       }
     }
     if (config.storyMode) {
-      const storyKeys = [config.story.startTitle, config.story.startImageAlt, config.story.startButton, config.story.previousButton, config.story.resultNameTemplate, ...config.story.intro, ...Object.values(config.story.locations || {})];
+      const storyKeys = [config.story.startTitle, config.story.startImageAlt, config.story.startButton, config.story.previousButton, config.story.resultNameTemplate, config.story.resultImageAlt, ...config.story.intro, ...Object.values(config.story.locations || {})];
       for (const key of storyKeys) for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} story text ${key}`);
+      for (const locale of locales) assert(localeResources[locale][config.story.resultNameTemplate]?.includes("{{result}}"), `${locale}.json: story result name template must include the generic result placeholder`);
       assert(fs.existsSync(path.resolve(root, "ko", config.story.startImage)), `${content.id}: missing story start image ${config.story.startImage}`);
+      if (config.story.resultNameTemplate?.includes("{{location}}")) {
+        assert(config.questions[0]?.choices.every((choice) => choice.locationId && config.story.locations?.[choice.locationId]), `${content.id}: result name uses a location without mapping every opening choice`);
+      }
     }
   } else {
     assert(false, `content registry: unsupported source kind ${source.kind} for ${content.id}`);
@@ -558,7 +589,7 @@ assert(archetypeShareSource.includes("imageUrl: imagePath") && archetypeShareSou
 assert(archetypeShareSource.includes("tr(config.sharePrompt || config.title)") && archetypeShareSource.includes("title: resultLine") && archetypeShareSource.includes("`${shareQuestion} [${resultName}]`"), "archetype result sharing: test context or bracketed result name is missing from the result title");
 assert(archetypeShareSource.includes("tr(profile.shareDescription)") && archetypeShareSource.includes("renderResultBullets(tr(profile.description))") && archetypeShareSource.includes('class="archetype-result-card__summary"') && archetypeShareSource.includes('<li>${escapeHtml(sentence)}</li>') && archetypeShareSource.includes("renderResultSentences(tr(item.text))") && archetypeShareSource.includes('class="result-sentence"') && archetypeShareSource.includes('class="result-detail-card"') && !archetypeShareSource.includes(String.fromCodePoint(0x2022)), "archetype result copy: summaries must render as bullets while detail cards and share descriptions remain marker-free");
 assert(read("assets/js/archetype-test.js").includes("Math.imul(hash, 0x01000193)") && read("assets/js/app.js").includes("Math.imul(tieHash, 0x01000193)"), "quiz scoring: deterministic answer-based tie-breaking must be consistent across archetype and animal quizzes");
-assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("title: `${localize(config.title)} [${localize(winner.name)}]`") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: contextual bracketed title, winner image, or same-game CTA is missing");
+assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("config.shareTitleTemplate") && read("assets/js/worldcup.js").includes("`${localize(config.title)} [${localize(winner.name)}]`") && read("assets/js/worldcup.js").includes("config.shareTextTemplate") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: contextual title, winner image, or same-game CTA is missing");
 const legacyQuizSource = read("assets/js/app.js");
 assert(legacyQuizSource.includes("imageUrl: profile.image") && legacyQuizSource.includes('tr("animal.sharePrompt")') && legacyQuizSource.includes('tr("mbti.sharePrompt")') && legacyQuizSource.includes("const resultLine = `${sharePrompt} [${resultName}]`") && legacyQuizSource.includes("renderResultSentences(tr(profile.daily))") && legacyQuizSource.includes('class="result-sentence"') && !legacyQuizSource.includes(String.fromCodePoint(0x2022)), "legacy quiz result sharing context or bullet-free sentence-formatted descriptions are missing");
 const sharedResultCardStyles = read("assets/css/styles.css");
@@ -586,6 +617,8 @@ for (const [gameId, config] of Object.entries(frontendCups)) {
       assert(typeof item.name?.[locale] === "string" && item.name[locale].trim(), `${gameId}/${item.id}: missing ${locale} name`);
       assert(typeof item.detail?.[locale] === "string" && item.detail[locale].trim(), `${gameId}/${item.id}: missing ${locale} detail`);
     }
+    assert(!looksLikeUntranslatedEnglishInChinese(item.name.zh), `${gameId}/${item.id}: likely untranslated English in Chinese item name`);
+    assert(!looksLikeUntranslatedEnglishInChinese(item.detail.zh), `${gameId}/${item.id}: likely untranslated English in Chinese item detail`);
     assert(fs.existsSync(path.resolve(root, "ko", item.image)), `${gameId}/${item.id}: missing image ${item.image}`);
   }
   for (const locale of locales) {
@@ -598,12 +631,19 @@ for (const [gameId, config] of Object.entries(frontendCups)) {
   }
 }
 const worldcupScriptVersions = new Set();
-for (const page of allHtml.filter((file) => /(?:^|\/)(?:late-night-)?worldcup\.html$/.test(file))) {
+for (const page of allHtml.filter((file) => /(?:^|\/)(?:(?:late-night|month-stay)-)?worldcup\.html$/.test(file))) {
   const version = read(page).match(/assets\/js\/worldcup\.js\?v=([^"']+)/)?.[1];
   assert(Boolean(version), `${page}: worldcup.js cache token is missing`);
   if (version) worldcupScriptVersions.add(version);
 }
 assert(worldcupScriptVersions.size === 1, `World Cup pages use inconsistent worldcup.js cache tokens: ${[...worldcupScriptVersions].join(", ")}`);
+const worldcupDataVersions = new Set();
+for (const page of allHtml.filter((file) => /(?:^|\/)(?:(?:late-night|month-stay)-)?worldcup\.html$/.test(file))) {
+  const version = read(page).match(/assets\/js\/worldcup-data\.js\?v=([^"']+)/)?.[1];
+  assert(Boolean(version), `${page}: worldcup-data.js cache token is missing`);
+  if (version) worldcupDataVersions.add(version);
+}
+assert(worldcupDataVersions.size === 1, `World Cup pages use inconsistent worldcup-data.js cache tokens: ${[...worldcupDataVersions].join(", ")}`);
 
 const archetypeFiles = [
   "assets/js/teto-egen-data.js",
@@ -643,21 +683,31 @@ for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHET
     if (image) assert(fs.existsSync(path.resolve(root, "ko", image)), `${testId}/${profileId}: missing result image ${image}`);
   }
   if (config.storyMode) {
-    assert(config.story?.startImage && config.story?.intro?.length && config.story?.previousButton && !config.story?.continueButton, `${testId}: story intro or navigation data is incomplete`);
-    for (const locale of locales) {
-      const storyContent = registryContents.find((content) => content.id === testId);
-      assert(storyContent?.page, testId + ": story page is not registered");
-      const storyPage = read(locale + "/" + storyContent.page);
+    assert(config.story?.startImage && config.story?.intro?.length && config.story?.previousButton && config.story?.resultImageAlt && !config.story?.continueButton, `${testId}: story intro, result image alternative text, or navigation data is incomplete`);
+    const storyContent = registryContents.find((content) => content.id === testId);
+    const storyPageName = storyContent?.page || (typeof config.url === "string" ? path.posix.basename(new URL(config.url).pathname) : "");
+    assert(Boolean(storyPageName), `${testId}: story public route is missing`);
+    const storyDataVersions = new Set();
+    if (storyPageName) for (const locale of locales) {
+      const storyPagePath = `${locale}/${storyPageName}`;
+      const pageExists = fs.existsSync(path.resolve(root, storyPagePath));
+      assert(pageExists, `${locale}: story page is missing (${storyPagePath})`);
+      if (!pageExists) continue;
+      const storyPage = read(storyPagePath);
       assert(!storyPage.includes("data-story-continue"), `${locale}: story selections should advance without a continue button`);
+      const storyDataReference = storyPage.match(new RegExp(`\\.\\./assets/js/${testId.replaceAll("-", "\\-")}-data\\.js\\?v=([^"'\\s]+)`));
+      assert(Boolean(storyDataReference), `${storyPagePath}: story data script is missing its cache token`);
+      if (storyDataReference) storyDataVersions.add(storyDataReference[1]);
     }
+    assert(storyDataVersions.size === 1, `${testId}: story data script cache tokens differ across locales`);
     const storyRenderer = read("assets/js/archetype-test.js");
-    assert(storyRenderer.includes("const renderStoryReaction") && storyRenderer.includes("scrollStoryStep") && storyRenderer.includes("move(1);"), `${testId}: selected reactions, automatic scene progression, or progress scrolling are missing`);
+    assert(storyRenderer.includes("const renderStoryReaction") && storyRenderer.includes("scrollStoryStep") && storyRenderer.includes("move(1);") && storyRenderer.includes("config.story.resultImageAlt") && storyRenderer.includes("profile.imageAlt") && storyRenderer.includes('stage.classList.remove("archetype-stage--leaving", "archetype-stage--entering")') && !storyRenderer.includes('tr("shopStory.resultImageAlt")'), `${testId}: story reactions, progression, progress scrolling, restart visibility, or configurable result-image alt text are missing`);
     config.questions.forEach((question, questionIndex) => {
       assert(question.title && question.situation && question.image && question.imageAlt, `${testId}: scene ${questionIndex + 1} is missing story copy or an image`);
       assert(fs.existsSync(path.resolve(root, "ko", question.image)), testId + ": missing scene image " + question.image);
       for (const [choiceIndex, choice] of question.choices.entries()) {
         assert(choice.reaction, `${testId}: scene ${questionIndex + 1}, choice ${choiceIndex + 1} has no follow-up reaction`);
-        if (questionIndex === 0 && config.story.locations) assert(config.story.locations?.[choice.locationId], testId + ": opening choice " + (choiceIndex + 1) + " has no recognized story location");
+        if (questionIndex === 0 && config.story.resultNameTemplate?.includes("{{location}}")) assert(config.story.locations?.[choice.locationId], `${testId}: opening choice ${choiceIndex + 1} has no recognized story location`);
       }
     });
     assert(fs.existsSync(path.resolve(root, "ko", config.story.startImage)), `${testId}: missing story start image`);

@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1300" viewBox="0 0 1600 1300" role="img" aria-labelledby="title desc">
+  <title id="title">몰까 사이트 전체 구조</title>
+  <desc id="desc">다국어 정적 페이지, 공통 브라우저 기능, 테스트 엔진, Cloudflare 서버 API와 D1 데이터베이스의 관계를 나타낸 다이어그램</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4fbf8"/>
+      <stop offset="1" stop-color="#eaf5f1"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#258b6b"/>
+      <stop offset="1" stop-color="#187557"/>
+    </linearGradient>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#164c3e" flood-opacity=".09"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#4a8c77"/>
+    </marker>
+    <style>
+      text { font-family: Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif; fill: #173b32; }
+      .title { font-size: 42px; font-weight: 800; letter-spacing: -1.3px; }
+      .subtitle { font-size: 19px; fill: #5c756d; }
+      .section { font-size: 18px; font-weight: 750; fill: #258568; }
+      .card-title { font-size: 25px; font-weight: 800; }
+      .label { font-size: 18px; font-weight: 750; }
+      .body { font-size: 16px; fill: #526b63; }
+      .small { font-size: 14px; fill: #627a72; }
+      .pill { font-size: 15px; font-weight: 700; fill: #24795f; }
+      .white { fill: #fff; }
+      .line { stroke: #6b9c89; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .soft-line { stroke: #abcbbd; stroke-width: 2.5; fill: none; }
+    </style>
+  </defs>
+
+  <rect x="-1" y="-1" width="1602" height="1302" fill="url(#bg)"/>
+  <circle cx="1480" cy="110" r="125" fill="#d8eee5" opacity=".55"/>
+  <circle cx="80" cy="730" r="100" fill="#e0f1ea" opacity=".6"/>
+
+  <text x="80" y="82" class="title">molgga 사이트 전체 구조</text>
+  <text x="82" y="119" class="subtitle">방문자가 보는 페이지부터 콘텐츠 처리와 서버 집계까지</text>
+  <rect x="1240" y="55" width="275" height="42" rx="21" fill="#e1f2eb"/>
+  <circle cx="1265" cy="76" r="7" fill="#28896b"/>
+  <text x="1282" y="82" class="small" font-weight="700">정적 웹사이트 + 필요한 API</text>
+
+  <!-- Visitor and hosting -->
+  <rect x="634" y="153" width="332" height="52" rx="26" fill="#fff" stroke="#cfe4da" stroke-width="2" filter="url(#shadow)"/>
+  <text x="800" y="186" text-anchor="middle" class="label">방문자 웹 브라우저</text>
+  <path d="M800 205 L800 224" class="line"/>
+  <rect x="530" y="229" width="540" height="67" rx="18" fill="url(#brand)" filter="url(#shadow)"/>
+  <text x="800" y="258" text-anchor="middle" class="white" font-size="22" font-weight="800">Cloudflare Pages</text>
+  <text x="800" y="282" text-anchor="middle" class="white" font-size="14" opacity=".9">페이지 제공 · Pages Functions 실행</text>
+
+  <text x="80" y="327" class="section">브라우저 화면</text>
+  <path d="M800 296 L800 311 L295 311 L295 338" class="line"/>
+  <path d="M800 311 L800 338" class="line"/>
+  <path d="M800 311 L1305 311 L1305 338" class="soft-line" marker-end="url(#arrow)"/>
+
+  <!-- Pages and localization -->
+  <g filter="url(#shadow)">
+    <rect x="70" y="340" width="450" height="382" rx="24" fill="#fff" stroke="#d7e9e1" stroke-width="2"/>
+    <rect x="70" y="340" width="450" height="12" rx="6" fill="#47a486"/>
+  </g>
+  <text x="102" y="391" class="card-title">페이지와 언어</text>
+  <text x="102" y="425" class="body">언어별 HTML 페이지를 제공합니다.</text>
+  <rect x="102" y="446" width="72" height="34" rx="17" fill="#e8f6ef"/><text x="138" y="469" text-anchor="middle" class="pill">한국어</text>
+  <rect x="184" y="446" width="72" height="34" rx="17" fill="#e8f6ef"/><text x="220" y="469" text-anchor="middle" class="pill">English</text>
+  <rect x="266" y="446" width="72" height="34" rx="17" fill="#e8f6ef"/><text x="302" y="469" text-anchor="middle" class="pill">日本語</text>
+  <rect x="348" y="446" width="95" height="34" rx="17" fill="#e8f6ef"/><text x="395" y="469" text-anchor="middle" class="pill">简体中文</text>
+  <line x1="102" y1="503" x2="488" y2="503" stroke="#e4eee9"/>
+  <text x="102" y="536" class="label">페이지 종류</text>
+  <text x="102" y="566" class="body">메인 · 테스트 · 소개 · 문의</text>
+  <text x="102" y="592" class="body">개인정보처리방침 · 이용약관 · 404</text>
+  <rect x="102" y="618" width="386" height="75" rx="14" fill="#f3faf7"/>
+  <text x="120" y="647" class="label" font-size="16">공통 화면 자원</text>
+  <text x="120" y="674" class="small">CSS · 이미지 · i18n.js + 언어별 JSON</text>
+
+  <!-- Catalog and browser behavior -->
+  <g filter="url(#shadow)">
+    <rect x="575" y="340" width="450" height="382" rx="24" fill="#fff" stroke="#d7e9e1" stroke-width="2"/>
+    <rect x="575" y="340" width="450" height="12" rx="6" fill="#47a486"/>
+  </g>
+  <text x="607" y="391" class="card-title">콘텐츠 탐색</text>
+  <text x="607" y="425" class="body">콘텐츠 목록 정보는 한 곳에서 관리합니다.</text>
+  <rect x="607" y="450" width="386" height="59" rx="14" fill="#e8f6ef"/>
+  <text x="800" y="476" text-anchor="middle" class="label">content-registry.js</text>
+  <text x="800" y="497" text-anchor="middle" class="small">이름 · 유형 · 주소 · 썸네일 · 분류</text>
+  <path d="M800 510 L800 529" class="line"/>
+  <text x="607" y="557" class="label">content-browser.js</text>
+  <text x="607" y="584" class="body">검색 · 분류 · 정렬 · 카드 · 시작</text>
+  <text x="607" y="615" class="body">관련 콘텐츠 추천</text>
+  <rect x="607" y="638" width="386" height="55" rx="14" fill="#f3faf7"/>
+  <text x="625" y="662" class="small" font-weight="700">브라우저 저장</text>
+  <text x="625" y="683" class="small">즐겨찾기와 최근 본 항목 → localStorage</text>
+
+  <!-- Quiz engines -->
+  <g filter="url(#shadow)">
+    <rect x="1080" y="340" width="450" height="382" rx="24" fill="#fff" stroke="#d7e9e1" stroke-width="2"/>
+    <rect x="1080" y="340" width="450" height="12" rx="6" fill="#47a486"/>
+  </g>
+  <text x="1112" y="391" class="card-title">테스트와 결과</text>
+  <text x="1112" y="425" class="body">콘텐츠 종류에 맞는 진행 엔진을 사용합니다.</text>
+  <rect x="1112" y="450" width="386" height="52" rx="13" fill="#f3faf7"/>
+  <text x="1130" y="482" class="label" font-size="17">기존 테스트</text>
+  <text x="1295" y="482" class="small">동물상 · MBTI</text>
+  <rect x="1112" y="512" width="386" height="52" rx="13" fill="#f3faf7"/>
+  <text x="1130" y="544" class="label" font-size="17">상황형 테스트</text>
+  <text x="1290" y="544" class="small">archetype-test + 데이터</text>
+  <rect x="1112" y="574" width="386" height="52" rx="13" fill="#f3faf7"/>
+  <text x="1130" y="606" class="label" font-size="17">월드컵</text>
+  <text x="1215" y="606" class="small">worldcup.js + 후보 데이터</text>
+  <rect x="1112" y="638" width="386" height="55" rx="14" fill="#e8f6ef"/>
+  <text x="1305" y="662" text-anchor="middle" class="label" font-size="17">결과 화면 → 공유</text>
+  <text x="1305" y="683" text-anchor="middle" class="small">share.js · 관련 콘텐츠 추천</text>
+
+  <!-- Horizontal flow arrows -->
+  <path d="M520 530 L565 530" class="line"/>
+  <path d="M1025 530 L1070 530" class="line"/>
+  <rect x="524" y="493" width="38" height="23" rx="11" fill="#eaf5f1"/><text x="543" y="510" text-anchor="middle" class="small" font-size="12">사용</text>
+  <rect x="1029" y="493" width="38" height="23" rx="11" fill="#eaf5f1"/><text x="1048" y="510" text-anchor="middle" class="small" font-size="12">선택</text>
+
+  <!-- API and database -->
+  <text x="80" y="776" class="section">서버에 요청하는 기능</text>
+  <path d="M800 722 L800 765 L425 765 L425 879" class="line"/>
+  <path d="M1305 722 L1305 765 L1175 765 L1175 879" class="line"/>
+  <rect x="70" y="810" width="1460" height="330" rx="24" fill="#e5f3ed" stroke="#c8e2d7" stroke-width="2"/>
+  <text x="102" y="849" class="label">Cloudflare Pages Functions</text>
+  <text x="102" y="875" class="small">필요한 집계 기능만 API로 처리</text>
+
+  <rect x="110" y="897" width="630" height="94" rx="18" fill="#fff" stroke="#d2e7dd" stroke-width="2"/>
+  <text x="425" y="928" text-anchor="middle" class="label">콘텐츠 시작 수</text>
+  <text x="425" y="956" text-anchor="middle" class="body">content-start · content-starts</text>
+  <text x="425" y="980" text-anchor="middle" class="small">메인 미리보기에서 시작한 횟수 집계</text>
+
+  <rect x="860" y="897" width="630" height="94" rx="18" fill="#fff" stroke="#d2e7dd" stroke-width="2"/>
+  <text x="1175" y="928" text-anchor="middle" class="label">월드컵 투표와 순위</text>
+  <text x="1175" y="956" text-anchor="middle" class="body">worldcup-vote · worldcup-rankings</text>
+  <text x="1175" y="980" text-anchor="middle" class="small">후보 허용 목록은 공통 설정에서 관리</text>
+
+  <path d="M425 991 L425 1004 L700 1004 L700 1015" class="line"/>
+  <path d="M1175 991 L1175 1004 L900 1004 L900 1015" class="line"/>
+  <rect x="560" y="1020" width="480" height="76" rx="18" fill="url(#brand)"/>
+  <text x="800" y="1051" text-anchor="middle" class="white" font-size="22" font-weight="800">Cloudflare D1</text>
+  <text x="800" y="1078" text-anchor="middle" class="white" font-size="16">MOLGGA_DB · 집계 데이터</text>
+  <text x="102" y="1120" class="small">테스트 답변과 개인별 결과는 서버에 저장하지 않습니다.</text>
+
+  <!-- Repository and deployment footer -->
+  <rect x="70" y="1160" width="1460" height="105" rx="22" fill="#fff" stroke="#d7e9e1" stroke-width="2"/>
+  <text x="102" y="1198" class="label">저장소와 배포</text>
+  <text x="102" y="1230" class="body">functions/ · migrations/ · scripts/ · image/</text>
+  <text x="615" y="1230" class="body">_redirects · robots.txt · sitemap.xml · ads.txt</text>
+  <rect x="1185" y="1183" width="310" height="56" rx="16" fill="#e8f6ef"/>
+  <text x="1340" y="1207" text-anchor="middle" class="label" font-size="16">main에 푸시</text>
+  <text x="1340" y="1228" text-anchor="middle" class="small">→ Cloudflare Pages 배포</text>
+</svg>
