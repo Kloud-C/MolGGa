@@ -103,6 +103,9 @@ assert(new Set(registryCategoryIds).size === registryCategoryIds.length, "conten
 assert(new Set(registryContentIds).size === registryContentIds.length, "content registry: duplicate content IDs");
 const contentBrowserSource = read("assets/js/content-browser.js");
 const focusRingSource = read("assets/css/styles.css");
+const radioQuizRendererSource = read("assets/js/app.js");
+const archetypeQuizRendererSource = read("assets/js/archetype-test.js");
+const quizQuestionLegendRules = [...focusRingSource.matchAll(/\.quiz-step-question legend\s*\{([^}]*)\}/g)].map(([, rule]) => rule);
 const mobileQuizChoiceRule = focusRingSource.match(/@media \(max-width: 600px\) \{\s*\.quiz-step-question legend \{[^}]*\}\s*\.quiz-step-choice \{[^}]*\}\s*\.archetype-question__choices \.choice-button \{([^}]*)\}/)?.[1] || "";
 const focusRingRule = focusRingSource.match(/:where\(button, a, input, select, textarea, summary\):focus-visible\s*\{([^}]*)\}/)?.[1] || "";
 assert(focusRingSource.includes("--focus-ring: var(--mint-700)")
@@ -117,8 +120,12 @@ assert(focusRingSource.includes(".field-question.quiz-step-question { margin: 0;
 "shared UI: mobile quiz panels must not retain empty feedback space, nested fieldset cards, or desktop-height answer choices");
 assert(focusRingSource.includes('html[lang^="ko"] body { word-break: keep-all; }')
   && focusRingSource.includes(".quiz-step-question legend, .archetype-question__prompt { display: block; width: 100%; max-width: 100%; }")
-  && focusRingSource.includes(".article-header h1, h1, h2, h3, legend { overflow-wrap: anywhere; }"),
-"shared UI: Korean text must wrap at word boundaries and quiz prompts must use the full answer column");
+  && focusRingSource.includes(".article-header h1, h1, h2, h3, legend { overflow-wrap: anywhere; }")
+  && quizQuestionLegendRules.length > 0
+  && quizQuestionLegendRules.every((rule) => !/text-wrap:\s*balance/.test(rule))
+  && radioQuizRendererSource.includes('question.classList.add("quiz-step-question");')
+  && archetypeQuizRendererSource.includes('class="archetype-question__prompt"'),
+"shared UI: both quiz renderers must use full-width Korean word wrapping without balanced lines that leave excess whitespace");
 assert(read("assets/js/app.js").includes("navigation.hidden = current === 0;"), "classic quiz: hide first-step navigation while all navigation controls are hidden");
 const popularSortBlock = contentBrowserSource.match(/if \(sortSelect\.value === "popular" && popularityStatus === "ready"\) \{([\s\S]*?)\n    \} else if \(sortSelect\.value === "latest"\)/)?.[1];
 assert(Boolean(popularSortBlock)
@@ -333,7 +340,7 @@ for (const page of allHtml) {
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
   assert(html.includes("assets/js/i18n.js?v=20261001-3"), `${page}: i18n.js is missing or has a stale cache token`);
-  assert(/assets\/css\/styles\.css\?v=20261003-1/.test(html), `${page}: shared styles are missing or stale`);
+  assert(/assets\/css\/styles\.css\?v=20261003-2/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
@@ -910,7 +917,7 @@ for (const assetPath of ["assets/css/styles.css", "assets/js/app.js", "assets/js
     }
   }
   assert(versions.size > 0 && versions.size === 1, `localized pages use missing or inconsistent ${assetPath} cache tokens: ${[...versions].join(", ")}`);
-  if (assetPath === "assets/css/styles.css") assert(versions.has("20261003-1"), "localized pages: styles.css cache token is stale");
+  if (assetPath === "assets/css/styles.css") assert(versions.has("20261003-2"), "localized pages: styles.css cache token is stale");
   if (assetPath === "assets/js/app.js") assert(versions.has("20261003-1"), "localized pages: app.js cache token is stale");
 }
 assert(Object.keys(localeResources.ko).length === Object.keys(localeResources.en).length

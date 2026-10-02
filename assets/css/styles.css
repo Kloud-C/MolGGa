@@ -655,7 +655,6 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 .quiz-step-question legend {
   font-size: clamp(1.15rem, 2vw, 1.45rem);
   line-height: 1.38;
-  text-wrap: balance;
 }
 .quiz-step-question legend, .archetype-question__prompt { display: block; width: 100%; max-width: 100%; }
 .quiz-step-choice {

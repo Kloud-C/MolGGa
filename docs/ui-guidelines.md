@@ -97,7 +97,7 @@ The template defines hierarchy and behavior, not identical wording or identical 
 
 - Body copy uses the shared 16 px base size, muted body color, and comfortable line height from the global stylesheet. Korean text keeps word boundaries across body copy and controls; do not split a syllable or a word across lines.
 - Use the existing responsive `clamp()` scales for headings. Long Korean headings should wrap at word boundaries; avoid oversized fixed font sizes.
-- Quiz question legends span the full answer column and wrap at word boundaries, so the prompt uses the available width without breaking a Korean word between lines.
+- Quiz question legends span the full answer column and wrap at word boundaries, so the prompt uses the available width without breaking a Korean word between lines. Do not balance the lines of long questions; natural wrapping fills each line before moving to the next.
 - Use one clear title per page. Use the small uppercase/letter-spaced `.eyebrow-text` only for short category metadata.
 - Use consistent panel padding and radii from `.article-header`, `.content-panel`, and `.info-card`. Reduce spacing at the existing 600 px breakpoint rather than adding one-off mobile dimensions.
 - Text inside buttons and other controls must be vertically centered, readable, and short enough to scan. Avoid explanatory counts or sentences in choice labels when a short action label works.
