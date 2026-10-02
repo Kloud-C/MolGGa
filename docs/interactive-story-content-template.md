@@ -123,8 +123,8 @@ window.MOA_ARCHETYPE_TESTS["[story-id]"] = {
   resultLabel: "story.[story-id].resultLabel",
   url: "https://molgga.com/[story-route].html",
   story: {
-    // showStartTitle: false, // optional: omit when this repeats the page heading; defaults to true
-    startTitle: "story.[story-id].startTitle", // required unless showStartTitle is false
+    // showStartTitle: false, // optional: omit the start-card heading when it repeats the page heading; defaults to true
+    startTitle: "story.[story-id].startTitle", // required unless showStartTitle is false; omit with its locale keys when hidden
     intro: ["story.[story-id].intro.1"],
     startButton: "story.[story-id].startButton",
     startImage: "../image/tests/[story-id]/start.webp",
@@ -172,7 +172,7 @@ window.MOA_ARCHETYPE_TESTS["[story-id]"] = {
 
 각 `profile`에는 결과 이름, 이미지 경로, 강조 색, 한 줄 소개, 결과 설명, 공유 설명을 작성합니다. 이야기 결과가 기본 궁합 카드로 대체되지 않도록 `details`를 비우지 말고 최소 한 개 이상의 상세 카드를 둡니다. 각 상세 카드에는 번역 키인 `title`과 `text`가 필요하며, `icon`은 기존 `image/result-icons/` 아이콘을 사용할 때만 지정합니다. 프로필의 `imageAlt`는 선택 항목이고, 생략하면 `story.resultImageAlt`를 사용합니다.
 
-`story.startTitle`은 시작 카드의 제목이고, 페이지 제목과 같다면 `story.showStartTitle: false`로 카드 안의 중복만 감춥니다. 제목을 숨기는 경우 `startTitle`과 그 번역 키도 생략할 수 있습니다. 페이지의 주 제목과 시작 설명·버튼은 유지합니다. `questions`는 하나 이상의 장면을 순서대로 담습니다. 각 장면에는 `title`, `situation`, `prompt`, `image`, `imageAlt`, 두 개 이상의 `choices`가 필요합니다. 각 선택에는 `text`, `reaction`, 등록된 결과 ID를 가리키는 양수 점수 `scores`가 필요합니다. `resultNameTemplate`은 네 언어 모두 `{{result}}`를 포함해야 합니다. `{{location}}`을 쓰면 첫 장면의 모든 선택지에 등록된 `locationId`와 위치 번역 키가 있어야 합니다.
+`story.startTitle`은 시작 카드의 제목이고, 페이지 주 제목과 같다면 `story.showStartTitle: false`로 카드 안의 중복 `<h2>`만 감춥니다. 이 경우 `startTitle` 필드와 네 언어의 해당 번역 키도 함께 생략합니다. 페이지의 주 제목과 시작 설명·버튼, 서로 다른 장면 제목은 유지합니다. `questions`는 하나 이상의 장면을 순서대로 담습니다. 각 장면에는 `title`, `situation`, `prompt`, `image`, `imageAlt`, 두 개 이상의 `choices`가 필요합니다. 각 선택에는 `text`, `reaction`, 등록된 결과 ID를 가리키는 양수 점수 `scores`가 필요합니다. `resultNameTemplate`은 네 언어 모두 `{{result}}`를 포함해야 합니다. `{{location}}`을 쓰면 첫 장면의 모든 선택지에 등록된 `locationId`와 위치 번역 키가 있어야 합니다.
 
 여러 결과로 연결할 때는 `scores: [{ id, weight }]`를 사용하고 연결한 모든 ID가 `profiles`에 있는지 확인합니다. 결과는 누적 점수가 가장 높은 유형으로 정해집니다. 동점은 같은 답변에서 항상 같은 결과가 나오도록 처리되며 무작위 결과를 넣지 않습니다.
 

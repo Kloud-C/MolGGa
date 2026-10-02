@@ -103,7 +103,13 @@ assert(new Set(registryCategoryIds).size === registryCategoryIds.length, "conten
 assert(new Set(registryContentIds).size === registryContentIds.length, "content registry: duplicate content IDs");
 const contentBrowserSource = read("assets/js/content-browser.js");
 const focusRingSource = read("assets/css/styles.css");
-assert(focusRingSource.includes("--focus-ring: var(--mint-700)") && focusRingSource.includes("--focus-halo: var(--mint-100)") && focusRingSource.includes(":where(button, a, input, select, textarea, summary):focus-visible"), "shared UI: keyboard focus needs the dark green outline and pale mint halo");
+const focusRingRule = focusRingSource.match(/:where\(button, a, input, select, textarea, summary\):focus-visible\s*\{([^}]*)\}/)?.[1] || "";
+assert(focusRingSource.includes("--focus-ring: var(--mint-700)")
+  && focusRingSource.includes("--focus-halo: var(--mint-100)")
+  && /outline:\s*3px solid var\(--focus-ring\)/.test(focusRingRule)
+  && /outline-offset:\s*2px/.test(focusRingRule)
+  && /box-shadow:\s*0 0 0 6px var\(--focus-halo\)\s*!important/.test(focusRingRule),
+"shared UI: keyboard focus needs the 3px dark green outline, 2px offset, and 6px pale mint halo");
 const popularSortBlock = contentBrowserSource.match(/if \(sortSelect\.value === "popular" && popularityStatus === "ready"\) \{([\s\S]*?)\n    \} else if \(sortSelect\.value === "latest"\)/)?.[1];
 assert(Boolean(popularSortBlock)
   && popularSortBlock.includes("popularityCounts.get")
@@ -613,6 +619,10 @@ for (const content of registryContents) {
     if (config.storyMode) {
       const storyKeys = [...(config.story.showStartTitle === false ? [] : [config.story.startTitle]), config.story.startImageAlt, config.story.startButton, config.story.previousButton, config.story.resultNameTemplate, config.story.resultImageAlt, ...config.story.intro, ...Object.values(config.story.locations || {})];
       for (const key of storyKeys) for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} story text ${key}`);
+      if (content.id === "fantasy-shop") {
+        assert(config.story.showStartTitle === false && !config.story.startTitle, "fantasy-shop: duplicate start-card title must stay disabled and unconfigured");
+        for (const locale of locales) assert(!Object.hasOwn(localeResources[locale], "shopStory.startTitle"), `${locale}.json: obsolete fantasy-shop start title translation must stay removed`);
+      }
       for (const locale of locales) assert(localeResources[locale][config.story.resultNameTemplate]?.includes("{{result}}"), `${locale}.json: story result name template must include the generic result placeholder`);
       assert(fs.existsSync(path.resolve(root, "ko", config.story.startImage)), `${content.id}: missing story start image ${config.story.startImage}`);
       if (config.story.resultNameTemplate?.includes("{{location}}")) {
@@ -750,7 +760,7 @@ for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHET
     }
     assert(storyDataVersions.size === 1, `${testId}: story data script cache tokens differ across locales`);
     const storyRenderer = read("assets/js/archetype-test.js");
-    assert(storyRenderer.includes("const renderStoryReaction") && storyRenderer.includes("scrollStoryStep") && storyRenderer.includes("move(1);") && storyRenderer.includes("config.story.resultImageAlt") && storyRenderer.includes("profile.imageAlt") && storyRenderer.includes("config.story.showStartTitle") && storyRenderer.includes('class="story-intro__title"') && storyRenderer.includes('stage.classList.remove("archetype-stage--leaving", "archetype-stage--entering")') && !storyRenderer.includes('tr("shopStory.resultImageAlt")'), `${testId}: story reactions, progression, progress scrolling, restart visibility, configurable intro headings, or result-image alt text are missing`);
+    assert(storyRenderer.includes("const renderStoryReaction") && storyRenderer.includes("scrollStoryStep") && storyRenderer.includes("move(1);") && storyRenderer.includes("config.story.resultImageAlt") && storyRenderer.includes("profile.imageAlt") && storyRenderer.includes('const startTitle = config.story.showStartTitle === false || !config.story.startTitle ? "" : `<h2 class="story-intro__title">') && storyRenderer.includes('stage.classList.remove("archetype-stage--leaving", "archetype-stage--entering")') && !storyRenderer.includes('tr("shopStory.resultImageAlt")'), `${testId}: story reactions, progression, progress scrolling, restart visibility, configurable intro headings, or result-image alt text are missing`);
     config.questions.forEach((question, questionIndex) => {
       assert(question.title && question.situation && question.image && question.imageAlt, `${testId}: scene ${questionIndex + 1} is missing story copy or an image`);
       assert(fs.existsSync(path.resolve(root, "ko", question.image)), testId + ": missing scene image " + question.image);
