@@ -155,8 +155,8 @@ assert(!looksLikeUntranslatedEnglishInChinese("MBTI"), "zh.json audit: English s
 const untranslatedChineseEnglish = Object.entries(localeResources.zh).filter(([, value]) => looksLikeUntranslatedEnglishInChinese(value));
 assert(untranslatedChineseEnglish.length === 0, `zh.json: likely untranslated English text: ${untranslatedChineseEnglish.slice(0, 10).map(([key]) => key).join(", ")}`);
 const phaseTwoTranslationKeys = [
-  "contentBrowser.search.label", "contentBrowser.search.placeholder", "contentBrowser.category.label",
-  "contentBrowser.category.all", "contentBrowser.filters.toggle", "contentBrowser.filters.active",
+  "contentBrowser.search.label", "contentBrowser.search.placeholder", "contentBrowser.filters.toggle",
+  "contentBrowser.filters.active",
   "contentBrowser.filters.topic", "contentBrowser.filters.format", "contentBrowser.filters.count",
   "contentBrowser.format.worldcup", "contentBrowser.format.quiz", "contentBrowser.format.story",
   "contentBrowser.sort.label", "contentBrowser.sort.popular", "contentBrowser.sort.popularLoading",
@@ -173,8 +173,8 @@ const phaseTwoTranslationKeys = [
 const phaseThreeTranslationKeys = [
   "contentActivity.scope.label", "contentActivity.scope.all", "contentActivity.scope.favorites",
   "contentActivity.scope.recent", "contentActivity.favorite.add", "contentActivity.favorite.remove",
-  "contentActivity.empty.favorites", "contentActivity.empty.recent", "contentActivity.recent.title",
-  "contentActivity.recent.clear", "contentActivity.suggestions.title", "contentActivity.suggestions.open",
+  "contentActivity.empty.favorites", "contentActivity.empty.recent", "contentActivity.recent.clear",
+  "contentActivity.suggestions.title", "contentActivity.suggestions.open",
   "privacy.quizAnswers", "privacy.localContentPreferences", "privacy.contentStartCounts", "privacy.storageNotice",
   "privacy.adCookiesDisclosure", "privacy.adSettingsIntro", "privacy.adSettingsMiddle", "privacy.adSettingsSuffix",
   "2026년 9월 29일", "PRIVACY · 시행일 2026년 9월 29일", "aboutads.info 광고 선택"
@@ -238,6 +238,22 @@ for (const locale of locales.slice(1)) {
 }
 
 const allHtml = locales.flatMap((locale) => walk(locale, (file) => file.endsWith(".html")));
+const translationSourceFiles = [
+  ...allHtml,
+  ...walk("assets", (file) => /\.(?:css|html|js|mjs|json)$/i.test(file)),
+  ...walk("functions", (file) => /\.(?:js|mjs)$/i.test(file)),
+  "index.html",
+  "404.html"
+];
+const translationSource = [...new Set(translationSourceFiles)].map(read).join("\n");
+const runtimeGeneratedTranslationKeys = new Set([
+  ...registryContents.flatMap((content) => (content.tagIds || []).map((tagId) => `tag.${tagId}`)),
+  ...supportedFormatIds.map((formatId) => `contentBrowser.format.${formatId}`),
+  "contentActivity.scope.favorites",
+  "contentActivity.scope.recent"
+]);
+const unreferencedTranslations = localeResourceKeys.filter((key) => !translationSource.includes(key) && !runtimeGeneratedTranslationKeys.has(key));
+assert(unreferencedTranslations.length === 0, `ko.json: contains unreferenced translations: ${unreferencedTranslations.slice(0, 10).join(", ")}`);
 for (const page of allHtml) {
   const html = read(page);
   const [locale] = page.split("/");
@@ -590,6 +606,10 @@ assert(archetypeShareSource.includes("tr(config.sharePrompt || config.title)") &
 assert(archetypeShareSource.includes("tr(profile.shareDescription)") && archetypeShareSource.includes("renderResultBullets(tr(profile.description))") && archetypeShareSource.includes('class="archetype-result-card__summary"') && archetypeShareSource.includes('<li>${escapeHtml(sentence)}</li>') && archetypeShareSource.includes("renderResultSentences(tr(item.text))") && archetypeShareSource.includes('class="result-sentence"') && archetypeShareSource.includes('class="result-detail-card"') && !archetypeShareSource.includes(String.fromCodePoint(0x2022)), "archetype result copy: summaries must render as bullets while detail cards and share descriptions remain marker-free");
 assert(read("assets/js/archetype-test.js").includes("Math.imul(hash, 0x01000193)") && read("assets/js/app.js").includes("Math.imul(tieHash, 0x01000193)"), "quiz scoring: deterministic answer-based tie-breaking must be consistent across archetype and animal quizzes");
 assert(read("assets/js/worldcup.js").includes("imageUrl: winner.image") && read("assets/js/worldcup.js").includes("config.shareTitleTemplate") && read("assets/js/worldcup.js").includes("`${localize(config.title)} [${localize(winner.name)}]`") && read("assets/js/worldcup.js").includes("config.shareTextTemplate") && read("assets/js/worldcup.js").includes("나도 월드컵 해보기"), "World Cup result sharing: contextual title, winner image, or same-game CTA is missing");
+const worldcupRendererSource = read("assets/js/worldcup.js");
+const worldcupMatchRenderer = worldcupRendererSource.slice(worldcupRendererSource.indexOf("const renderMatch"), worldcupRendererSource.indexOf("const localRanking"));
+const worldcupReset = worldcupRendererSource.slice(worldcupRendererSource.indexOf("function reset()"), worldcupRendererSource.indexOf("backButton.addEventListener"));
+assert(worldcupMatchRenderer.includes('options.classList.remove("archetype-stage--leaving", "archetype-stage--entering")') && worldcupReset.includes('options.classList.remove("archetype-stage--leaving", "archetype-stage--entering")'), "World Cup match rendering and retry must clear stale transition classes before showing choices");
 const legacyQuizSource = read("assets/js/app.js");
 assert(legacyQuizSource.includes("imageUrl: profile.image") && legacyQuizSource.includes('tr("animal.sharePrompt")') && legacyQuizSource.includes('tr("mbti.sharePrompt")') && legacyQuizSource.includes("const resultLine = `${sharePrompt} [${resultName}]`") && legacyQuizSource.includes("renderResultSentences(tr(profile.daily))") && legacyQuizSource.includes('class="result-sentence"') && !legacyQuizSource.includes(String.fromCodePoint(0x2022)), "legacy quiz result sharing context or bullet-free sentence-formatted descriptions are missing");
 const sharedResultCardStyles = read("assets/css/styles.css");
@@ -637,6 +657,7 @@ for (const page of allHtml.filter((file) => /(?:^|\/)(?:(?:late-night|month-stay
   if (version) worldcupScriptVersions.add(version);
 }
 assert(worldcupScriptVersions.size === 1, `World Cup pages use inconsistent worldcup.js cache tokens: ${[...worldcupScriptVersions].join(", ")}`);
+assert(worldcupScriptVersions.has("20261002-2"), `World Cup pages are not using the current worldcup.js cache token: ${[...worldcupScriptVersions].join(", ")}`);
 const worldcupDataVersions = new Set();
 for (const page of allHtml.filter((file) => /(?:^|\/)(?:(?:late-night|month-stay)-)?worldcup\.html$/.test(file))) {
   const version = read(page).match(/assets\/js\/worldcup-data\.js\?v=([^"']+)/)?.[1];

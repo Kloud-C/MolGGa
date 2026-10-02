@@ -86,6 +86,7 @@
     backButton.disabled = history.length === 0 || moving;
     backButton.hidden = history.length === 0;
     options.replaceChildren();
+    options.classList.remove("archetype-stage--leaving", "archetype-stage--entering");
     [left, right].forEach((item) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -319,6 +320,7 @@
     result.hidden = true;
     result.replaceChildren();
     options.replaceChildren();
+    options.classList.remove("archetype-stage--leaving", "archetype-stage--entering");
     options.hidden = false;
     status.textContent = "";
     showStart();
