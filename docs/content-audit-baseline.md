@@ -53,6 +53,14 @@ No unresolved P1 or P2 content-count, translation-key, result-linkage, or reacha
 - `node scripts/audit-integrations.mjs`: passed 17,644 checks across 80 localized pages, discovery, localized SEO, World Cup data and APIs, archetype data, assets, sitemap, redirects, and D1 docs.
 - `git diff --check`: passed.
 
+## 2026-10-02 content-page navigation and explainer review
+
+- Rechecked all 14 active content routes in Korean, English, Japanese, and Simplified Chinese (56 page/locale combinations) for the shared `Home / content name` breadcrumb and repeated start/help copy.
+- The missing breadcrumb separator was isolated to the four month-stay pages and has been corrected with the shared markup now documented in `docs/ui-guidelines.md`.
+- The late-night World Cup had three help cards repeating bracket and selection details already visible in the game controls, plus ranking/privacy details repeated by the page note. The guide now follows the concise World Cup pattern and retains its food and health disclaimer.
+- `node scripts/audit-integrations.mjs`: passed 17,603 checks across 80 localized pages, content discovery and recommendations, localized SEO, World Cup data/APIs, archetype data, assets, sitemap, redirects, and D1 docs.
+- Breadcrumb scan: all 56 content page/locale combinations show the separator. `git diff --check`: passed.
+
 ## Reopening this baseline
 
 - Do not manually reread or rewrite these unchanged content entries during unrelated reviews or routine integration checks.

@@ -76,6 +76,14 @@ The template defines hierarchy and behavior, not identical wording or identical 
 ## Page structure
 
 - Use the shared header, centered `.wrap`, `.page-main`, `.article`, breadcrumb, `.article-header`, content panels, and footer used by the localized pages.
+- Use one breadcrumb pattern on every localized page: a localized home link, a standalone `/` separator, then the localized current-page label. Keep the separator outside translation strings and keys, mark it `aria-hidden="true"`, and mark the current label `aria-current="page"`.
+  ```html
+  <nav class="breadcrumbs" aria-label="현재 위치">
+    <a href="index.html"><span data-i18n="홈">홈</span></a>
+    <span class="breadcrumb-separator" aria-hidden="true">/</span>
+    <span data-i18n="content.example.breadcrumb" aria-current="page">콘텐츠명</span>
+  </nav>
+  ```
 - Keep the main reading column between roughly 790 and 860 px on desktop. Let it shrink fluidly on smaller screens with a consistent 20–24 px side gutter.
 - Use `.article-header` for a page title and short introduction, `.content-panel` for an interactive block, and `.info-card` for supporting explanations.
 - Keep headings, panels, controls, and footer content inside the same centered content column. Do not set page-specific fixed widths for common components.
