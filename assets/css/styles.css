@@ -229,7 +229,7 @@
     .choice-button.is-selected { border-color: var(--mint-600); background: var(--mint-100); box-shadow: inset 0 0 0 1px var(--mint-600); }
     .archetype-navigation { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
     .archetype-navigation button:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
-    .archetype-quiz > .form-message:empty { display: none; }
+    .archetype-quiz > .form-message:empty, #animal-quiz > .form-message:empty, #mbti-quiz > .form-message:empty { display: none; }
     .archetype-result-card { overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: white; box-shadow: var(--shadow); }
     .archetype-result-card__top { position: relative; overflow: hidden; padding: clamp(24px, 6vw, 48px); background: linear-gradient(145deg, color-mix(in srgb, var(--result-accent) 12%, white), #fff 78%); text-align: center; }
     .archetype-result-card__top::after { position: absolute; right: -55px; bottom: -115px; width: 250px; height: 250px; border: 1px solid color-mix(in srgb, var(--result-accent) 20%, transparent); border-radius: 50%; content: ""; }
@@ -268,6 +268,8 @@
     .worldcup-back { margin-top: 14px; }
     @media (prefers-reduced-motion: reduce) { .archetype-stage { transition: none; } }
     .field-question { margin: 15px 0; padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: white; }
+    .field-question.quiz-step-question { margin: 0; padding: 12px 0 0; border: 0; border-radius: 0; background: transparent; }
+    .field-question.quiz-step-question legend { padding: 0; font-weight: 800; letter-spacing: -.04em; }
     .field-question--error { border: 2px solid #c93535; background: #fffafa; }
     .field-question legend { padding: 0 5px; font-weight: 750; }
     .question-error { margin: 12px 3px 0; color: #b42318; font-size: .9rem; font-weight: 750; }
@@ -310,7 +312,8 @@
 /* Responsive refinements shared by every localized page. */
 body { line-height: 1.68; }
 .article { max-width: 860px; }
-.article-header h1, h1, h2, h3 { overflow-wrap: anywhere; }
+.article-header h1, h1, h2, h3, legend { overflow-wrap: anywhere; }
+html[lang^="ko"] body { word-break: keep-all; }
 html[lang^="ko"] h1, html[lang^="ko"] h2, html[lang^="ko"] h3 { word-break: keep-all; }
 .article p, .article li, .hero-copy, .category-card p { overflow-wrap: anywhere; }
 .progress-row { font-size: .95rem; }
@@ -650,11 +653,11 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 
 /* Shared alignment and type scale for quiz and tournament controls. */
 .quiz-step-question legend {
-  max-width: 100%;
   font-size: clamp(1.15rem, 2vw, 1.45rem);
   line-height: 1.38;
   text-wrap: balance;
 }
+.quiz-step-question legend, .archetype-question__prompt { display: block; width: 100%; max-width: 100%; }
 .quiz-step-choice {
   display: flex;
   min-height: 68px;
@@ -696,6 +699,7 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 @media (max-width: 600px) {
   .quiz-step-question legend { margin-bottom: 14px; font-size: clamp(1.08rem, 5vw, 1.28rem); }
   .quiz-step-choice { min-height: 62px; margin-bottom: 9px; padding: 12px 13px; font-size: .92rem; }
+  .archetype-question__choices .choice-button { min-height: 78px; }
   .article-header h1 { font-size: clamp(1.45rem, 6vw, 1.85rem); }
   .archetype-result-card__top h3 { font-size: clamp(1.35rem, 6vw, 1.9rem); }
 }

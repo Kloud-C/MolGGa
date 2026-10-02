@@ -88,6 +88,7 @@
       progressWrap.querySelector("[data-flow-count]").textContent = `${current + 1} / ${questions.length}`;
       back.disabled = current === 0;
       back.hidden = current === 0;
+      navigation.hidden = current === 0;
       if (animate) {
         stage.classList.remove("archetype-stage--leaving");
         stage.classList.add("archetype-stage--entering");

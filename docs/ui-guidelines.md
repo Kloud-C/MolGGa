@@ -95,8 +95,9 @@ The template defines hierarchy and behavior, not identical wording or identical 
 
 ## Type and spacing
 
-- Body copy uses the shared 16 px base size, muted body color, and comfortable line height from the global stylesheet.
+- Body copy uses the shared 16 px base size, muted body color, and comfortable line height from the global stylesheet. Korean text keeps word boundaries across body copy and controls; do not split a syllable or a word across lines.
 - Use the existing responsive `clamp()` scales for headings. Long Korean headings should wrap at word boundaries; avoid oversized fixed font sizes.
+- Quiz question legends span the full answer column and wrap at word boundaries, so the prompt uses the available width without breaking a Korean word between lines.
 - Use one clear title per page. Use the small uppercase/letter-spaced `.eyebrow-text` only for short category metadata.
 - Use consistent panel padding and radii from `.article-header`, `.content-panel`, and `.info-card`. Reduce spacing at the existing 600 px breakpoint rather than adding one-off mobile dimensions.
 - Text inside buttons and other controls must be vertically centered, readable, and short enough to scan. Avoid explanatory counts or sentences in choice labels when a short action label works.
@@ -106,6 +107,7 @@ The template defines hierarchy and behavior, not identical wording or identical 
 - Every button must use `.button`, `.choice-button`, `.quiz-step-choice`, or `.worldcup-bracket-choice`; do not leave native default button appearance in the UI.
 - Primary actions use `.button`. Secondary actions use `.button.button-quiet`.
 - Mutually exclusive choices must visibly show the selected state and set `aria-pressed` or the checked form state. Keyboard focus uses the shared `:focus-visible` rule: a 3 px `--focus-ring` outline (`--mint-700`), 2 px offset, and 6 px `--focus-halo` (`--mint-100`). Keep a comfortable tap target (at least 44 px for actions; compact header controls follow the shared header sizing).
+- For one-question radio quizzes, keep `.quiz-step-question` fieldsets transparent inside the content panel, hide empty error messages, and hide navigation when it has no visible controls. For archetype quizzes, explicitly reduce `.archetype-question__choices .choice-button` to 78 px minimum height on one-column mobile layouts; the more specific desktop rule otherwise keeps its 118 px height.
 - In scene-based stories, omit the start-card heading when it repeats the page heading; retain the page heading and each distinct per-scene title.
 - Center short bracket labels in `.worldcup-bracket-choice`; use one column on narrow phones and two columns when space allows.
 - World Cup pages offer 16강/32강 choices when the content pool supports them. Keep the available bracket buttons in sync with `availableBrackets` and the number of unique items; hide unsupported sizes and never fill a bracket with duplicate choices.
