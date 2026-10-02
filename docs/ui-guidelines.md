@@ -105,7 +105,8 @@ The template defines hierarchy and behavior, not identical wording or identical 
 
 - Every button must use `.button`, `.choice-button`, `.quiz-step-choice`, or `.worldcup-bracket-choice`; do not leave native default button appearance in the UI.
 - Primary actions use `.button`. Secondary actions use `.button.button-quiet`.
-- Mutually exclusive choices must visibly show the selected state and set `aria-pressed` or the checked form state. Keep focus-visible outlines and a comfortable tap target (at least 44 px for actions; compact header controls follow the shared header sizing).
+- Mutually exclusive choices must visibly show the selected state and set `aria-pressed` or the checked form state. Keyboard focus uses a dark green outline with a pale mint outer halo. Keep a comfortable tap target (at least 44 px for actions; compact header controls follow the shared header sizing).
+- In scene-based stories, omit the start-card heading when it repeats the page heading; retain the page heading and each distinct per-scene title.
 - Center short bracket labels in `.worldcup-bracket-choice`; use one column on narrow phones and two columns when space allows.
 - World Cup pages offer 16강/32강 choices when the content pool supports them. Keep the available bracket buttons in sync with `availableBrackets` and the number of unique items; hide unsupported sizes and never fill a bracket with duplicate choices.
 - Quiz answer labels use `.quiz-step-choice`: radio/checkbox indicator and label text align on the vertical center, multi-line text remains left-aligned, and the full card is clickable.

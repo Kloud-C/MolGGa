@@ -8,7 +8,7 @@ window.MOA_ARCHETYPE_TESTS["fantasy-shop"] = {
   resultLabel: "shopStory.resultLabel",
   url: "https://molgga.com/fantasy-shop-test.html",
   story: {
-    startTitle: "shopStory.startTitle",
+    showStartTitle: false,
     intro: ["shopStory.intro.1", "shopStory.intro.2", "shopStory.intro.3"],
     startButton: "shopStory.startButton",
     startImage: "../image/tests/fantasy-shop/start.webp",

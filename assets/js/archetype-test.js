@@ -68,7 +68,8 @@
     backButton.hidden = true;
     error.textContent = "";
     stage.hidden = false;
-    stage.innerHTML = `<section class="story-intro"><figure class="story-scene__media"><img data-story-image src="${escapeHtml(config.story.startImage)}" alt="${escapeHtml(tr(config.story.startImageAlt))}" width="1600" height="900" decoding="async" fetchpriority="high"></figure><h2 class="story-intro__title">${escapeHtml(tr(config.story.startTitle))}</h2><div class="story-intro__copy">${config.story.intro.map((paragraph) => `<p>${escapeHtml(tr(paragraph))}</p>`).join("")}</div><button class="button" type="button" data-story-start>${escapeHtml(tr(config.story.startButton))}</button></section>`;
+    const startTitle = config.story.showStartTitle === false || !config.story.startTitle ? "" : `<h2 class="story-intro__title">${escapeHtml(tr(config.story.startTitle))}</h2>`;
+    stage.innerHTML = `<section class="story-intro"><figure class="story-scene__media"><img data-story-image src="${escapeHtml(config.story.startImage)}" alt="${escapeHtml(tr(config.story.startImageAlt))}" width="1600" height="900" decoding="async" fetchpriority="high"></figure>${startTitle}<div class="story-intro__copy">${config.story.intro.map((paragraph) => `<p>${escapeHtml(tr(paragraph))}</p>`).join("")}</div><button class="button" type="button" data-story-start>${escapeHtml(tr(config.story.startButton))}</button></section>`;
     attachStoryImageBehavior();
     stage.querySelector("[data-story-start]").addEventListener("click", () => {
       current = 0;

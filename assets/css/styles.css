@@ -6,6 +6,8 @@
       --mint-500: #50b88e;
       --mint-600: #2d805f;
       --mint-700: #247353;
+      --focus-ring: var(--mint-700);
+      --focus-halo: var(--mint-100);
       --ink: #20352d;
       --muted: #62736b;
       --white: #fff;
@@ -71,7 +73,6 @@
       cursor: pointer;
     }
     .button:hover { transform: translateY(-2px); background: var(--mint-700); box-shadow: 0 8px 18px rgba(49, 141, 105, .24); }
-    .button:focus-visible, a:focus-visible { outline: 3px solid #9bdfc1; outline-offset: 3px; }
     .button-small { min-height: 40px; padding-inline: 16px; font-size: .9rem; }
     .button-quiet { border-color: var(--line); background: white; color: var(--mint-700); box-shadow: none; }
     .button-quiet:hover { background: var(--mint-100); color: var(--mint-700); box-shadow: none; }
@@ -279,7 +280,7 @@
     .contact-form__field label span { color: var(--muted); font-size: .86rem; font-weight: 450; }
     .contact-form__field input, .contact-form__field select, .contact-form__field textarea { width: 100%; min-height: 48px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); font: inherit; }
     .contact-form__field textarea { min-height: 160px; resize: vertical; }
-    .contact-form__field input:focus, .contact-form__field select:focus, .contact-form__field textarea:focus { outline: 3px solid var(--mint-200); border-color: var(--mint-600); }
+    .contact-form__field input:focus, .contact-form__field select:focus, .contact-form__field textarea:focus { border-color: var(--mint-600); }
     .contact-form__privacy { margin: 0; font-size: .88rem; }
     .contact-form__trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
     .info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
@@ -326,7 +327,7 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 .content-browser__search, .content-browser__sort { display: grid; gap: 5px; min-width: 0; }
 .content-browser__field-label { color: var(--muted); font-size: .78rem; font-weight: 750; }
 .content-browser__search input, .content-browser select { width: 100%; min-height: 46px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); font: inherit; font-size: .92rem; }
-.content-browser__search input:focus, .content-browser select:focus { outline: 3px solid var(--mint-200); border-color: var(--mint-600); }
+.content-browser__search input:focus, .content-browser select:focus { border-color: var(--mint-600); }
 .content-browser__filters { overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
 .content-browser__filters-summary { display: flex; min-height: 46px; align-items: center; gap: 9px; padding: 10px 13px; color: var(--ink); font-size: .9rem; font-weight: 750; list-style: none; cursor: pointer; }
 .content-browser__filters-summary::-webkit-details-marker { display: none; }
@@ -345,7 +346,6 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 .content-browser__check-option { display: grid; min-width: 0; min-height: 44px; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 11px; background: white; color: var(--ink); font-size: .84rem; line-height: 1.35; cursor: pointer; }
 .content-browser__check-option:has(input:checked) { border-color: var(--mint-600); background: var(--mint-50); }
 .content-browser__check-option input[type="checkbox"] { width: 18px; height: 18px; min-height: 18px; margin: 0; padding: 0; accent-color: var(--mint-600); }
-.content-browser__check-option input[type="checkbox"]:focus-visible { outline: 3px solid var(--mint-200); outline-offset: 2px; }
 .content-browser__check-label { min-width: 0; overflow-wrap: anywhere; }
 .content-browser__check-count { color: var(--muted); font-size: .76rem; font-variant-numeric: tabular-nums; }
 .content-browser__control-row { display: grid; grid-template-columns: minmax(150px, .7fr) minmax(0, 1fr) minmax(0, 1.2fr); align-items: end; gap: 12px; }
@@ -359,7 +359,6 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 .content-browser__filter-actions .button { min-height: 40px; }
 .content-browser__view-button { min-height: 36px; padding: 5px 10px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font: inherit; font-size: .82rem; font-weight: 700; white-space: nowrap; cursor: pointer; }
 .content-browser__view-button[aria-pressed="true"] { background: var(--mint-100); color: var(--mint-700); }
-.content-browser__view-button:focus-visible, .content-browser__scope-button:focus-visible, .content-browser__filters-summary:focus-visible, .content-browser__reset:focus-visible, .content-browser__clear-recent:focus-visible { outline: 3px solid #9bdfc1; outline-offset: 2px; }
 .content-browser__status { min-height: 1.5em; margin: 8px 2px 0; color: var(--muted); font-size: .82rem; }
 .content-browser__status--empty { color: var(--ink); }
 .content-browser__reset { margin: 0; }
@@ -527,7 +526,6 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
 }
 .home-disclosure__summary::-webkit-details-marker { display: none; }
 .home-disclosure__summary::marker { content: ""; }
-.home-disclosure__summary:focus-visible { outline: 3px solid var(--mint-500); outline-offset: -4px; }
 .home-disclosure__heading { display: grid; gap: 5px; min-width: 0; }
 .home-disclosure__heading h2 { margin: 0; font-size: clamp(1.2rem, 2.5vw, 1.65rem); line-height: 1.35; letter-spacing: -.045em; }
 .home-disclosure__heading > span { color: var(--muted); font-size: .94rem; line-height: 1.6; }
@@ -560,7 +558,6 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
   .worldcup-bracket-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 10px; margin-block: 8px 4px; }
   .worldcup-bracket-choice { min-height: 64px; padding: 13px 16px; border: 1px solid var(--mint-200); border-radius: 14px; background: white; color: var(--ink); font: inherit; font-weight: 750; cursor: pointer; }
   .worldcup-bracket-choice:hover, .worldcup-bracket-choice.is-selected { border-color: var(--mint-600); background: var(--mint-100); box-shadow: inset 0 0 0 1px var(--mint-600); }
-  .worldcup-bracket-choice:focus-visible, .worldcup-choice:focus-visible { outline: 3px solid var(--mint-500); outline-offset: 2px; }
   .worldcup-option-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 12px; }
   .worldcup-choice { min-width: 0; min-height: 0; justify-content: flex-start; gap: 11px; padding: 12px; }
   .worldcup-choice__image { display: block; width: 100%; aspect-ratio: 1 / 1; border-radius: 10px; background: var(--mint-50); object-fit: cover; }
@@ -645,7 +642,6 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
   background: var(--mint-100);
   box-shadow: inset 0 0 0 1px var(--mint-600);
 }
-#worldcup-game .worldcup-bracket-choice:focus-visible { outline: 3px solid var(--mint-500); outline-offset: 3px; }
 #worldcup-game .worldcup-bracket-choice:active { transform: translateY(1px); }
 @media (max-width: 480px) {
   #worldcup-game .worldcup-bracket-picker { grid-template-columns: 1fr; gap: 9px; }
@@ -702,4 +698,11 @@ progress::-moz-progress-bar { border-radius: 999px; background: var(--mint-600);
   .quiz-step-choice { min-height: 62px; margin-bottom: 9px; padding: 12px 13px; font-size: .92rem; }
   .article-header h1 { font-size: clamp(1.45rem, 6vw, 1.85rem); }
   .archetype-result-card__top h3 { font-size: clamp(1.35rem, 6vw, 1.9rem); }
+}
+
+/* Keep keyboard focus visible above component hover and selected-state shadows. */
+:where(button, a, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--focus-halo) !important;
 }

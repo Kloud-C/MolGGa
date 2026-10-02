@@ -102,6 +102,8 @@ const supportedFormatIds = ["worldcup", "quiz", "story"];
 assert(new Set(registryCategoryIds).size === registryCategoryIds.length, "content registry: duplicate category IDs");
 assert(new Set(registryContentIds).size === registryContentIds.length, "content registry: duplicate content IDs");
 const contentBrowserSource = read("assets/js/content-browser.js");
+const focusRingSource = read("assets/css/styles.css");
+assert(focusRingSource.includes("--focus-ring: var(--mint-700)") && focusRingSource.includes("--focus-halo: var(--mint-100)") && focusRingSource.includes(":where(button, a, input, select, textarea, summary):focus-visible"), "shared UI: keyboard focus needs the dark green outline and pale mint halo");
 const popularSortBlock = contentBrowserSource.match(/if \(sortSelect\.value === "popular" && popularityStatus === "ready"\) \{([\s\S]*?)\n    \} else if \(sortSelect\.value === "latest"\)/)?.[1];
 assert(Boolean(popularSortBlock)
   && popularSortBlock.includes("popularityCounts.get")
@@ -245,7 +247,7 @@ const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
   assert(html.includes('content-registry.js?v=20261002-2') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261002-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
-  assert(html.includes('content-activity.css?v=20260929-5'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
+  assert(html.includes('content-activity.css?v=20261002-1'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
     .filter(([opening]) => /\bclass=["'][^"']*\bhome-disclosure\b/i.test(opening));
@@ -315,7 +317,7 @@ for (const page of allHtml) {
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
   assert(html.includes("assets/js/i18n.js?v=20261001-3"), `${page}: i18n.js is missing or has a stale cache token`);
-  assert(/assets\/css\/styles\.css\?v=20261002-1/.test(html), `${page}: shared styles are missing or stale`);
+  assert(/assets\/css\/styles\.css\?v=20261002-2/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
@@ -327,7 +329,7 @@ for (const page of allHtml) {
   }
   const registeredPageContent = registryContents.find((content) => content.page === `${slug}.html`);
   if (registeredPageContent?.source?.kind === "archetype") {
-    assert(html.includes('archetype-test.js?v=20261002-2'), `${page}: shared archetype renderer cache token is missing or stale`);
+    assert(html.includes('archetype-test.js?v=20261002-3'), `${page}: shared archetype renderer cache token is missing or stale`);
   }
   for (const [, declaration] of html.matchAll(/\bdata-i18n-attr=["']([^"']+)["']/gi)) {
     for (const entry of declaration.split(";")) {
@@ -609,7 +611,7 @@ for (const content of registryContents) {
       }
     }
     if (config.storyMode) {
-      const storyKeys = [config.story.startTitle, config.story.startImageAlt, config.story.startButton, config.story.previousButton, config.story.resultNameTemplate, config.story.resultImageAlt, ...config.story.intro, ...Object.values(config.story.locations || {})];
+      const storyKeys = [...(config.story.showStartTitle === false ? [] : [config.story.startTitle]), config.story.startImageAlt, config.story.startButton, config.story.previousButton, config.story.resultNameTemplate, config.story.resultImageAlt, ...config.story.intro, ...Object.values(config.story.locations || {})];
       for (const key of storyKeys) for (const locale of locales) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing ${content.id} story text ${key}`);
       for (const locale of locales) assert(localeResources[locale][config.story.resultNameTemplate]?.includes("{{result}}"), `${locale}.json: story result name template must include the generic result placeholder`);
       assert(fs.existsSync(path.resolve(root, "ko", config.story.startImage)), `${content.id}: missing story start image ${config.story.startImage}`);
@@ -748,7 +750,7 @@ for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHET
     }
     assert(storyDataVersions.size === 1, `${testId}: story data script cache tokens differ across locales`);
     const storyRenderer = read("assets/js/archetype-test.js");
-    assert(storyRenderer.includes("const renderStoryReaction") && storyRenderer.includes("scrollStoryStep") && storyRenderer.includes("move(1);") && storyRenderer.includes("config.story.resultImageAlt") && storyRenderer.includes("profile.imageAlt") && storyRenderer.includes('stage.classList.remove("archetype-stage--leaving", "archetype-stage--entering")') && !storyRenderer.includes('tr("shopStory.resultImageAlt")'), `${testId}: story reactions, progression, progress scrolling, restart visibility, or configurable result-image alt text are missing`);
+    assert(storyRenderer.includes("const renderStoryReaction") && storyRenderer.includes("scrollStoryStep") && storyRenderer.includes("move(1);") && storyRenderer.includes("config.story.resultImageAlt") && storyRenderer.includes("profile.imageAlt") && storyRenderer.includes("config.story.showStartTitle") && storyRenderer.includes('class="story-intro__title"') && storyRenderer.includes('stage.classList.remove("archetype-stage--leaving", "archetype-stage--entering")') && !storyRenderer.includes('tr("shopStory.resultImageAlt")'), `${testId}: story reactions, progression, progress scrolling, restart visibility, configurable intro headings, or result-image alt text are missing`);
     config.questions.forEach((question, questionIndex) => {
       assert(question.title && question.situation && question.image && question.imageAlt, `${testId}: scene ${questionIndex + 1} is missing story copy or an image`);
       assert(fs.existsSync(path.resolve(root, "ko", question.image)), testId + ": missing scene image " + question.image);
@@ -888,7 +890,7 @@ for (const assetPath of ["assets/css/styles.css", "assets/js/app.js", "assets/js
     }
   }
   assert(versions.size > 0 && versions.size === 1, `localized pages use missing or inconsistent ${assetPath} cache tokens: ${[...versions].join(", ")}`);
-  if (assetPath === "assets/css/styles.css") assert(versions.has("20261002-1"), "localized pages: styles.css cache token is stale");
+  if (assetPath === "assets/css/styles.css") assert(versions.has("20261002-2"), "localized pages: styles.css cache token is stale");
 }
 assert(Object.keys(localeResources.ko).length === Object.keys(localeResources.en).length
   && Object.keys(localeResources.ko).length === Object.keys(localeResources.ja).length
