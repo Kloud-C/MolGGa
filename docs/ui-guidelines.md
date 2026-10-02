@@ -12,6 +12,11 @@ This document is the shared implementation template for new and updated pages. F
 - Build the Korean structure first, then keep the same component order and class names in `en/`, `ja/`, and `zh/`. Add each page to the sitemap and the relevant navigation/content list when appropriate.
 - Prefer these existing templates over copying markup from a screenshot or introducing page-specific inline CSS.
 
+## Shared accessibility and localization details
+
+- The shared primary action uses white text on `--mint-600`. Keep its normal-size text contrast at or above 4.5:1, and verify the computed color after changing the token. Follow the [WCAG 2.2 contrast minimum](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
+- When a localized sentence is split around inline links, review the fully rendered sentence in each locale. Translation fragments must preserve natural punctuation and visible whitespace before and after link labels.
+
 ## Adding content to the shared explorer
 
 - Register each item once in `assets/js/content-registry.js`: stable ID, type, category IDs, tag IDs, localized title and description keys, thumbnail, canonical page path, source definition, real `createdAt`, and verified metrics.
@@ -20,7 +25,7 @@ This document is the shared implementation template for new and updated pages. F
 - Keep the home explorer compact on entry: show search first and put topic/format checkboxes, sort order, card view, favorites, and recent items in the collapsed advanced-filter panel. Multi-select uses OR within topics and within formats, then combines topic, format, search, and activity scope with AND. Recent items appear through the Recent scope instead of a separate always-visible list. Preserve this behavior in each language and at every breakpoint.
 - Add every new translation key to `ko.json`, `en.json`, `ja.json`, and `zh.json`; keep the localized page structure in sync and register the public route alternates in the sitemap.
 - For World Cups, keep the full candidate pool and supported bracket sizes in the existing World Cup source. Preview may show available rounds; do not replace a larger candidate pool with only the selected bracket.
-- `createdAt` is the date content first entered the project. The explorer uses it for newest-first sorting. Popular sort reads aggregate content-start counters from `/api/content-starts`; only a preview's actual Start action increments a counter. When the aggregate endpoint is unavailable, disable Popular and keep Newest available.
+- `createdAt` is the date content first entered the project. The explorer uses it for newest-first sorting. Popular sort reads aggregate content-start counters from `/api/content-starts` in descending order, with registry order as the stable tie-breaker. A `NEW` badge never pins content ahead of a higher count. Only a preview's actual Start action increments a counter. When the aggregate endpoint is unavailable, disable Popular and keep Newest available.
 - Keep the three explorer modes visually distinct at every breakpoint: **기본** is the readable three-column card (one column on narrow phones) with thumbnail, category and favorite aligned in its header, then title, useful metrics and a full-width start action, but no promotional paragraph; **간결하게** is a denser four-to-two-column tile grid with no paragraph or metrics, with the favorite in the thumbnail row, a readable category chip below it, and a full-width start action; **목록** is a compact, single-row list with thumbnail, one-line title, favorite control and an accessible start arrow. Check that a saved view still has the same layout and that each mode can open the shared preview.
 - Run the integration audit after adding an item so page, image, metrics, localization, route, and registry links are checked together.
 

@@ -398,7 +398,7 @@ const isNewContent = (createdAt, now = new Date()) => {
     const pinNewFirst = (a, b) => Number(b.isNew) - Number(a.isNew)
       || (a.isNew && b.isNew ? Date.parse(b.content.createdAt) - Date.parse(a.content.createdAt) : 0);
     if (sortSelect.value === "popular" && popularityStatus === "ready") {
-      orderedContents.sort((a, b) => pinNewFirst(a, b) || (popularityCounts.get(b.content.id) || 0) - (popularityCounts.get(a.content.id) || 0) || a.index - b.index);
+      orderedContents.sort((a, b) => (popularityCounts.get(b.content.id) || 0) - (popularityCounts.get(a.content.id) || 0) || a.index - b.index);
     } else if (sortSelect.value === "latest") {
       orderedContents.sort((a, b) => pinNewFirst(a, b) || Date.parse(b.content.createdAt || "") - Date.parse(a.content.createdAt || "") || a.index - b.index);
     } else {

@@ -80,6 +80,16 @@ function publishedPage(pathname) {
 
 const locales = ["ko", "en", "ja", "zh"];
 const localeResources = Object.fromEntries(locales.map((locale) => [locale, JSON.parse(read(`${locale}.json`))]));
+const englishPrivacyLead = localeResources.en["답변은 현재 페이지에서 계산하고 저장하지 않습니다. 자세한 내용은"];
+const englishPrivacyBridge = localeResources.en["을 확인하고, 다른 콘텐츠는"];
+const englishPrivacyEnd = localeResources.en["에서 만나보세요."];
+assert(englishPrivacyLead?.endsWith(" ")
+  && localeResources.en["개인정보처리방침"]?.trim()
+  && englishPrivacyBridge?.startsWith(". ")
+  && englishPrivacyBridge?.endsWith(" ")
+  && localeResources.en["몰까 둘러보기"]?.trim()
+  && /^[.!?]$/.test(englishPrivacyEnd || ""),
+"en.json: inline privacy notice fragments must preserve sentence punctuation and whitespace around linked text");
 const localeResourceKeys = Object.keys(localeResources.ko);
 const registrySandbox = { window: {} };
 vm.runInNewContext(read("assets/js/content-registry.js"), registrySandbox, { timeout: 1000 });
@@ -92,6 +102,22 @@ const supportedFormatIds = ["worldcup", "quiz", "story"];
 assert(new Set(registryCategoryIds).size === registryCategoryIds.length, "content registry: duplicate category IDs");
 assert(new Set(registryContentIds).size === registryContentIds.length, "content registry: duplicate content IDs");
 const contentBrowserSource = read("assets/js/content-browser.js");
+const popularSortBlock = contentBrowserSource.match(/if \(sortSelect\.value === "popular" && popularityStatus === "ready"\) \{([\s\S]*?)\n    \} else if \(sortSelect\.value === "latest"\)/)?.[1];
+assert(Boolean(popularSortBlock)
+  && popularSortBlock.includes("popularityCounts.get")
+  && popularSortBlock.includes("a.index")
+  && !popularSortBlock.includes("pinNewFirst"),
+"content browser: Popular must sort by aggregate starts with stable ties and must not pin NEW content first");
+const sharedStylesSource = read("assets/css/styles.css");
+const primaryColor = sharedStylesSource.match(/--mint-600:\s*(#[\da-f]{6})/i)?.[1];
+const linearChannel = (hex, offset) => {
+  const value = Number.parseInt(hex.slice(offset, offset + 2), 16) / 255;
+  return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+};
+const primaryTextContrast = primaryColor
+  ? 1.05 / (0.2126 * linearChannel(primaryColor, 1) + 0.7152 * linearChannel(primaryColor, 3) + 0.0722 * linearChannel(primaryColor, 5) + 0.05)
+  : 0;
+assert(primaryTextContrast >= 4.5, `styles.css: --mint-600 contrast with white CTA text is below 4.5:1 (${primaryTextContrast.toFixed(2)}:1)`);
 const newContentHelperSource = contentBrowserSource.match(/const isNewContent = \(createdAt, now = new Date\(\)\) => \{[\s\S]*?\n\};/)?.[0];
 assert(Boolean(newContentHelperSource), "content browser: missing calendar-day new badge logic");
 if (newContentHelperSource) {
@@ -218,7 +244,7 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20261002-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261001-3'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-registry.js?v=20261002-2') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261002-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
   assert(html.includes('content-activity.css?v=20260929-5'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
@@ -289,14 +315,14 @@ for (const page of allHtml) {
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next@26.3.6/dist/umd/i18next.min.js"), `${page}: pinned i18next CDN script is missing`);
   assert(html.includes("https://cdn.jsdelivr.net/npm/i18next-http-backend@4.0.1/i18nextHttpBackend.min.js"), `${page}: pinned i18next HTTP backend script is missing`);
   assert(html.includes("assets/js/i18n.js?v=20261001-3"), `${page}: i18n.js is missing or has a stale cache token`);
-  assert(/assets\/css\/styles\.css\?v=20261001-4/.test(html), `${page}: shared styles are missing or stale`);
+  assert(/assets\/css\/styles\.css\?v=20261002-1/.test(html), `${page}: shared styles are missing or stale`);
   assert(!/(?:i18n-catalog|worldcup-i18n|spending-habits-i18n)\.js/.test(html), `${page}: obsolete translation bundle is still loaded`);
   const i18nKeys = [...html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)].map(([, key]) => key);
   assert(i18nKeys.length > 0, `${page}: no visible text is connected to i18next`);
   for (const key of i18nKeys) assert(Object.hasOwn(localeResources[locale], key), `${page}: ${locale}.json is missing data-i18n key ${key}`);
   const hasContentResult = /data-(?:quiz|worldcup)-result\b|id=["'](?:animal-result|mbti-result)["']/.test(html);
   if (hasContentResult) {
-    assert(html.includes('content-registry.js?v=20261002-1'), `${page}: result recommendations lack the shared content registry`);
+    assert(html.includes('content-registry.js?v=20261002-2'), `${page}: result recommendations lack the shared content registry`);
     assert(html.includes('content-recommendations.js?v=20260928-1'), `${page}: shared result recommendations are not loaded`);
   }
   const registeredPageContent = registryContents.find((content) => content.page === `${slug}.html`);
@@ -504,7 +530,7 @@ for (const locale of locales) {
 assert(/shuffle\(config\.items\)\.slice\(0,\s*bracketSize\)/.test(read("assets/js/worldcup.js")), "World Cup must randomly draw the selected bracket size from the complete candidate list");
 
 const registryArchetypeSandbox = { window: {} };
-for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js", "assets/js/romance-style-data.js", "assets/js/fantasy-class-data.js", "assets/js/fantasy-shop-data.js", "assets/js/night-train-data.js"]) {
+for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js", "assets/js/romance-style-data.js", "assets/js/fantasy-class-data.js", "assets/js/fantasy-shop-data.js", "assets/js/night-train-data.js", "assets/js/rest-style-data.js"]) {
   vm.runInNewContext(read(file), registryArchetypeSandbox, { timeout: 1000, filename: file });
 }
 const archetypeConfigs = registryArchetypeSandbox.window.MOA_ARCHETYPE_TESTS || {};
@@ -862,6 +888,7 @@ for (const assetPath of ["assets/css/styles.css", "assets/js/app.js", "assets/js
     }
   }
   assert(versions.size > 0 && versions.size === 1, `localized pages use missing or inconsistent ${assetPath} cache tokens: ${[...versions].join(", ")}`);
+  if (assetPath === "assets/css/styles.css") assert(versions.has("20261002-1"), "localized pages: styles.css cache token is stale");
 }
 assert(Object.keys(localeResources.ko).length === Object.keys(localeResources.en).length
   && Object.keys(localeResources.ko).length === Object.keys(localeResources.ja).length
