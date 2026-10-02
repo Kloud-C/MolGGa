@@ -1949,5 +1949,6 @@
   "nightTrain.result.clock.station": "벽돌 역 건물과 오래된 노선도",
   "nightTrain.result.clock.people": "역의 물건을 정리하는 관리인",
   "nightTrain.result.clock.afterArrival": "역 안은 조용하다. 오래된 매표소 창구 뒤에서 관리인이 먼지떨이를 내려놓는다. “야간선 승차권을 가지고 있군요. 그건 이 역에서 마지막으로 확인한 게 꽤 오래전인데.” 전시실에는 빛바랜 시간표와 오래된 승차권들이 놓여 있다. 빈 승차권을 그 사이에 잠시 올려두자, 종이 위에 적혔던 역 이름이 천천히 옅어진다.",
-  "nightTrain.result.clock.imageAlt": "큰 시계 아래 오래된 노선도와 빛바랜 승차권이 전시된 옛시계역"
+  "nightTrain.result.clock.imageAlt": "큰 시계 아래 오래된 노선도와 빛바랜 승차권이 전시된 옛시계역",
+  "about.aiUse": "일부 이미지는 AI 도구로 제작하며, 콘텐츠 제작 과정에도 AI 도구를 보조적으로 활용합니다."
 }

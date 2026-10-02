@@ -1949,5 +1949,6 @@
   "nightTrain.result.clock.station": "レンガの駅舎と古い路線図",
   "nightTrain.result.clock.people": "駅に残る品を整理する管理人",
   "nightTrain.result.clock.afterArrival": "駅の中は静かだ。古い窓口の向こうで、管理人がはたきを置いた。「夜行線の切符を持っているんですね。ここで見るのはずいぶん久しぶりです。」展示室には色あせた時刻表や古い切符が並んでいる。空白の切符をその間に置くと、紙に書かれた駅名がゆっくり薄れていく。",
-  "nightTrain.result.clock.imageAlt": "大時計の下に古い路線図と色あせた切符が展示されたレンガ駅"
+  "nightTrain.result.clock.imageAlt": "大時計の下に古い路線図と色あせた切符が展示されたレンガ駅",
+  "about.aiUse": "一部の画像はAIツールで制作し、コンテンツの制作過程でも補助的にAIを活用しています。"
 }

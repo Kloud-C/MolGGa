@@ -1949,5 +1949,6 @@
   "nightTrain.result.clock.station": "A brick station with an old route map",
   "nightTrain.result.clock.people": "A keeper sorting objects from the station",
   "nightTrain.result.clock.afterArrival": "The station is quiet. Behind the old ticket window, the keeper sets down a duster. “You have a Night Line ticket. It’s been a long time since I saw one here.” Faded timetables and old tickets fill the display room. When you place the blank ticket among them, the station name slowly fades from the paper.",
-  "nightTrain.result.clock.imageAlt": "A brick station with a large clock, an old route map, and faded tickets on display"
+  "nightTrain.result.clock.imageAlt": "A brick station with a large clock, an old route map, and faded tickets on display",
+  "about.aiUse": "Some images are generated with AI tools, which we also use as an aid during content creation."
 }

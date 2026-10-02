@@ -1949,5 +1949,6 @@
   "nightTrain.result.clock.station": "砖砌车站与旧线路图",
   "nightTrain.result.clock.people": "整理车站旧物的管理员",
   "nightTrain.result.clock.afterArrival": "车站里十分安静。旧售票窗口后面的管理员放下了掸子。“你拿着夜行线的车票啊。我已经很久没在这里见过了。”展厅里摆着褪色的时刻表和旧车票。把空白车票放在其中，纸上写着的站名便慢慢褪去。",
-  "nightTrain.result.clock.imageAlt": "大钟下方的砖砌车站里，展示着旧线路图和褪色车票"
+  "nightTrain.result.clock.imageAlt": "大钟下方的砖砌车站里，展示着旧线路图和褪色车票",
+  "about.aiUse": "部分图片由 AI 工具生成，内容制作过程中也会辅助使用 AI。"
 }
