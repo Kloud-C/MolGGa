@@ -76,6 +76,7 @@ No unresolved P1 or P2 content-count, translation-key, result-linkage, or reacha
 - 2026-10-02: added `night-train` to the baseline after integration checks, an exact outcome-distribution review, and confirmation of its four-locale page and asset mapping.
 - 2026-10-02: added `month-stay` after the four-locale content, bracket flow, share templates, route metadata, and 50-image integration checks.
 - 2026-10-03: replaced all five `hobby-discovery` result comics, checked the new scenes against result guidance and image anatomy, and synchronized cache-versioned paths and image guidelines.
+- 2026-10-03: rewrote all 12 `hobby-discovery` prompts and 48 choices in four locales as everyday preference questions, reducing direct hobby cues while preserving the scoring map and answer-position balance.
 
 ## 2026-10-02 rest-style content
 
@@ -99,3 +100,9 @@ No unresolved P1 or P2 content-count, translation-key, result-linkage, or reacha
 - Replaced all five hobby result comics with newly generated, lighter flat-cartoon scenes and removed the prior image files. The new scenes show: folding and using a cardboard desk organizer (maker), planting and watching a seed sprout (grower), tasting a berry-yogurt combination (flavor), recording cloud changes (observer), and a friend solving a shape-pattern puzzle (puzzler).
 - Matched the scene progression to each result's catchphrase, description, and first-step suggestion; reviewed all panels for character continuity, hand/arm count and attachment, object orientation, and composition. Updated localized image alt text to describe the new scenes.
 - Published the new assets with versioned filenames to refresh browser/CDN caches; synchronized profile and discovery-card image paths, image documentation, and the image-generation checklist.
+
+## 2026-10-03 hobby-discovery question wording
+
+- Rewrote the 12 question prompts and 48 answer choices in Korean, English, Japanese, and Simplified Chinese to ask about everyday preferences, reactions, and ways of approaching situations instead of naming the matching hobby or its signature materials.
+- Kept all answer-to-result score mappings, choice order, and per-position distribution unchanged; only localized display text changed.
+- `node scripts/audit-integrations.mjs`: passed 19,989 checks across 88 localized pages; locale keys and hobby answer-position rules remain valid. `git diff --check`: passed. Score-distribution analysis was not needed because scoring did not change.
