@@ -13,5 +13,6 @@ export const CONTENT_START_IDS = [
   "fantasy-shop",
   "night-train",
   "month-stay",
-  "rest-style"
+  "rest-style",
+  "hobby-discovery"
 ];

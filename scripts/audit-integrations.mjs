@@ -288,7 +288,7 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20261002-2') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261003-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-registry.js?v=20261003-1') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261003-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
   const i18nScriptPosition = html.indexOf('assets/js/i18n.js?v=20261001-3');
   const contentBrowserScriptPosition = html.indexOf('assets/js/content-browser.js?v=20261003-1');
   assert(i18nScriptPosition >= 0 && contentBrowserScriptPosition > i18nScriptPosition, `${locale}/index.html: i18n.js must be loaded before the localized content browser`);
@@ -389,12 +389,17 @@ for (const page of allHtml) {
   for (const key of i18nKeys) assert(Object.hasOwn(localeResources[locale], key), `${page}: ${locale}.json is missing data-i18n key ${key}`);
   const hasContentResult = /data-(?:quiz|worldcup)-result\b|id=["'](?:animal-result|mbti-result)["']/.test(html);
   if (hasContentResult) {
-    assert(html.includes('content-registry.js?v=20261002-2'), `${page}: result recommendations lack the shared content registry`);
+    assert(html.includes('content-registry.js?v=20261003-1'), `${page}: result recommendations lack the shared content registry`);
     assert(html.includes('content-recommendations.js?v=20260928-1'), `${page}: shared result recommendations are not loaded`);
   }
   const registeredPageContent = registryContents.find((content) => content.page === `${slug}.html`);
   if (registeredPageContent?.source?.kind === "archetype") {
     assert(html.includes('archetype-test.js?v=20261003-1'), `${page}: shared archetype renderer cache token is missing or stale`);
+  }
+  if (registeredPageContent?.id === "hobby-discovery") {
+    assert(html.includes('hobby-discovery-data.js?v=20261003-1'), `${page}: hobby-discovery data script cache token is missing or stale`);
+    assert(html.includes('data-quiz-progress max="12" value="1"') && html.includes('1 / 12'), `${page}: hobby-discovery first progress state does not show 1 / 12`);
+    assert(html.includes('<span class="breadcrumb-separator" aria-hidden="true">/</span>') && html.includes('aria-current="page"'), `${page}: hobby-discovery breadcrumb is missing its accessible separator or current-page state`);
   }
   for (const [, declaration] of html.matchAll(/\bdata-i18n-attr=["']([^"']+)["']/gi)) {
     for (const entry of declaration.split(";")) {
@@ -418,17 +423,17 @@ for (const page of allHtml) {
   }
 }
 
-const updatedAboutOfferings = "주말·야식 월드컵과 MBTI·동물상·테토/에겐·애착 유형·전생·소비 습관·친구 여행 역할·연애 스타일·판타지 직업 테스트·판타지 마을 가게 이야기를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 25문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 질문과 설명은 몰까가 직접 작성합니다. 밤기차를 타고 내릴 역을 고르는 이야기 콘텐츠도 새로 추가했습니다.";
+const updatedAboutOfferings = "주말·야식 월드컵과 MBTI·동물상·테토/에겐·애착 유형·전생·소비 습관·취미 찾기·친구 여행 역할·연애 스타일·판타지 직업 테스트·판타지 마을 가게 이야기를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 25문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 질문과 설명은 몰까가 직접 작성합니다. 밤기차를 타고 내릴 역을 고르는 이야기 콘텐츠도 새로 추가했습니다.";
 const updatedResultNote = "결과는 각 페이지에서 선택한 내용에 따른 참고 정보입니다. 월드컵은 마지막까지 선택한 항목을 보여 주며, 야식 월드컵 랭킹에는 완주한 대진의 우승 메뉴가 집계됩니다. 성향 테스트는 선택에서 드러난 경향을 살펴보는 콘텐츠입니다. 어떤 결과도 전문 심리검사나 의료·법률·교육·채용 판단을 대신하지 않습니다.";
 const expectedTermsServices = {
-  en: "molgga offers a weekend preference matchup and a late-night food tournament, along with quizzes for MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, travel roles, romance styles, and fantasy classes, plus a story game about opening a shop in a fantasy village. All current content is free and available without registration.",
-  ja: "molggaでは、週末の好みマッチと夜食メニュー対決のほか、MBTI、動物タイプ、テト／エゲン、愛着スタイル、前世、お金の使い方、旅行での役割、恋愛スタイル、ファンタジー職業のテスト、ファンタジーの村でお店を開く物語コンテンツを提供しています。現在のコンテンツは無料で、会員登録なしで利用できます。",
-  zh: "molgga 提供周末偏好选择赛和夜宵菜单对决，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格和奇幻职业测试，还有在奇幻小镇开店的故事体验。目前所有内容均免费，无需注册即可使用。"
+  en: "molgga offers a weekend preference matchup and a late-night food tournament, along with quizzes for MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, travel roles, romance styles, and fantasy classes, plus a hobby-finder quiz and a story game about opening a shop in a fantasy village. All current content is free and available without registration.",
+  ja: "molggaでは、週末の好みマッチと夜食メニュー対決のほか、MBTI、動物タイプ、テト／エゲン、愛着スタイル、前世、お金の使い方、旅行での役割、恋愛スタイル、ファンタジー職業のテスト、趣味探しのテスト、ファンタジーの村でお店を開く物語コンテンツを提供しています。現在のコンテンツは無料で、会員登録なしで利用できます。",
+  zh: "molgga 提供周末偏好选择赛和夜宵菜单对决，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格和奇幻职业测试，还有寻找爱好的趣味测试和在奇幻小镇开店的故事体验。目前所有内容均免费，无需注册即可使用。"
 };
 const expectedPrivacyScope = {
-  en: "molgga is a static website operated by Kloud-C. This policy applies to every page and piece of content on molgga.com, including the weekend and late-night matchups; MBTI, animal-style, Teto/Egen, attachment-style, past-life, spending-habits, travel-role, romance-style, and fantasy-class quizzes; the fantasy village shop story game; and the About, Contact, and Terms pages.",
-  ja: "molggaはKloud-Cが運営する静的ウェブサイトです。このポリシーは、週末・夜食の対決、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・旅行での役割・恋愛スタイル・ファンタジー職業のテスト、ファンタジーの村でお店を開く物語コンテンツ、紹介・お問い合わせ・利用案内を含む、molgga.comのすべてのページとコンテンツに適用されます。",
-  zh: "molgga 是由 Kloud-C 运营的静态网站。本政策适用于 molgga.com 的所有页面和内容，包括周末与夜宵选择赛、MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格和奇幻职业测试、奇幻小镇开店故事，以及关于我们、联系和使用说明页面。"
+  en: "molgga is a static website operated by Kloud-C. This policy applies to every page and piece of content on molgga.com, including the weekend and late-night matchups; MBTI, animal-style, Teto/Egen, attachment-style, past-life, spending-habits, hobby-finder, travel-role, romance-style, and fantasy-class quizzes; the fantasy village shop story game; and the About, Contact, and Terms pages.",
+  ja: "molggaはKloud-Cが運営する静的ウェブサイトです。このポリシーは、週末・夜食の対決、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・趣味探し・旅行での役割・恋愛スタイル・ファンタジー職業のテスト、ファンタジーの村でお店を開く物語コンテンツ、紹介・お問い合わせ・利用案内を含む、molgga.comのすべてのページとコンテンツに適用されます。",
+  zh: "molgga 是由 Kloud-C 运营的静态网站。本政策适用于 molgga.com 的所有页面和内容，包括周末与夜宵选择赛、MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、爱好探索、旅行角色、恋爱风格和奇幻职业测试、奇幻小镇开店故事，以及关于我们、联系和使用说明页面。"
 };
 const expectedPrivacyContactForm = {
   en: "On the contact page, you may submit your name and email (both optional), a topic, and a message. Formspree processes the submission so the site operator can review and respond to it. The submission is stored in the operator's Formspree account and may be forwarded to the operator's email depending on account settings. Formspree may process information in several countries, including the United States. For details, see",
@@ -458,9 +463,9 @@ const nightTrainCopy = {
   }
 };
 for (const [locale, expected] of Object.entries({
-  en: ["Explore the weekend and late-night food matchups, plus quizzes about MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, your role on a trip with friends, romance styles, and fantasy classes. You can also follow a story game about opening a shop in a fantasy village. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
-  ja: ["週末・夜食の対決と、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割・恋愛スタイル・ファンタジー職業のテストに加え、ファンタジーの村でお店を開く物語も楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは25問です。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
-  zh: ["可以体验周末和夜宵选择赛，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、朋友旅行角色、恋爱风格和奇幻职业测试，也可以体验在奇幻小镇开店的故事。夜宵选择赛会从50种菜单中随机组成16强或32强，前世测试共25道题。依恋风格内容参考相关研究，各项问题和说明均由molgga原创。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
+  en: ["Explore the weekend and late-night food matchups, plus quizzes about MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, your role on a trip with friends, romance styles, and fantasy classes. You can also follow a story game about opening a shop in a fantasy village. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations. You can also try a short hobby-finder quiz.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
+  ja: ["週末・夜食の対決と、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割・恋愛スタイル・ファンタジー職業のテストに加え、ファンタジーの村でお店を開く物語も楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは25問です。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。趣味探しのテストも楽しめます。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
+  zh: ["可以体验周末和夜宵选择赛，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、朋友旅行角色、恋爱风格和奇幻职业测试，也可以体验在奇幻小镇开店的故事。夜宵选择赛会从50种菜单中随机组成16强或32强，前世测试共25道题。依恋风格内容参考相关研究，各项问题和说明均由molgga原创。也可以通过趣味测试寻找适合自己的爱好。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
 })) {
   const aboutHtml = read(`${locale}/about.html`);
   assert(aboutHtml.includes(updatedAboutOfferings) && aboutHtml.includes(updatedResultNote), `${locale}: About page source text is out of sync with its translation keys`);
@@ -597,7 +602,7 @@ for (const locale of locales) {
 assert(/shuffle\(config\.items\)\.slice\(0,\s*bracketSize\)/.test(read("assets/js/worldcup.js")), "World Cup must randomly draw the selected bracket size from the complete candidate list");
 
 const registryArchetypeSandbox = { window: {} };
-for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js", "assets/js/romance-style-data.js", "assets/js/fantasy-class-data.js", "assets/js/fantasy-shop-data.js", "assets/js/night-train-data.js", "assets/js/rest-style-data.js"]) {
+for (const file of ["assets/js/teto-egen-data.js", "assets/js/attachment-data.js", "assets/js/past-life-data.js", "assets/js/spending-habits-data.js", "assets/js/travel-role-data.js", "assets/js/romance-style-data.js", "assets/js/fantasy-class-data.js", "assets/js/fantasy-shop-data.js", "assets/js/night-train-data.js", "assets/js/rest-style-data.js", "assets/js/hobby-discovery-data.js"]) {
   vm.runInNewContext(read(file), registryArchetypeSandbox, { timeout: 1000, filename: file });
 }
 const archetypeConfigs = registryArchetypeSandbox.window.MOA_ARCHETYPE_TESTS || {};
@@ -772,10 +777,39 @@ const archetypeFiles = [
   "assets/js/romance-style-data.js",
   "assets/js/fantasy-class-data.js",
   "assets/js/fantasy-shop-data.js",
-  "assets/js/night-train-data.js"
+  "assets/js/night-train-data.js",
+  "assets/js/rest-style-data.js",
+  "assets/js/hobby-discovery-data.js"
 ];
 const archetypeSandbox = { window: {} };
 for (const file of archetypeFiles) vm.runInNewContext(read(file), archetypeSandbox, { timeout: 1000 });
+const hobbyDiscovery = archetypeSandbox.window.MOA_ARCHETYPE_TESTS["hobby-discovery"];
+const hobbyResultIds = Object.keys(hobbyDiscovery?.profiles || {});
+assert(hobbyDiscovery?.questions?.length === 12, "hobby-discovery: answer-position audit expects 12 questions");
+assert(hobbyResultIds.length === 5, "hobby-discovery: answer-position audit expects five result types");
+const hobbyAppearances = Object.fromEntries(hobbyResultIds.map((id) => [id, 0]));
+const hobbyPositions = Object.fromEntries(hobbyResultIds.map((id) => [id, Array(4).fill(0)]));
+const hobbyOrders = [];
+for (const [questionIndex, question] of (hobbyDiscovery?.questions || []).entries()) {
+  const order = (question.choices || []).map((choice) => {
+    const scores = choice.scores || [];
+    return scores.length === 1 ? (typeof scores[0] === "string" ? scores[0] : scores[0].id) : "";
+  });
+  assert(order.length === 4, `hobby-discovery: question ${questionIndex + 1} must have four answer choices`);
+  assert(order.every((id) => hobbyResultIds.includes(id)) && new Set(order).size === 4, `hobby-discovery: question ${questionIndex + 1} must map four different choices to four result types`);
+  order.forEach((id, position) => {
+    if (!Object.hasOwn(hobbyPositions, id)) return;
+    hobbyAppearances[id] += 1;
+    hobbyPositions[id][position] += 1;
+    if (questionIndex > 0) assert(hobbyOrders[questionIndex - 1][position] !== id, `hobby-discovery: ${id} repeats in answer position ${position + 1} on consecutive questions`);
+  });
+  hobbyOrders.push(order);
+}
+for (const id of hobbyResultIds) {
+  assert(hobbyAppearances[id] === 9 || hobbyAppearances[id] === 10, `hobby-discovery: ${id} appears ${hobbyAppearances[id]} times, expected 9 or 10`);
+  assert(hobbyPositions[id].every((count) => count >= 1 && count <= 3), `hobby-discovery: ${id} is not spread across answer positions (${hobbyPositions[id].join(", ")})`);
+}
+assert(new Set(hobbyOrders.map((order) => order.join("|"))).size === 12, "hobby-discovery: answer ordering repeats across questions");
 for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHETYPE_TESTS || {})) {
   const profileIds = Object.keys(config.profiles || {});
   assert(config.questions?.length > 0, `${testId}: no questions configured`);

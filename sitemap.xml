@@ -640,4 +640,36 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/rest-style-test" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/rest-style-test" />
   </url>
+  <url>
+    <loc>https://molgga.com/ko/hobby-discovery-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/hobby-discovery-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/en/hobby-discovery-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/hobby-discovery-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/ja/hobby-discovery-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/hobby-discovery-test" />
+  </url>
+  <url>
+    <loc>https://molgga.com/zh/hobby-discovery-test</loc>
+    <xhtml:link rel="alternate" hreflang="ko-KR" href="https://molgga.com/ko/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://molgga.com/en/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://molgga.com/ja/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://molgga.com/zh/hobby-discovery-test" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://molgga.com/ko/hobby-discovery-test" />
+  </url>
 </urlset>

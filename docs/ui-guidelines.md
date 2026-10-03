@@ -57,6 +57,7 @@ The template defines hierarchy and behavior, not identical wording or identical 
 
 - Store only the question sentence in each quiz data file. Do not hard-code question numbers, “last question” labels, or progress status into the prompt.
 - The shared archetype renderer adds the live question number from the current index. Its number must always match the visible `N / total` progress value; the final-question state must be derived from the actual final index, never from a fixed question number.
+- When answer choices map to result types, vary their order across questions without separating a label from its score. Review the number of appearances for each type overall and in each position, and check that the same type does not repeat in the same position on consecutive questions. Preserve each prompt's natural reading flow while avoiding a predictable answer-position shortcut.
 - Keep prompts direct and conversational. Use one question per prompt, and avoid “마지막 질문!” unless the renderer derives that label at the true end (the default is to omit it).
 - When a quiz's question count changes, check the live progress denominator and any explicit duration or counts in the explanatory content where they are genuinely useful.
 - Translate changed source prompts and labels in all supported languages (`ko`, `en`, `ja`, `zh`); do not let missing translation keys fall back to Korean on localized pages.

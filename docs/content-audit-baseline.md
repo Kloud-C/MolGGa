@@ -1,11 +1,11 @@
 # Existing content audit baseline
 
-Reviewed: 2026-10-02
-Status: complete; the current baseline covers all 14 active entries, and existing catalog copy is frozen by default under [the site quality framework](site-quality-framework.md#콘텐츠-기준선과-재검토-범위).
+Reviewed: 2026-10-03
+Status: complete; the current baseline covers all 16 active entries, and existing catalog copy is frozen by default under [the site quality framework](site-quality-framework.md#콘텐츠-기준선과-재검토-범위).
 
 ## Scope
 
-The baseline covers the 14 active entries in `assets/js/content-registry.js`: Korean source copy and the English, Japanese, and Simplified Chinese versions of their cards, titles, descriptions, questions, answer choices, results, share copy, story reactions, and supporting metadata. It includes inline World Cup candidate names and descriptions, plus related result assets and registered counts. General navigation and policy pages are covered by the normal integration and localization checks, not by this content freeze.
+The baseline covers the 16 active entries in `assets/js/content-registry.js`: Korean source copy and the English, Japanese, and Simplified Chinese versions of their cards, titles, descriptions, questions, answer choices, results, share copy, story reactions, and supporting metadata. It includes inline World Cup candidate names and descriptions, plus related result assets and registered counts. General navigation and policy pages are covered by the normal integration and localization checks, not by this content freeze.
 
 | Content ID | Type | Current source size |
 | --- | --- | --- |
@@ -23,6 +23,8 @@ The baseline covers the 14 active entries in `assets/js/content-registry.js`: Ko
 | `fantasy-class` | Quiz | 8 questions, 8 results |
 | `fantasy-shop` | Story quiz | 8 scenes, 6 results |
 | `night-train` | Story quiz | 8 scenes, 4 choices per scene, 6 results |
+| `rest-style` | Quiz | 7 questions, 5 choices, 5 results |
+| `hobby-discovery` | Quiz | 12 questions, 4 choices, 5 results |
 
 ## Findings resolved
 
@@ -79,4 +81,14 @@ No unresolved P1 or P2 content-count, translation-key, result-linkage, or reacha
 - Added `rest-style` as a seven-question, five-choice archetype quiz with five outcomes: quiet, movement, connection, immersion, and novelty. Each outcome is represented once in every question, all five outcomes are reachable, and exact-score ties use the shared deterministic resolver.
 - Added matching Korean, English, Japanese, and Simplified Chinese page copy, quiz strings, metadata, share copy, and result guidance. The copy frames results as lighthearted preferences rather than a diagnosis.
 - Added five square 2×2 cartoon result illustrations and linked the quiet-recharge image as the content-discovery thumbnail. Each comic presents four clear everyday scenes with no text or speech bubbles.
-- Registered the content in the shared explorer, content-start allow-list, and sitemap. The available review was limited to manual source, locale, result mapping, image-path, and route inspection; automated integration and score-distribution audits were not run.
+- Registered the content in the shared explorer, content-start allow-list, and sitemap. The original review was limited to manual source, locale, result mapping, image-path, and route inspection; automated integration and score-distribution audits were added later.
+
+## 2026-10-03 hobby-discovery and quiz-order verification
+
+- Added `hobby-discovery` as a 12-question quiz with four choices per question and five results: hands-on making, growing, flavor experiments, observation records, and puzzle design. Each choice maps to one result. Every result appears 9–10 times overall, 1–3 times in each answer position, never repeats in the same position on consecutive questions, and has a unique choice order per question.
+- Added Korean, English, Japanese, and Simplified Chinese page copy, questions, choices, result descriptions, share copy, image alternatives, card metadata, and service/privacy disclosures. Results are playful suggestions, not diagnoses. Each result has a dialogue-free four-panel cartoon with its own person, palette, setting, and drawing treatment.
+- Registered the quiz in the content explorer, start-count allow-list, sitemap, and shared archetype engine. Added audit checks for question count, four-locale key coverage, image mappings, and answer-position balance. The result-distribution audit now includes both `rest-style` and `hobby-discovery`.
+- The site and image guides now require varied answer positions and repeatable checks for future quizzes.
+- `node scripts/audit-integrations.mjs`: passed 19,989 checks across 88 localized pages, content discovery and recommendations, localized SEO, World Cup data/APIs, archetype data, assets, sitemap, redirects, and D1 docs.
+- `node scripts/audit-result-distributions.mjs`: all 13 registered quiz/story contents had no result below the 3% floor and no unreachable outcomes. `hobby-discovery` used a fixed 2,000,000-case sample from 16,777,216 possible answer combinations; all five results appeared, with an observed range of 18.494%–22.247% and a tie rate of 12.458%.
+- Answer-position audit: each result appears 9–10 times overall and 1–3 times per position; no result repeats its position on consecutive questions, and all 12 question orders are unique. `git diff --check`: passed.

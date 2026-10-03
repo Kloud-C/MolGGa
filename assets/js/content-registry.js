@@ -231,6 +231,21 @@
       thumbnail: "/image/tests/rest-style/quiet-charge.png",
       source: { kind: "archetype", id: "rest-style" },
       metrics: { questionCount: 7, choicesPerQuestion: 5, resultCount: 5, estimatedMinutes: 2 }
+    },
+    {
+      id: "hobby-discovery",
+      createdAt: "2026-10-03",
+      cardLabelKey: "content.hobby-discovery.cardLabel",
+      type: "quiz",
+      formatId: "quiz",
+      categoryIds: ["taste"],
+      tagIds: ["hobby", "lifestyle", "self-reflection"],
+      titleKey: "content.hobby-discovery.title",
+      descriptionKey: "content.hobby-discovery.description",
+      page: "hobby-discovery-test.html",
+      thumbnail: "/image/tests/hobby-discovery/maker.jpg",
+      source: { kind: "archetype", id: "hobby-discovery" },
+      metrics: { questionCount: 12, choicesPerQuestion: 4, resultCount: 5, estimatedMinutes: 3 }
     }
   ];
 
