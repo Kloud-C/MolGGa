@@ -243,7 +243,7 @@
       titleKey: "content.hobby-discovery.title",
       descriptionKey: "content.hobby-discovery.description",
       page: "hobby-discovery-test.html",
-      thumbnail: "/image/tests/hobby-discovery/maker.jpg",
+      thumbnail: "/image/tests/hobby-discovery/maker-v20261003-1.jpg",
       source: { kind: "archetype", id: "hobby-discovery" },
       metrics: { questionCount: 12, choicesPerQuestion: 4, resultCount: 5, estimatedMinutes: 3 }
     }

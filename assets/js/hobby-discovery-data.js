@@ -84,7 +84,7 @@ window.MOA_ARCHETYPE_TESTS["hobby-discovery"] = {
   profiles: {
     maker: {
       name: "hobbyDiscovery.result.maker.name",
-      image: "../image/tests/hobby-discovery/maker.jpg",
+      image: "../image/tests/hobby-discovery/maker-v20261003-1.jpg",
       imageAlt: "hobbyDiscovery.result.maker.imageAlt",
       color: "#d56b4d",
       catchphrase: "hobbyDiscovery.result.maker.catchphrase",
@@ -97,7 +97,7 @@ window.MOA_ARCHETYPE_TESTS["hobby-discovery"] = {
     },
     grower: {
       name: "hobbyDiscovery.result.grower.name",
-      image: "../image/tests/hobby-discovery/grower.jpg",
+      image: "../image/tests/hobby-discovery/grower-v20261003-1.jpg",
       imageAlt: "hobbyDiscovery.result.grower.imageAlt",
       color: "#7588c5",
       catchphrase: "hobbyDiscovery.result.grower.catchphrase",
@@ -110,7 +110,7 @@ window.MOA_ARCHETYPE_TESTS["hobby-discovery"] = {
     },
     flavor: {
       name: "hobbyDiscovery.result.flavor.name",
-      image: "../image/tests/hobby-discovery/flavor.jpg",
+      image: "../image/tests/hobby-discovery/flavor-v20261003-1.jpg",
       imageAlt: "hobbyDiscovery.result.flavor.imageAlt",
       color: "#d65362",
       catchphrase: "hobbyDiscovery.result.flavor.catchphrase",
@@ -123,7 +123,7 @@ window.MOA_ARCHETYPE_TESTS["hobby-discovery"] = {
     },
     observer: {
       name: "hobbyDiscovery.result.observer.name",
-      image: "../image/tests/hobby-discovery/observer.jpg",
+      image: "../image/tests/hobby-discovery/observer-v20261003-1.jpg",
       imageAlt: "hobbyDiscovery.result.observer.imageAlt",
       color: "#596ca0",
       catchphrase: "hobbyDiscovery.result.observer.catchphrase",
@@ -136,7 +136,7 @@ window.MOA_ARCHETYPE_TESTS["hobby-discovery"] = {
     },
     puzzler: {
       name: "hobbyDiscovery.result.puzzler.name",
-      image: "../image/tests/hobby-discovery/puzzler.jpg",
+      image: "../image/tests/hobby-discovery/puzzler-v20261003-1.jpg",
       imageAlt: "hobbyDiscovery.result.puzzler.imageAlt",
       color: "#5464a8",
       catchphrase: "hobbyDiscovery.result.puzzler.catchphrase",

@@ -75,6 +75,7 @@ No unresolved P1 or P2 content-count, translation-key, result-linkage, or reacha
 - 2026-10-01: completed the initial 12-entry baseline; corrected stale weekend and Past Life counts, extended Chinese residual scanning to inline World Cup text, and verified all result distributions.
 - 2026-10-02: added `night-train` to the baseline after integration checks, an exact outcome-distribution review, and confirmation of its four-locale page and asset mapping.
 - 2026-10-02: added `month-stay` after the four-locale content, bracket flow, share templates, route metadata, and 50-image integration checks.
+- 2026-10-03: replaced all five `hobby-discovery` result comics, checked the new scenes against result guidance and image anatomy, and synchronized cache-versioned paths and image guidelines.
 
 ## 2026-10-02 rest-style content
 
@@ -92,3 +93,9 @@ No unresolved P1 or P2 content-count, translation-key, result-linkage, or reacha
 - `node scripts/audit-integrations.mjs`: passed 19,989 checks across 88 localized pages, content discovery and recommendations, localized SEO, World Cup data/APIs, archetype data, assets, sitemap, redirects, and D1 docs.
 - `node scripts/audit-result-distributions.mjs`: all 13 registered quiz/story contents had no result below the 3% floor and no unreachable outcomes. `hobby-discovery` used a fixed 2,000,000-case sample from 16,777,216 possible answer combinations; all five results appeared, with an observed range of 18.494%–22.247% and a tie rate of 12.458%.
 - Answer-position audit: each result appears 9–10 times overall and 1–3 times per position; no result repeats its position on consecutive questions, and all 12 question orders are unique. `git diff --check`: passed.
+
+## 2026-10-03 hobby-discovery image refresh
+
+- Replaced all five hobby result comics with newly generated, lighter flat-cartoon scenes and removed the prior image files. The new scenes show: folding and using a cardboard desk organizer (maker), planting and watching a seed sprout (grower), tasting a berry-yogurt combination (flavor), recording cloud changes (observer), and a friend solving a shape-pattern puzzle (puzzler).
+- Matched the scene progression to each result's catchphrase, description, and first-step suggestion; reviewed all panels for character continuity, hand/arm count and attachment, object orientation, and composition. Updated localized image alt text to describe the new scenes.
+- Published the new assets with versioned filenames to refresh browser/CDN caches; synchronized profile and discovery-card image paths, image documentation, and the image-generation checklist.
