@@ -10,15 +10,19 @@ const isNewContent = (createdAt, now = new Date()) => {
   return ageInDays >= 0 && ageInDays < 3;
 };
 
-(() => {
+(async () => {
   const registry = window.MOLGGA_CONTENT_REGISTRY;
   const mount = document.querySelector("[data-content-browser]");
   const grid = document.querySelector("[data-category-list]");
   if (!registry || !mount || !grid) return;
 
+  const translationsReady = window.MOA_I18N?.ready;
+  if (!translationsReady || typeof translationsReady.then !== "function") return;
+  await translationsReady;
+
   const storageKey = "molgga.contentViewMode";
   const allowedViews = ["grid", "compact", "list"];
-  const translate = (key, options) => window.MOA_I18N?.t(key, options) || key;
+  const translate = (key, options) => window.MOA_I18N?.t(key, { ...options, defaultValue: "" }) ?? "";
   const activity = window.MOLGGA_CONTENT_ACTIVITY;
   const cardsById = new Map();
   const popularityCounts = new Map();

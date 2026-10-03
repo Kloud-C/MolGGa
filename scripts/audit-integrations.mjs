@@ -69,6 +69,13 @@ function visibleUnlocalizedKorean(html) {
   return leaks;
 }
 
+function visiblePageText(html) {
+  return html
+    .replace(/<!--[\s\S]*?-->|<(script|style|noscript)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&(?:nbsp|#160);/gi, " ");
+}
+
 function publishedPage(pathname) {
   const decoded = decodeURIComponent(pathname);
   const relative = decoded.startsWith("/") ? decoded.slice(1) : decoded;
@@ -126,6 +133,18 @@ assert(focusRingSource.includes('html[lang^="ko"] body { word-break: keep-all; }
   && radioQuizRendererSource.includes('question.classList.add("quiz-step-question");')
   && archetypeQuizRendererSource.includes('class="archetype-question__prompt"'),
 "shared UI: both quiz renderers must use full-width Korean word wrapping without balanced lines that leave excess whitespace");
+assert(contentBrowserSource.includes("await translationsReady;")
+  && contentBrowserSource.indexOf("await translationsReady;") < contentBrowserSource.indexOf("const storageKey ="),
+"content browser: localized controls and cards must wait for i18next before rendering");
+assert(contentBrowserSource.includes('defaultValue: "" }) ?? ""'),
+"content browser: missing translations must not fall back to visible translation keys");
+assert(radioQuizRendererSource.includes("question.hidden = index !== 0;")
+  && !radioQuizRendererSource.includes("await translationsReady;"),
+"classic quizzes: hide later questions synchronously before localized dynamic labels are applied");
+assert(archetypeQuizRendererSource.includes("translationsReady.then(initialRender)")
+  && !archetypeQuizRendererSource.includes("else initialRender();")
+  && archetypeQuizRendererSource.includes('defaultValue: "" }) ?? ""'),
+"archetype quizzes and stories: render after i18next and never show a raw translation key");
 assert(read("assets/js/app.js").includes("navigation.hidden = current === 0;"), "classic quiz: hide first-step navigation while all navigation controls are hidden");
 const popularSortBlock = contentBrowserSource.match(/if \(sortSelect\.value === "popular" && popularityStatus === "ready"\) \{([\s\S]*?)\n    \} else if \(sortSelect\.value === "latest"\)/)?.[1];
 assert(Boolean(popularSortBlock)
@@ -269,7 +288,10 @@ for (const locale of locales.slice(1)) {
 const homeContentSets = Object.fromEntries(locales.map((locale) => {
   const html = read(`${locale}/index.html`);
   assert(html.includes('data-content-browser'), `${locale}/index.html: shared content browser mount point is missing`);
-  assert(html.includes('content-registry.js?v=20261002-2') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261002-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  assert(html.includes('content-registry.js?v=20261002-2') && html.includes('content-activity.js?v=20260928-1') && html.includes('content-browser.js?v=20261003-1'), `${locale}/index.html: shared content browser scripts are missing or stale`);
+  const i18nScriptPosition = html.indexOf('assets/js/i18n.js?v=20261001-3');
+  const contentBrowserScriptPosition = html.indexOf('assets/js/content-browser.js?v=20261003-1');
+  assert(i18nScriptPosition >= 0 && contentBrowserScriptPosition > i18nScriptPosition, `${locale}/index.html: i18n.js must be loaded before the localized content browser`);
   assert(html.includes('content-activity.css?v=20261002-1'), `${locale}/index.html: local activity controls stylesheet is missing or stale`);
   const staticCards = [...html.matchAll(/<article\b[^>]*\bclass=["'][^"']*\bcategory-card\b/gi)];
   const disclosures = [...html.matchAll(/<details\b([^>]*)>/gi)]
@@ -289,6 +311,19 @@ for (const locale of locales.slice(1)) {
 }
 
 const allHtml = locales.flatMap((locale) => walk(locale, (file) => file.endsWith(".html")));
+const visiblePublicRoute = /(?:https?:\/\/)?(?:www\.)?molgga\.com\/(?:ko|en|ja|zh)(?:\/[\w./?#=&%-]*)?|\/(?:ko|en|ja|zh)\/[\w./?#=&%-]*/i;
+const visibleLocationOutput = /(?:\.textContent|\.innerText|\.innerHTML)\s*(?:=|\+=)\s*(?:`[^`]*\$\{\s*)?(?:window\.)?location\.(?:href|pathname|search|hash|origin|host|hostname)\b/;
+const sharedScripts = walk("assets/js", (file) => file.endsWith(".js"));
+for (const page of ["index.html", "404.html", ...allHtml]) {
+  const body = read(page).match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] || "";
+  const visibleText = visiblePageText(body);
+  assert(!visiblePublicRoute.test(visibleText), `${page}: a raw public URL or route must not appear as visible page text`);
+  const visibleTranslationKey = localeResourceKeys.find((key) => /^[A-Za-z][A-Za-z0-9]*(?:\.[A-Za-z][A-Za-z0-9_-]*)+$/.test(key) && visibleText.includes(key));
+  assert(!visibleTranslationKey, `${page}: raw translation key ${visibleTranslationKey} must not appear as visible page text`);
+}
+for (const script of sharedScripts) {
+  assert(!visibleLocationOutput.test(read(script)), `${script}: browser location values must not be rendered as visible page text`);
+}
 const translationSourceFiles = [
   ...allHtml,
   ...walk("assets", (file) => /\.(?:css|html|js|mjs|json)$/i.test(file)),
@@ -309,6 +344,13 @@ for (const page of allHtml) {
   const html = read(page);
   const [locale] = page.split("/");
   const slug = path.posix.basename(page, ".html");
+  const i18nScriptPosition = html.indexOf("assets/js/i18n.js");
+  for (const rendererScript of ["app.js", "archetype-test.js", "worldcup.js"]) {
+    const rendererScriptPosition = html.indexOf(`assets/js/${rendererScript}`);
+    if (rendererScriptPosition >= 0) {
+      assert(i18nScriptPosition >= 0 && rendererScriptPosition > i18nScriptPosition, `${page}: i18n.js must run before ${rendererScript}`);
+    }
+  }
   if (slug === "privacy") {
     assert(html.includes('data-i18n="privacy.adCookiesDisclosure"'), `${page}: Google ad cookie disclosure is missing`);
     assert(html.includes('data-i18n="privacy.contentStartCounts"'), `${page}: aggregate popularity disclosure is missing`);
@@ -352,7 +394,7 @@ for (const page of allHtml) {
   }
   const registeredPageContent = registryContents.find((content) => content.page === `${slug}.html`);
   if (registeredPageContent?.source?.kind === "archetype") {
-    assert(html.includes('archetype-test.js?v=20261002-3'), `${page}: shared archetype renderer cache token is missing or stale`);
+    assert(html.includes('archetype-test.js?v=20261003-1'), `${page}: shared archetype renderer cache token is missing or stale`);
   }
   for (const [, declaration] of html.matchAll(/\bdata-i18n-attr=["']([^"']+)["']/gi)) {
     for (const entry of declaration.split(";")) {
@@ -907,7 +949,7 @@ for (const page of allHtml) {
   }
 }
 assert(i18nScriptVersions.size === 1, `localized pages use missing or inconsistent i18n.js cache tokens: ${[...i18nScriptVersions].join(", ")}`);
-for (const assetPath of ["assets/css/styles.css", "assets/js/app.js", "assets/js/archetype-test.js", "assets/js/worldcup.js"]) {
+for (const assetPath of ["assets/css/styles.css", "assets/js/app.js", "assets/js/archetype-test.js", "assets/js/worldcup.js", "assets/js/content-browser.js"]) {
   const versions = new Set();
   for (const page of allHtml) {
     const references = [...read(page).matchAll(new RegExp(`${assetPath.replaceAll(".", "\\.")}(?:\\?v=([^"']+))?`, "g"))];
@@ -919,6 +961,7 @@ for (const assetPath of ["assets/css/styles.css", "assets/js/app.js", "assets/js
   assert(versions.size > 0 && versions.size === 1, `localized pages use missing or inconsistent ${assetPath} cache tokens: ${[...versions].join(", ")}`);
   if (assetPath === "assets/css/styles.css") assert(versions.has("20261003-2"), "localized pages: styles.css cache token is stale");
   if (assetPath === "assets/js/app.js") assert(versions.has("20261003-1"), "localized pages: app.js cache token is stale");
+  if (assetPath === "assets/js/content-browser.js") assert(versions.has("20261003-1"), "localized pages: content-browser.js cache token is stale");
 }
 assert(Object.keys(localeResources.ko).length === Object.keys(localeResources.en).length
   && Object.keys(localeResources.ko).length === Object.keys(localeResources.ja).length

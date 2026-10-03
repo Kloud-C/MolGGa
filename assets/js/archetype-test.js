@@ -4,7 +4,7 @@
 
   const config = window.MOA_ARCHETYPE_TESTS?.[root.dataset.archetypeTest];
   if (!config) return;
-  const tr = (text, options) => window.MOA_I18N?.t(text, options) || text;
+  const tr = (text, options) => window.MOA_I18N?.t(text, { ...options, defaultValue: "" }) ?? "";
   const localizedQuizUrl = (url) => `https://molgga.com/${window.MOA_I18N?.language || "ko"}/${new URL(url, location.href).pathname.split("/").pop().replace(/\.html$/, "")}`;
   const resultLabel = config.resultLabel || (root.dataset.archetypeTest === "past-life" ? "나의 전생 캐릭터" : "나의 결과 유형");
 
@@ -265,7 +265,6 @@
   const translationsReady = window.MOA_I18N?.ready;
   const initialRender = () => storyMode ? renderStoryIntro() : renderQuestion();
   if (translationsReady && typeof translationsReady.then === "function") translationsReady.then(initialRender);
-  else initialRender();
   window.i18next?.on("languageChanged", () => {
     if (result.hidden) {
       if (storyMode && current < 0) renderStoryIntro();

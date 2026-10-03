@@ -81,6 +81,7 @@ The template defines hierarchy and behavior, not identical wording or identical 
 ## Page structure
 
 - Use the shared header, centered `.wrap`, `.page-main`, `.article`, breadcrumb, `.article-header`, content panels, and footer used by the localized pages.
+- Check both direct route entry and browser refresh. The home content explorer and archetype quiz/story first screens must wait for `MOA_I18N.ready`; never show a translation key as fallback text. Initialize classic radio quiz steps immediately so only the first question is visible, then confirm i18next updates their dynamic labels. Verify home, quiz, story, and worldcup start screens in all four locales. The integration audit checks renderer order, readiness, and raw URL text leaks across localized pages. Distinguish the browser's address bar from page content; the site cannot control browser chrome.
 - Use one breadcrumb pattern on every localized page: a localized home link, a standalone `/` separator, then the localized current-page label. Keep the separator outside translation strings and keys, mark it `aria-hidden="true"`, and mark the current label `aria-current="page"`.
   ```html
   <nav class="breadcrumbs" aria-label="현재 위치">
