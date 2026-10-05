@@ -286,7 +286,7 @@
       for (const axis of axes) {
         const answers = axis.names.map((name) => data.get(name));
         if (answers.some((answer) => !answer)) {
-          document.querySelector("#mbti-error").textContent = "결과를 보려면 스무 문항에 모두 답해 주세요.";
+          document.querySelector("#mbti-error").textContent = tr("결과를 보려면 스무 문항에 모두 답해 주세요.");
           return;
         }
       }

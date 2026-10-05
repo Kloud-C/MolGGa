@@ -127,6 +127,13 @@ The template defines hierarchy and behavior, not identical wording or identical 
 
 ## Localization and cache updates
 
+### Editorial consistency for localized content
+
+- Write concise, natural Korean in the site's warm, conversational polite style. Avoid translation-like phrasing, repeated explanations, forced excitement, and generic AI-sounding filler.
+- Keep quiz prompts focused on one situation. Use neutral, parallel choices that do not reveal the intended result; when a score model changes, review choice meaning and score mapping together.
+- Keep short labels and choices free of decorative final punctuation. Use consistent punctuation in full sentences, and correct spacing, duplicated words, incomplete clauses, and mismatched quotation marks.
+- When Korean copy changes, update English, Japanese, Chinese, and each locale's HTML fallback together. Preserve meaning, scoring, feature behavior, privacy details, placeholders, and key parity across all four locale JSON files.
+
 - Keep structure and component classes the same across `ko/`, `en/`, `ja/`, and `zh/` pages. Translate visible labels through the existing dictionaries when shared scripts provide translations.
 - Load translation resources through i18next and i18next-http-backend from the root locale JSON files (`ko.json`, `en.json`, `ja.json`, `zh.json`). Pin CDN versions, use `data-i18n` for visible text, and use `data-i18n-attr` for translated metadata attributes.
 - Use readable namespaced keys such as `nav.contact` for new copy. Legacy Korean sentence keys remain only for existing content compatibility; do not add new literal-sentence keys. Keep `keySeparator: false` while legacy keys are present.

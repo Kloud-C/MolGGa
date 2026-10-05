@@ -823,7 +823,7 @@ for (const page of allHtml.filter((file) => /(?:^|\/)(?:(?:late-night|month-stay
   if (version) worldcupScriptVersions.add(version);
 }
 assert(worldcupScriptVersions.size === 1, `World Cup pages use inconsistent worldcup.js cache tokens: ${[...worldcupScriptVersions].join(", ")}`);
-assert(worldcupScriptVersions.has("20261002-2"), `World Cup pages are not using the current worldcup.js cache token: ${[...worldcupScriptVersions].join(", ")}`);
+assert(worldcupScriptVersions.has("20261005-1"), `World Cup pages are not using the current worldcup.js cache token: ${[...worldcupScriptVersions].join(", ")}`);
 const worldcupDataVersions = new Set();
 for (const page of allHtml.filter((file) => /(?:^|\/)(?:(?:late-night|month-stay)-)?worldcup\.html$/.test(file))) {
   const version = read(page).match(/assets\/js\/worldcup-data\.js\?v=([^"']+)/)?.[1];
@@ -1076,7 +1076,7 @@ for (const assetPath of ["assets/css/styles.css", "assets/js/app.js", "assets/js
   }
   assert(versions.size > 0 && versions.size === 1, `localized pages use missing or inconsistent ${assetPath} cache tokens: ${[...versions].join(", ")}`);
   if (assetPath === "assets/css/styles.css") assert(versions.has("20261003-2"), "localized pages: styles.css cache token is stale");
-  if (assetPath === "assets/js/app.js") assert(versions.has("20261003-1"), "localized pages: app.js cache token is stale");
+  if (assetPath === "assets/js/app.js") assert(versions.has("20261005-3"), "localized pages: app.js cache token is stale");
   if (assetPath === "assets/js/content-browser.js") assert(versions.has("20261003-1"), "localized pages: content-browser.js cache token is stale");
 }
 assert(Object.keys(localeResources.ko).length === Object.keys(localeResources.en).length

@@ -226,15 +226,17 @@
       ? fillTemplate(config.resultCatchphraseTemplate, winner)
       : localize(winner.detail);
     top.append(brand, photo, label, heading, catchphrase);
-    const body = document.createElement("div");
-    body.className = "archetype-result-card__body";
-    const note = document.createElement("p");
-    note.className = "archetype-result-card__summary";
-    note.textContent = config.resultBodyTemplate
-      ? fillTemplate(config.resultBodyTemplate, winner)
-      : tr("무작위로 뽑힌 선택지로 진행한 월드컵에서 가장 마지막까지 선택된 항목이에요.");
-    body.append(note);
-    card.append(top, body);
+    if (config.resultBodyTemplate) {
+      const body = document.createElement("div");
+      body.className = "archetype-result-card__body";
+      const note = document.createElement("p");
+      note.className = "archetype-result-card__summary";
+      note.textContent = fillTemplate(config.resultBodyTemplate, winner);
+      body.append(note);
+      card.append(top, body);
+    } else {
+      card.append(top);
+    }
     result.append(card);
 
     const actions = document.createElement("div");
