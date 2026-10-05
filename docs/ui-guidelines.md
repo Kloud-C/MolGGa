@@ -38,6 +38,9 @@ Keep the same reading order across quiz pages while allowing the subject matter 
 3. **Result:** result label, image (when the quiz has a result image set), name, short catchphrase, concise explanation, and any quiz-specific detail cards. Use the shared `archetype-test.js` renderer for archetype quizzes.
 4. **Actions:** restart and share controls in the same order and with the shared button styles.
 
+- Below the quiz, explain the choices the quiz actually covers and offer one practical way to use the result. Make the guidance specific to that content: for example, a hobby result can suggest trying a low-cost sample before buying supplies, while a travel-role result can help friends share trip planning. Avoid interchangeable filler such as repeating that every result is just for fun; state limits once, clearly, where they matter.
+- Keep these sections useful before someone starts the quiz. They should answer what the choices represent and what a visitor can do with the outcome, without repeating the intro, listing every result, or adding text solely to increase page length.
+
 - Center the result hero presentation (brand label, result image, result label, title, and catchphrase) within its card on every quiz. Keep longer explanatory copy and detail cards left-aligned for comfortable reading.
 - Send result shares through `MOLGGA_SHARE.open()` with the translated result title, short description, result image URL, localized same-content route, and a clear action such as “나도 테스트하기”. World Cup shares use the winner's image and return to that game. Use the generic Open Graph image only as the crawler fallback when an individual result share already has an image.
 - Result image URLs must be publicly reachable over HTTPS. The Kakao feed receives the result-specific title, description, image, and CTA at share time; the CTA must start the same content in the active language.

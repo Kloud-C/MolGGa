@@ -77,6 +77,7 @@ No unresolved P1 or P2 content-count, translation-key, result-linkage, or reacha
 - 2026-10-02: added `month-stay` after the four-locale content, bracket flow, share templates, route metadata, and 50-image integration checks.
 - 2026-10-03: replaced all five `hobby-discovery` result comics, checked the new scenes against result guidance and image anatomy, and synchronized cache-versioned paths and image guidelines.
 - 2026-10-03: rewrote all 12 `hobby-discovery` prompts and 48 choices in four locales as everyday preference questions, reducing direct hobby cues while preserving the scoring map and answer-position balance.
+- 2026-10-05: expanded the pre-quiz explanations for `hobby-discovery`, `rest-style`, `travel-role`, `romance-style`, and `fantasy-class` in all four locales. The pages now describe their actual choice themes and offer a concrete, content-specific way to use the result; the copy avoids diagnostic claims, purchase pressure, and repeated filler. Added this standard to the reusable quiz and site-quality guidelines.
 
 ## 2026-10-02 rest-style content
 
