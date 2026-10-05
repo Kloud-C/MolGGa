@@ -122,6 +122,13 @@
       if (question !== questions[current] || !question.querySelector('input[type="radio"]:checked')) return;
       move(1);
     });
+    // Browsers do not fire `change` when a user clicks the radio that is already checked.
+    form.addEventListener("click", (event) => {
+      const choice = event.target.closest?.(".quiz-step-choice");
+      const input = choice?.querySelector('input[type="radio"]');
+      if (!input?.checked || input.closest(".field-question") !== questions[current]) return;
+      move(1);
+    });
     back.addEventListener("click", () => move(-1));
     render();
     return {
