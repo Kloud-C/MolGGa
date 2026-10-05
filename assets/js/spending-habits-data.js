@@ -1,5 +1,6 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["spending-habits"] = {
+  answerPositionPolicy: "balanced",
   title: "소비 습관 테스트",
   resultLabel: "나의 소비 습관 유형",
   eyebrow: "molgga PLAY · 소비 습관",
@@ -13,40 +14,40 @@ window.MOA_ARCHETYPE_TESTS["spending-habits"] = {
       { text: "눈에 들어온 것부터 기분 좋게 결제한다", scores: ["impulse"] }
     ] },
     { prompt: "필요한 물건을 살 때 나는 보통…", choices: [
+      { text: "마음에 들면 오래 고민하지 않고 바로 산다", scores: ["impulse"] },
       { text: "여러 곳의 가격과 후기, 할인 혜택을 비교한다", scores: ["frugal"] },
       { text: "오래 쓸 수 있고 만족감이 큰 제품을 고른다", scores: ["flex"] },
-      { text: "정해 둔 예산과 구매 목록에 있는지 확인한다", scores: ["planned"] },
-      { text: "마음에 들면 오래 고민하지 않고 바로 산다", scores: ["impulse"] }
+      { text: "정해 둔 예산과 구매 목록에 있는지 확인한다", scores: ["planned"] }
     ] },
     { prompt: "이번 달 예산이 예상보다 빠듯해졌다면?", choices: [
+      { text: "일단 필요한 걸 사고 다음 달에 맞춰 본다", scores: ["impulse"] },
       { text: "꼭 필요하지 않은 지출을 줄이고 다음 기회를 기다린다", scores: ["frugal"] },
       { text: "가치 있다고 느끼는 경험에는 예산을 더 쓸 수 있다", scores: ["flex"] },
-      { text: "항목별 금액을 조정해 남은 기간 계획을 다시 세운다", scores: ["planned"] },
-      { text: "일단 필요한 걸 사고 다음 달에 맞춰 본다", scores: ["impulse"] }
+      { text: "항목별 금액을 조정해 남은 기간 계획을 다시 세운다", scores: ["planned"] }
     ] },
     { prompt: "‘오늘만 특가’라는 문구를 보면 어떤가요?", choices: [
-      { text: "평소 가격과 비교하고 꼭 필요한 경우에만 산다", scores: ["frugal"] },
       { text: "평소 눈여겨본 좋은 제품이면 기분 좋게 장만한다", scores: ["flex"] },
       { text: "구매 계획에 있었는지와 이번 달 예산을 확인한다", scores: ["planned"] },
-      { text: "놓치면 아쉬울 것 같아 서둘러 결제할 때가 많다", scores: ["impulse"] }
+      { text: "놓치면 아쉬울 것 같아 서둘러 결제할 때가 많다", scores: ["impulse"] },
+      { text: "평소 가격과 비교하고 꼭 필요한 경우에만 산다", scores: ["frugal"] }
     ] },
     { prompt: "내 소비 내역을 돌아보는 방식은?", choices: [
-      { text: "작은 지출도 살펴보고 아낄 방법을 찾는다", scores: ["frugal"] },
-      { text: "기억에 남는 경험이나 만족스러운 소비를 떠올린다", scores: ["flex"] },
       { text: "예산 항목별로 계획과 실제 금액을 비교한다", scores: ["planned"] },
-      { text: "꼼꼼히 기록하기보다 필요할 때 잔액을 확인한다", scores: ["impulse"] }
+      { text: "꼼꼼히 기록하기보다 필요할 때 잔액을 확인한다", scores: ["impulse"] },
+      { text: "작은 지출도 살펴보고 아낄 방법을 찾는다", scores: ["frugal"] },
+      { text: "기억에 남는 경험이나 만족스러운 소비를 떠올린다", scores: ["flex"] }
     ] },
     { prompt: "갑자기 예상하지 못한 지출이 생기면?", choices: [
-      { text: "비상금이나 여유 자금에서 해결하고 원인을 살핀다", scores: ["frugal"] },
       { text: "문제를 편하게 해결할 수 있다면 비용을 더 쓸 수 있다", scores: ["flex"] },
       { text: "다른 항목을 조정해 전체 계획을 다시 맞춘다", scores: ["planned"] },
-      { text: "일단 결제한 뒤 나중에 어떻게 할지 생각한다", scores: ["impulse"] }
+      { text: "일단 결제한 뒤 나중에 어떻게 할지 생각한다", scores: ["impulse"] },
+      { text: "비상금이나 여유 자금에서 해결하고 원인을 살핀다", scores: ["frugal"] }
     ] },
     { prompt: "저축 목표를 세울 때 더 가까운 방식은?", choices: [
-      { text: "작은 금액이라도 꾸준히 모으는 것을 우선한다", scores: ["frugal"] },
-      { text: "여행이나 취미처럼 기대되는 목표를 위해 모은다", scores: ["flex"] },
       { text: "목표 금액을 기간별로 나눠 자동이체와 함께 관리한다", scores: ["planned"] },
-      { text: "마음에 드는 목표가 생길 때마다 그때그때 시작한다", scores: ["impulse"] }
+      { text: "마음에 드는 목표가 생길 때마다 그때그때 시작한다", scores: ["impulse"] },
+      { text: "작은 금액이라도 꾸준히 모으는 것을 우선한다", scores: ["frugal"] },
+      { text: "여행이나 취미처럼 기대되는 목표를 위해 모은다", scores: ["flex"] }
     ] },
     { prompt: "친구와 외식이나 나들이를 정할 때 나는…", choices: [
       { text: "부담 없는 가격대에서 만족도 높은 곳을 찾는다", scores: ["frugal"] },
@@ -61,10 +62,10 @@ window.MOA_ARCHETYPE_TESTS["spending-habits"] = {
       { text: "마음이 바뀌기 전에 한 번에 주문하는 경우가 많다", scores: ["impulse"] }
     ] },
     { prompt: "돈을 잘 쓰고 있다고 느끼는 순간은?", choices: [
-      { text: "필요한 것을 합리적인 가격에 사고 여유 자금도 남겼을 때", scores: ["frugal"] },
-      { text: "소중한 사람이나 나를 위한 경험이 오래 기억에 남을 때", scores: ["flex"] },
       { text: "세운 계획을 지키면서 목표에 한 걸음 다가갔을 때", scores: ["planned"] },
-      { text: "지금 원하던 것을 망설임 없이 즐겼을 때", scores: ["impulse"] }
+      { text: "지금 원하던 것을 망설임 없이 즐겼을 때", scores: ["impulse"] },
+      { text: "필요한 것을 합리적인 가격에 사고 여유 자금도 남겼을 때", scores: ["frugal"] },
+      { text: "소중한 사람이나 나를 위한 경험이 오래 기억에 남을 때", scores: ["flex"] }
     ] }
   ],
   profiles: {

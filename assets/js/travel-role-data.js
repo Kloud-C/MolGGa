@@ -1,5 +1,6 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["travel-role"] = {
+  answerPositionPolicy: "balanced",
   title: "travelRole.title",
   sharePrompt: "travelRole.sharePrompt",
   eyebrow: "molgga PLAY · 친구 여행 테스트",
@@ -13,32 +14,32 @@ window.MOA_ARCHETYPE_TESTS["travel-role"] = {
       { text: "travelRole.question.1.b", scores: ["free-spirit", "mood-maker"] }
     ] },
     { prompt: "travelRole.question.2", choices: [
-      { text: "travelRole.question.2.a", scores: [{ id: "foodie", weight: 1.5 }, "budget-keeper"] },
-      { text: "travelRole.question.2.b", scores: ["navigator"] }
+      { text: "travelRole.question.2.b", scores: ["navigator"] },
+      { text: "travelRole.question.2.a", scores: [{ id: "foodie", weight: 1.5 }, "budget-keeper"] }
     ] },
     { prompt: "travelRole.question.3", choices: [
-      { text: "travelRole.question.3.a", scores: ["navigator"] },
-      { text: "travelRole.question.3.b", scores: ["mood-maker", "free-spirit"] }
+      { text: "travelRole.question.3.b", scores: ["mood-maker", "free-spirit"] },
+      { text: "travelRole.question.3.a", scores: ["navigator"] }
     ] },
     { prompt: "travelRole.question.4", choices: [
       { text: "travelRole.question.4.a", scores: [{ id: "photographer", weight: 1.5 }, "caregiver"] },
       { text: "travelRole.question.4.b", scores: ["mood-maker", "caregiver"] }
     ] },
     { prompt: "travelRole.question.5", choices: [
-      { text: "travelRole.question.5.a", scores: ["caregiver"] },
-      { text: "travelRole.question.5.b", scores: ["planner", "caregiver"] }
+      { text: "travelRole.question.5.b", scores: ["planner", "caregiver"] },
+      { text: "travelRole.question.5.a", scores: ["caregiver"] }
     ] },
     { prompt: "travelRole.question.6", choices: [
       { text: "travelRole.question.6.a", scores: ["budget-keeper", "planner"] },
       { text: "travelRole.question.6.b", scores: [{ id: "foodie", weight: 1.5 }, "caregiver"] }
     ] },
     { prompt: "travelRole.question.7", choices: [
-      { text: "travelRole.question.7.a", scores: ["planner", "navigator"] },
-      { text: "travelRole.question.7.b", scores: ["mood-maker", "free-spirit"] }
+      { text: "travelRole.question.7.b", scores: ["mood-maker", "free-spirit"] },
+      { text: "travelRole.question.7.a", scores: ["planner", "navigator"] }
     ] },
     { prompt: "travelRole.question.8", choices: [
-      { text: "travelRole.question.8.a", scores: ["free-spirit", "photographer"] },
-      { text: "travelRole.question.8.b", scores: ["navigator", "foodie"] }
+      { text: "travelRole.question.8.b", scores: ["navigator", "foodie"] },
+      { text: "travelRole.question.8.a", scores: ["free-spirit", "photographer"] }
     ] },
     { prompt: "travelRole.question.9", choices: [
       { text: "travelRole.question.9.a", scores: [{ id: "photographer", weight: 1.5 }, "mood-maker"] },

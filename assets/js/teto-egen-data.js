@@ -1,57 +1,59 @@
 window.MOA_ARCHETYPE_TESTS = {
   "teto-egen": {
+  answerPositionPolicy: "balanced",
     title: "테토/에겐 테스트",
     eyebrow: "molgga PLAY · 테토/에겐",
     estimatedMinutes: 3,
+    balanceResultExposure: true,
     url: "https://molgga.com/teto-egen-test.html",
     questions: [
       { prompt: "약속 장소를 정할 때 나는…", choices: [
-        { text: "가고 싶은 곳을 먼저 정해 시원하게 제안한다", scores: ["teto-leader", "teto-bold"] },
-        { text: "서로 편한 선택지를 물어보고 함께 고른다", scores: ["egen-care", "egen-empathy"] }
+        { text: "서로 편한 선택지를 물어보고 함께 고른다", scores: [{ id: "egen-care", weight: 3 }, { id: "egen-empathy", weight: 2 }] },
+        { text: "가고 싶은 곳을 먼저 정해 시원하게 제안한다", scores: [{ id: "teto-leader", weight: 3 }, { id: "teto-bold", weight: 2 }] }
       ] },
       { prompt: "상대의 답장이 늦을 때 나는…", choices: [
-        { text: "하던 일에 집중하고 내 리듬을 유지한다", scores: ["teto-cool", "egen-free"] },
-        { text: "바쁜가 보다 하고 짧게 안부를 남긴다", scores: ["teto-guard", "egen-mood"] }
+        { text: "하던 일에 집중하고 내 리듬을 유지한다", scores: [{ id: "teto-cool", weight: 3 }, { id: "egen-free", weight: 2 }] },
+        { text: "바쁜가 보다 하고 짧게 안부를 남긴다", scores: [{ id: "teto-guard", weight: 3 }, { id: "egen-mood", weight: 2 }] }
       ] },
       { prompt: "친구가 고민을 털어놓으면 먼저…", choices: [
-        { text: "지금 할 수 있는 해결책을 같이 찾는다", scores: ["teto-leader", "teto-bold"] },
-        { text: "충분히 들어주고 어떤 기분인지 살핀다", scores: ["egen-empathy", "egen-care"] }
+        { text: "지금 할 수 있는 해결책을 같이 찾는다", scores: [{ id: "teto-leader", weight: 3 }, { id: "teto-bold", weight: 2 }] },
+        { text: "충분히 들어주고 어떤 기분인지 살핀다", scores: [{ id: "egen-empathy", weight: 3 }, { id: "egen-care", weight: 2 }] }
       ] },
       { prompt: "처음 가는 모임에서는…", choices: [
-        { text: "먼저 말을 걸고 자연스럽게 분위기를 연다", scores: ["teto-leader", "egen-mood"] },
-        { text: "편한 사람과 천천히 대화를 시작한다", scores: ["teto-cool", "egen-free"] }
+        { text: "먼저 말을 걸고 자연스럽게 분위기를 연다", scores: [{ id: "teto-leader", weight: 3 }, { id: "egen-mood", weight: 2 }] },
+        { text: "편한 사람과 천천히 대화를 시작한다", scores: [{ id: "teto-cool", weight: 3 }, { id: "egen-free", weight: 2 }] }
       ] },
       { prompt: "칭찬을 들으면 더 자연스러운 반응은?", choices: [
-        { text: "고맙다고 말하고 자신 있게 받아들인다", scores: ["teto-bold", "teto-cool"] },
-        { text: "상대의 좋은 점도 바로 찾아 돌려준다", scores: ["egen-care", "egen-mood"] }
+        { text: "상대의 좋은 점도 바로 찾아 돌려준다", scores: [{ id: "egen-care", weight: 3 }, { id: "egen-mood", weight: 2 }] },
+        { text: "고맙다고 말하고 자신 있게 받아들인다", scores: [{ id: "teto-bold", weight: 3 }, { id: "teto-cool", weight: 2 }] }
       ] },
       { prompt: "의견이 부딪히면 나는…", choices: [
-        { text: "내 생각을 분명하게 말하고 접점을 찾는다", scores: ["teto-bold", "teto-cool"] },
-        { text: "잠깐 생각한 뒤 서로의 마음을 살핀다", scores: ["egen-empathy", "teto-guard"] }
+        { text: "내 생각을 분명하게 말하고 접점을 찾는다", scores: [{ id: "teto-bold", weight: 3 }, { id: "teto-cool", weight: 2 }] },
+        { text: "잠깐 생각한 뒤 서로의 마음을 살핀다", scores: [{ id: "egen-empathy", weight: 3 }, { id: "teto-guard", weight: 2 }] }
       ] },
       { prompt: "기다리던 주말 계획이 취소되면…", choices: [
-        { text: "바로 다른 장소나 활동을 제안한다", scores: ["teto-leader", "egen-free"] },
-        { text: "함께할 사람의 기분부터 챙겨 새로 정한다", scores: ["teto-guard", "egen-care"] }
+        { text: "함께할 사람의 기분부터 챙겨 새로 정한다", scores: [{ id: "teto-guard", weight: 3 }, { id: "egen-care", weight: 2 }] },
+        { text: "바로 다른 장소나 활동을 제안한다", scores: [{ id: "teto-leader", weight: 3 }, { id: "egen-free", weight: 2 }] }
       ] },
       { prompt: "호감 있는 사람에게 연락할 때 나는…", choices: [
-        { text: "보고 싶다고 솔직하게 먼저 말한다", scores: ["teto-bold", "teto-leader"] },
-        { text: "전에 나눈 이야기를 기억해 다정하게 말을 건다", scores: ["egen-empathy", "egen-care"] }
+        { text: "전에 나눈 이야기를 기억해 다정하게 말을 건다", scores: [{ id: "egen-empathy", weight: 3 }, { id: "egen-care", weight: 2 }] },
+        { text: "보고 싶다고 솔직하게 먼저 말한다", scores: [{ id: "teto-bold", weight: 3 }, { id: "teto-leader", weight: 2 }] }
       ] },
       { prompt: "여럿이 함께 무언가를 정할 때 내 역할은?", choices: [
-        { text: "선택지를 좁히고 다음 행동을 정리한다", scores: ["teto-leader", "teto-guard"] },
-        { text: "모두가 편하게 참여하도록 분위기를 띄운다", scores: ["egen-mood", "egen-care"] }
+        { text: "선택지를 좁히고 다음 행동을 정리한다", scores: [{ id: "teto-leader", weight: 3 }, { id: "teto-guard", weight: 2 }] },
+        { text: "모두가 편하게 참여하도록 분위기를 띄운다", scores: [{ id: "egen-mood", weight: 3 }, { id: "egen-care", weight: 2 }] }
       ] },
       { prompt: "하루를 마치고 지쳤을 때 필요한 시간은?", choices: [
-        { text: "혼자 조용히 쉬며 머리를 식히는 시간", scores: ["teto-cool", "egen-free"] },
-        { text: "편한 사람과 가볍게 마음을 나누는 시간", scores: ["teto-guard", "egen-empathy"] }
+        { text: "혼자 조용히 쉬며 머리를 식히는 시간", scores: [{ id: "teto-cool", weight: 3 }, { id: "egen-free", weight: 2 }] },
+        { text: "편한 사람과 가볍게 마음을 나누는 시간", scores: [{ id: "teto-guard", weight: 3 }, { id: "egen-empathy", weight: 2 }] }
       ] },
       { prompt: "좋아하는 마음을 표현하는 방식은?", choices: [
-        { text: "필요한 순간 먼저 움직여 행동으로 보여준다", scores: ["teto-guard", "teto-bold"] },
-        { text: "말과 작은 표현으로 자주 전해준다", scores: ["egen-care", "egen-mood"] }
+        { text: "필요한 순간 먼저 움직여 행동으로 보여준다", scores: [{ id: "teto-guard", weight: 3 }, { id: "teto-bold", weight: 2 }] },
+        { text: "말과 작은 표현으로 자주 전해준다", scores: [{ id: "egen-care", weight: 3 }, { id: "egen-mood", weight: 2 }] }
       ] },
       { prompt: "새로운 일을 시작할 때 나는…", choices: [
-        { text: "내 방식대로 먼저 해보고 자유롭게 방향을 잡는다", scores: ["teto-cool", "egen-free"] },
-        { text: "주변 반응과 내 마음을 살피며 시작한다", scores: ["egen-empathy", "egen-mood"] }
+        { text: "주변 반응과 내 마음을 살피며 시작한다", scores: [{ id: "egen-empathy", weight: 3 }, { id: "egen-mood", weight: 2 }] },
+        { text: "내 방식대로 먼저 해보고 자유롭게 방향을 잡는다", scores: [{ id: "teto-cool", weight: 3 }, { id: "egen-free", weight: 2 }] }
       ] }
     ],
     profiles: {

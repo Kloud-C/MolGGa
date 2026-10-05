@@ -1,5 +1,6 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["attachment-style"] = {
+  answerPositionPolicy: "balanced",
   title: "애착 유형 테스트",
   eyebrow: "molgga PLAY · 애착 유형",
   estimatedMinutes: 4,
@@ -10,28 +11,28 @@ window.MOA_ARCHETYPE_TESTS["attachment-style"] = {
       { text: "혹시 마음이 달라졌나 여러 가능성을 떠올린다", scores: ["anxious"] }
     ] },
     { prompt: "관계에서 서운한 일이 생기면 먼저…", choices: [
-      { text: "상대와 차분히 이야기해 서로의 생각을 맞춘다", scores: ["secure"] },
-      { text: "혼자 정리할 시간이 생길 때까지 말을 아낀다", scores: ["avoidant"] }
+      { text: "혼자 정리할 시간이 생길 때까지 말을 아낀다", scores: ["avoidant"] },
+      { text: "상대와 차분히 이야기해 서로의 생각을 맞춘다", scores: ["secure"] }
     ] },
     { prompt: "마음을 나누는 대화가 깊어질 때 더 가까운 반응은?", choices: [
       { text: "상대가 나를 어떻게 생각하는지 확인하고 싶어진다", scores: ["anxious"] },
       { text: "감정에 깊이 들어가기보다 화제를 바꾸고 싶어진다", scores: ["avoidant"] }
     ] },
     { prompt: "연인이 혼자만의 시간을 원한다고 하면 나는…", choices: [
-      { text: "서로의 시간이 필요할 수 있다고 받아들인다", scores: ["secure"] },
-      { text: "나와 거리를 두려는 건 아닌지 신경이 쓰인다", scores: ["fearful"] }
+      { text: "나와 거리를 두려는 건 아닌지 신경이 쓰인다", scores: ["fearful"] },
+      { text: "서로의 시간이 필요할 수 있다고 받아들인다", scores: ["secure"] }
     ] },
     { prompt: "관계가 가까워질수록 내 안에서 자주 드는 마음은?", choices: [
-      { text: "나만 더 좋아하게 될까 봐 확신을 얻고 싶다", scores: ["anxious"] },
-      { text: "기대가 커지면 상처받을까 봐 한발 물러선다", scores: ["fearful"] }
+      { text: "기대가 커지면 상처받을까 봐 한발 물러선다", scores: ["fearful"] },
+      { text: "나만 더 좋아하게 될까 봐 확신을 얻고 싶다", scores: ["anxious"] }
     ] },
     { prompt: "힘든 일이 있을 때 가까운 사람에게 나는…", choices: [
       { text: "필요한 도움을 구체적으로 말하고 의지한다", scores: ["secure"] },
       { text: "기대고 싶으면서도 막상 마음을 열기는 조심스럽다", scores: ["fearful"] }
     ] },
     { prompt: "상대가 바쁜 시기에 연락이 줄어들면 나는…", choices: [
-      { text: "바쁜 시기가 지나면 다시 이야기할 수 있다고 생각한다", scores: ["secure"] },
-      { text: "관계가 멀어질까 걱정돼 더 자주 확인하고 싶다", scores: ["anxious"] }
+      { text: "관계가 멀어질까 걱정돼 더 자주 확인하고 싶다", scores: ["anxious"] },
+      { text: "바쁜 시기가 지나면 다시 이야기할 수 있다고 생각한다", scores: ["secure"] }
     ] },
     { prompt: "의견 차이가 생겼을 때 마음이 편한 대화는?", choices: [
       { text: "혼자 생각을 정리한 뒤 내가 할 수 있는 부분부터 해결한다", scores: ["avoidant"] },
@@ -42,32 +43,32 @@ window.MOA_ARCHETYPE_TESTS["attachment-style"] = {
       { text: "불편한 상태를 견디기 어려워 바로 확인하고 싶다", scores: ["anxious"] }
     ] },
     { prompt: "좋아하는 마음을 전할 때 더 자연스러운 방식은?", choices: [
-      { text: "고마움과 애정을 말과 행동으로 편하게 표현한다", scores: ["secure"] },
-      { text: "표현한 뒤 상대가 같은 마음인지 자주 확인한다", scores: ["anxious"] }
+      { text: "표현한 뒤 상대가 같은 마음인지 자주 확인한다", scores: ["anxious"] },
+      { text: "고마움과 애정을 말과 행동으로 편하게 표현한다", scores: ["secure"] }
     ] },
     { prompt: "가까운 사람에게 실망했을 때 나는…", choices: [
-      { text: "마음을 풀고 싶지만 다시 믿어도 될지 망설인다", scores: ["fearful"] },
-      { text: "기대하지 않는 편이 낫다고 생각하며 거리를 둔다", scores: ["avoidant"] }
+      { text: "기대하지 않는 편이 낫다고 생각하며 거리를 둔다", scores: ["avoidant"] },
+      { text: "마음을 풀고 싶지만 다시 믿어도 될지 망설인다", scores: ["fearful"] }
     ] },
     { prompt: "연인이나 친구에게 부탁할 일이 생기면…", choices: [
       { text: "필요한 점을 말하고 서로 가능한 방법을 찾는다", scores: ["secure"] },
       { text: "부담을 줄까 봐 웬만하면 혼자 해결하려 한다", scores: ["avoidant"] }
     ] },
     { prompt: "상대의 말투가 평소와 다르게 느껴지면…", choices: [
-      { text: "괜찮다고 생각하며 혼자 하던 일에 집중한다", scores: ["avoidant"] },
-      { text: "묻고 싶지만 반응이 두려워 혼자 마음을 살핀다", scores: ["fearful"] }
+      { text: "묻고 싶지만 반응이 두려워 혼자 마음을 살핀다", scores: ["fearful"] },
+      { text: "괜찮다고 생각하며 혼자 하던 일에 집중한다", scores: ["avoidant"] }
     ] },
     { prompt: "상대가 나를 도와주겠다고 하면 나는…", choices: [
       { text: "고맙게 받아들이고 필요하면 도움을 나눈다", scores: ["secure"] },
       { text: "고맙지만 속마음까지 드러내는 건 조금 어렵다", scores: ["fearful"] }
     ] },
     { prompt: "상대가 혼자 쉬고 싶다고 말하면 나는…", choices: [
-      { text: "각자 쉬는 시간이 관계에도 필요하다고 여긴다", scores: ["secure"] },
-      { text: "내가 뭔가 잘못했는지 확인하고 싶어진다", scores: ["anxious"] }
+      { text: "내가 뭔가 잘못했는지 확인하고 싶어진다", scores: ["anxious"] },
+      { text: "각자 쉬는 시간이 관계에도 필요하다고 여긴다", scores: ["secure"] }
     ] },
     { prompt: "누군가와 가까워지고 싶을 때 내 마음은…", choices: [
-      { text: "상대의 반응이 걱정돼도 먼저 확인하고 다가간다", scores: ["anxious"] },
-      { text: "다가가고 싶다가도 상처받을까 봐 물러선다", scores: ["fearful"] }
+      { text: "다가가고 싶다가도 상처받을까 봐 물러선다", scores: ["fearful"] },
+      { text: "상대의 반응이 걱정돼도 먼저 확인하고 다가간다", scores: ["anxious"] }
     ] }
   ],
   profiles: {

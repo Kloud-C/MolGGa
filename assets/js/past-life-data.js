@@ -1,5 +1,6 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["past-life"] = {
+  answerPositionPolicy: "balanced",
   title: "전생 테스트",
   eyebrow: "molgga PLAY · 전생 테스트",
   estimatedMinutes: 4,
@@ -11,40 +12,40 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
       { text: "조용한 숙소를 찾아 짐을 푼다", scores: ["rock", "turtle"] }
     ] },
     { prompt: "하루 종일 비가 온다면 나는…", choices: [
-      { text: "빗소리 들으며 책이나 기록을 본다", scores: ["whale", "scribe"] },
-      { text: "비 오는 풍경을 보러 밖으로 나간다", scores: ["dandelion", "otter"] }
+      { text: "비 오는 풍경을 보러 밖으로 나간다", scores: ["dandelion", "otter"] },
+      { text: "빗소리 들으며 책이나 기록을 본다", scores: ["whale", "scribe"] }
     ] },
     { prompt: "누군가 길을 잃고 도움을 청한다면?", choices: [
       { text: "직접 데려다주고 오는 길도 챙긴다", scores: ["dog", "healer"] },
       { text: "지도를 그려주고 모험담도 물어본다", scores: ["compass", "crow"] }
     ] },
     { prompt: "내가 맡고 싶은 궁궐의 일은?", choices: [
-      { text: "왕의 간식과 차를 고르는 일", scores: ["cat", "taster"] },
-      { text: "궁궐의 비밀스러운 편지를 나르는 일", scores: ["rabbit", "ant"] }
+      { text: "궁궐의 비밀스러운 편지를 나르는 일", scores: ["rabbit", "ant"] },
+      { text: "왕의 간식과 차를 고르는 일", scores: ["cat", "taster"] }
     ] },
     { prompt: "모닥불 앞에서 가장 하고 싶은 것은?", choices: [
       { text: "사람들 이야기를 듣고 다음 이야기를 보탠다", scores: ["bard", "crow"] },
       { text: "불가에 기대 조용히 쉰다", scores: ["cloud", "rock", "penguin"] }
     ] },
     { prompt: "새로운 일을 시작할 때 나는…", choices: [
-      { text: "일단 작게 해보며 감을 잡는다", scores: ["goblin", "otter"] },
-      { text: "순서와 필요한 도구를 먼저 챙긴다", scores: ["ant", "scribe"] }
+      { text: "순서와 필요한 도구를 먼저 챙긴다", scores: ["ant", "scribe"] },
+      { text: "일단 작게 해보며 감을 잡는다", scores: ["goblin", "otter"] }
     ] },
     { prompt: "친구들이 나를 찾는 이유는 대체로?", choices: [
-      { text: "고민을 들어주고 해결책을 찾아줘서", scores: ["healer", "turtle"] },
-      { text: "분위기를 띄우고 재미있는 일을 벌여서", scores: ["goblin", "bard", "trickster"] }
+      { text: "분위기를 띄우고 재미있는 일을 벌여서", scores: ["goblin", "bard", "trickster"] },
+      { text: "고민을 들어주고 해결책을 찾아줘서", scores: ["healer", "turtle"] }
     ] },
     { prompt: "보물 상자를 하나 발견했다! 먼저 드는 생각은?", choices: [
-      { text: "누구의 물건인지 주변에 물어본다", scores: ["dog", "healer"] },
-      { text: "열기 전에 잠금장치와 흔적을 살핀다", scores: ["scribe", "cat"] }
+      { text: "열기 전에 잠금장치와 흔적을 살핀다", scores: ["scribe", "cat"] },
+      { text: "누구의 물건인지 주변에 물어본다", scores: ["dog", "healer"] }
     ] },
     { prompt: "배를 타고 멀리 떠난다면 어떤 역할이 좋아?", choices: [
-      { text: "파도와 바람을 읽는 항해사", scores: ["compass", "otter"] },
-      { text: "선원들의 간식 담당", scores: ["taster", "cat"] }
+      { text: "선원들의 간식 담당", scores: ["taster", "cat"] },
+      { text: "파도와 바람을 읽는 항해사", scores: ["compass", "otter"] }
     ] },
     { prompt: "마을에 축제가 열린대. 나는…", choices: [
-      { text: "무대에 올라 노래나 재주를 보여준다", scores: ["bard", "rabbit"] },
-      { text: "구석구석 구경하며 재미있는 장면을 모은다", scores: ["crow", "cat"] }
+      { text: "구석구석 구경하며 재미있는 장면을 모은다", scores: ["crow", "cat"] },
+      { text: "무대에 올라 노래나 재주를 보여준다", scores: ["bard", "rabbit"] }
     ] },
     { prompt: "숲에서 처음 보는 열매를 발견하면?", choices: [
       { text: "먹기 전에 주변 식물과 특징을 살핀다", scores: ["healer", "scribe"] },
@@ -71,16 +72,16 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
       { text: "호출의 이유와 준비물을 먼저 알아본다", scores: ["ant", "scribe"] }
     ] },
     { prompt: "내가 운영하고 싶은 작은 가게는?", choices: [
-      { text: "따뜻한 수프와 차를 파는 가게", scores: ["healer", "taster"] },
-      { text: "지도와 여행 도구를 파는 가게", scores: ["compass", "market"] }
+      { text: "지도와 여행 도구를 파는 가게", scores: ["compass", "market"] },
+      { text: "따뜻한 수프와 차를 파는 가게", scores: ["healer", "taster"] }
     ] },
     { prompt: "깊은 밤, 창밖에서 이상한 소리가 들리면?", choices: [
-      { text: "무슨 소린지 조심히 확인하러 간다", scores: ["cat", "trickster"] },
-      { text: "아침에 밝아지면 확인하기로 하고 잔다", scores: ["rock", "cloud"] }
+      { text: "아침에 밝아지면 확인하기로 하고 잔다", scores: ["rock", "cloud"] },
+      { text: "무슨 소린지 조심히 확인하러 간다", scores: ["cat", "trickster"] }
     ] },
     { prompt: "길에서 반짝이는 돌멩이를 주웠다. 나는…", choices: [
-      { text: "모양이 재미있어 주머니에 넣어둔다", scores: ["goblin", "dandelion", "trickster"] },
-      { text: "제자리에 놓고 주변 풍경을 더 둘러본다", scores: ["rock", "turtle"] }
+      { text: "제자리에 놓고 주변 풍경을 더 둘러본다", scores: ["rock", "turtle"] },
+      { text: "모양이 재미있어 주머니에 넣어둔다", scores: ["goblin", "dandelion", "trickster"] }
     ] },
     { prompt: "사람들이 다투기 시작하면 나는?", choices: [
       { text: "양쪽 말을 듣고 접점을 찾아본다", scores: ["healer", "turtle"] },
@@ -95,16 +96,16 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
       { text: "창가에서 마음 가는 책을 골라 읽는다", scores: ["cloud", "cat"] }
     ] },
     { prompt: "나에게 더 근사한 칭찬은?", choices: [
-      { text: "네가 있어서 다들 든든해", scores: ["dog", "ant", "penguin"] },
-      { text: "너랑 있으면 매일 새로운 일이 생겨", scores: ["dandelion", "otter"] }
+      { text: "너랑 있으면 매일 새로운 일이 생겨", scores: ["dandelion", "otter"] },
+      { text: "네가 있어서 다들 든든해", scores: ["dog", "ant", "penguin"] }
     ] },
     { prompt: "마을에 새로 온 사람에게 나는…", choices: [
-      { text: "동네에서 지켜야 할 요령을 알려준다", scores: ["turtle", "market"] },
-      { text: "같이 돌아다니며 친구들을 소개한다", scores: ["rabbit", "bard"] }
+      { text: "같이 돌아다니며 친구들을 소개한다", scores: ["rabbit", "bard"] },
+      { text: "동네에서 지켜야 할 요령을 알려준다", scores: ["turtle", "market"] }
     ] },
     { prompt: "마법사가 하루 동안 물건 하나에 생명을 준대. 무엇이 좋을까?", choices: [
-      { text: "말을 걸어주는 오래된 돌", scores: ["rock", "whale"] },
-      { text: "혼자 심부름 다니는 작은 신발", scores: ["ant", "penguin"] }
+      { text: "혼자 심부름 다니는 작은 신발", scores: ["ant", "penguin"] },
+      { text: "말을 걸어주는 오래된 돌", scores: ["rock", "whale"] }
     ] },
     { prompt: "휴가가 생겼을 때 내 마음은?", choices: [
       { text: "정해둔 곳 없이 바람 따라 떠나고 싶다", scores: ["dandelion", "otter"] },
@@ -115,16 +116,16 @@ window.MOA_ARCHETYPE_TESTS["past-life"] = {
       { text: "어디에 무엇이 있었는지와 길의 모양", scores: ["compass", "ant"] }
     ] },
     { prompt: "마을의 하루를 바꾸는 작은 발명품을 만든다면?", choices: [
-      { text: "모두가 제시간에 움직이게 돕는 장치", scores: ["ant", "scribe"] },
-      { text: "심심할 틈 없게 장난을 치는 장치", scores: ["goblin", "bard", "trickster"] }
+      { text: "심심할 틈 없게 장난을 치는 장치", scores: ["goblin", "bard", "trickster"] },
+      { text: "모두가 제시간에 움직이게 돕는 장치", scores: ["ant", "scribe"] }
     ] },
     { prompt: "전설 속 내 별명으로 더 끌리는 것은?", choices: [
-      { text: "어디든 나타나는 행운의 여행자", scores: ["dandelion", "rabbit"] },
-      { text: "아무 일도 안 해도 존재감이 큰 바위", scores: ["rock", "cloud"] }
+      { text: "아무 일도 안 해도 존재감이 큰 바위", scores: ["rock", "cloud"] },
+      { text: "어디든 나타나는 행운의 여행자", scores: ["dandelion", "rabbit"] }
     ] },
     { prompt: "오래오래 남길 유산 하나를 고른다면?", choices: [
-      { text: "사람들을 웃게 했던 이야기", scores: ["bard", "crow"] },
-      { text: "누군가 계속 쓸 수 있는 든든한 안내서", scores: ["compass", "whale"] }
+      { text: "누군가 계속 쓸 수 있는 든든한 안내서", scores: ["compass", "whale"] },
+      { text: "사람들을 웃게 했던 이야기", scores: ["bard", "crow"] }
     ] }
   ],
   profiles: {

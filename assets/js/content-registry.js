@@ -60,7 +60,7 @@
       formatId: "quiz",
       categoryIds: ["personality"],
       tagIds: ["personality", "mbti", "self-reflection"],
-      titleKey: "MBTI 콘텐츠",
+      titleKey: "MBTI 테스트",
       descriptionKey: "질문에 답해 나의 MBTI를 알아보세요. (공식 MBTI 검사는 아닙니다.)",
       page: "mbti.html",
       thumbnail: "/image/home-categories/mbti.jpg",

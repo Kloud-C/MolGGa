@@ -1,5 +1,6 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["romance-style"] = {
+  answerPositionPolicy: "balanced",
   title: "romanceStyle.title",
   sharePrompt: "romanceStyle.sharePrompt",
   eyebrow: "molgga PLAY · romanceStyle.eyebrow",
@@ -14,14 +15,14 @@ window.MOA_ARCHETYPE_TESTS["romance-style"] = {
       { text: "romanceStyle.question.1.c", scores: ["independent", "steady"] }
     ] },
     { prompt: "romanceStyle.question.2", choices: [
+      { text: "romanceStyle.question.2.c", scores: ["observer", "realistic"] },
       { text: "romanceStyle.question.2.a", scores: ["direct", "devoted"] },
-      { text: "romanceStyle.question.2.b", scores: ["playful", "flirt"] },
-      { text: "romanceStyle.question.2.c", scores: ["observer", "realistic"] }
+      { text: "romanceStyle.question.2.b", scores: ["playful", "flirt"] }
     ] },
     { prompt: "romanceStyle.question.3", choices: [
-      { text: "romanceStyle.question.3.a", scores: ["verbal", "observer"] },
       { text: "romanceStyle.question.3.b", scores: ["thrill", "playful"] },
-      { text: "romanceStyle.question.3.c", scores: ["steady", "realistic"] }
+      { text: "romanceStyle.question.3.c", scores: ["steady", "realistic"] },
+      { text: "romanceStyle.question.3.a", scores: ["verbal", "observer"] }
     ] },
     { prompt: "romanceStyle.question.4", choices: [
       { text: "romanceStyle.question.4.a", scores: ["direct", "mediator"] },
@@ -34,9 +35,9 @@ window.MOA_ARCHETYPE_TESTS["romance-style"] = {
       { text: "romanceStyle.question.5.c", scores: ["caregiver", "steady"] }
     ] },
     { prompt: "romanceStyle.question.6", choices: [
+      { text: "romanceStyle.question.6.c", scores: ["steady", "independent"] },
       { text: "romanceStyle.question.6.a", scores: ["mediator", "direct"] },
-      { text: "romanceStyle.question.6.b", scores: ["flirt", "observer"] },
-      { text: "romanceStyle.question.6.c", scores: ["steady", "independent"] }
+      { text: "romanceStyle.question.6.b", scores: ["flirt", "observer"] }
     ] },
     { prompt: "romanceStyle.question.7", choices: [
       { text: "romanceStyle.question.7.a", scores: ["mediator", "caregiver"] },
@@ -44,14 +45,14 @@ window.MOA_ARCHETYPE_TESTS["romance-style"] = {
       { text: "romanceStyle.question.7.c", scores: ["devoted", "direct"] }
     ] },
     { prompt: "romanceStyle.question.8", choices: [
-      { text: "romanceStyle.question.8.a", scores: ["realistic", "steady"] },
       { text: "romanceStyle.question.8.b", scores: ["thrill", "independent"] },
-      { text: "romanceStyle.question.8.c", scores: ["verbal", "steady"] }
+      { text: "romanceStyle.question.8.c", scores: ["verbal", "steady"] },
+      { text: "romanceStyle.question.8.a", scores: ["realistic", "steady"] }
     ] },
     { prompt: "romanceStyle.question.9", choices: [
+      { text: "romanceStyle.question.9.c", scores: ["playful", "caregiver"] },
       { text: "romanceStyle.question.9.a", scores: ["caregiver", "devoted"] },
-      { text: "romanceStyle.question.9.b", scores: ["mediator", "observer"] },
-      { text: "romanceStyle.question.9.c", scores: ["playful", "caregiver"] }
+      { text: "romanceStyle.question.9.b", scores: ["mediator", "observer"] }
     ] },
     { prompt: "romanceStyle.question.10", choices: [
       { text: "romanceStyle.question.10.a", scores: ["direct", "mediator"] },
@@ -59,29 +60,29 @@ window.MOA_ARCHETYPE_TESTS["romance-style"] = {
       { text: "romanceStyle.question.10.c", scores: ["playful", "verbal"] }
     ] },
     { prompt: "romanceStyle.question.11", choices: [
-      { text: "romanceStyle.question.11.a", scores: ["mediator", "caregiver"] },
       { text: "romanceStyle.question.11.b", scores: ["flirt", "independent"] },
-      { text: "romanceStyle.question.11.c", scores: ["devoted", "direct"] }
+      { text: "romanceStyle.question.11.c", scores: ["devoted", "direct"] },
+      { text: "romanceStyle.question.11.a", scores: ["mediator", "caregiver"] }
     ] },
     { prompt: "romanceStyle.question.12", choices: [
-      { text: "romanceStyle.question.12.a", scores: ["devoted", "thrill"] },
       { text: "romanceStyle.question.12.b", scores: ["realistic", "steady"] },
-      { text: "romanceStyle.question.12.c", scores: ["thrill", "playful"] }
+      { text: "romanceStyle.question.12.c", scores: ["thrill", "playful"] },
+      { text: "romanceStyle.question.12.a", scores: ["devoted", "thrill"] }
     ] },
     { prompt: "romanceStyle.question.13", choices: [
-      { text: "romanceStyle.question.13.a", scores: ["direct", "verbal"] },
       { text: "romanceStyle.question.13.b", scores: ["flirt", "observer"] },
-      { text: "romanceStyle.question.13.c", scores: ["caregiver", "observer"] }
+      { text: "romanceStyle.question.13.c", scores: ["caregiver", "observer"] },
+      { text: "romanceStyle.question.13.a", scores: ["direct", "verbal"] }
     ] },
     { prompt: "romanceStyle.question.14", choices: [
-      { text: "romanceStyle.question.14.a", scores: ["thrill", "independent"] },
       { text: "romanceStyle.question.14.b", scores: ["steady", "caregiver"] },
-      { text: "romanceStyle.question.14.c", scores: ["verbal", "mediator"] }
+      { text: "romanceStyle.question.14.c", scores: ["verbal", "mediator"] },
+      { text: "romanceStyle.question.14.a", scores: ["thrill", "independent"] }
     ] },
     { prompt: "romanceStyle.question.15", choices: [
-      { text: "romanceStyle.question.15.a", scores: ["realistic", "mediator"] },
       { text: "romanceStyle.question.15.b", scores: ["devoted", "verbal"] },
-      { text: "romanceStyle.question.15.c", scores: ["independent", "steady"] }
+      { text: "romanceStyle.question.15.c", scores: ["independent", "steady"] },
+      { text: "romanceStyle.question.15.a", scores: ["realistic", "mediator"] }
     ] }
   ],
   profiles: {

@@ -247,7 +247,7 @@ const phaseThreeTranslationKeys = [
   "contentActivity.suggestions.title", "contentActivity.suggestions.open",
   "privacy.quizAnswers", "privacy.localContentPreferences", "privacy.contentStartCounts", "privacy.storageNotice",
   "privacy.adCookiesDisclosure", "privacy.adSettingsIntro", "privacy.adSettingsMiddle", "privacy.adSettingsSuffix",
-  "2026년 9월 29일", "PRIVACY · 시행일 2026년 9월 29일", "aboutads.info 광고 선택"
+  "2026년 10월 5일", "TERMS · 시행일 2026년 10월 5일", "PRIVACY · 시행일 2026년 10월 5일", "aboutads.info 광고 선택"
 ];
 for (const locale of locales) {
   for (const key of phaseTwoTranslationKeys) assert(Boolean(localeResources[locale][key]), `${locale}.json: missing phase 2 UI translation ${key}`);
@@ -355,7 +355,10 @@ for (const page of allHtml) {
     assert(html.includes('data-i18n="privacy.adCookiesDisclosure"'), `${page}: Google ad cookie disclosure is missing`);
     assert(html.includes('data-i18n="privacy.contentStartCounts"'), `${page}: aggregate popularity disclosure is missing`);
     assert(html.includes('href="https://adssettings.google.com/"') && html.includes('href="https://www.aboutads.info/choices/"'), `${page}: ad preference controls are missing`);
-    assert(html.includes('2026년 9월 29일'), `${page}: privacy policy update date is stale`);
+    assert(html.includes('2026년 10월 5일'), `${page}: privacy policy update date is stale`);
+  }
+  if (slug === "terms") {
+    assert(html.includes('2026년 10월 5일'), `${page}: terms update date is stale`);
   }
   if (slug === "index" || registryContents.some((content) => path.posix.basename(content.page, ".html") === slug)) {
     assert(html.includes('content-activity.js?v=20260928-1'), `${page}: local content activity script is missing or stale`);
@@ -423,17 +426,44 @@ for (const page of allHtml) {
   }
 }
 
-const updatedAboutOfferings = "주말·야식 월드컵과 MBTI·동물상·테토/에겐·애착 유형·전생·소비 습관·취미 찾기·친구 여행 역할·연애 스타일·판타지 직업 테스트·판타지 마을 가게 이야기를 즐길 수 있습니다. 야식 월드컵은 50개 메뉴에서 16강 또는 32강 대진을 무작위로 구성하고, 전생 테스트는 25문항으로 진행합니다. 애착 유형 콘텐츠는 연구 자료를 참고하며, 질문과 설명은 몰까가 직접 작성합니다. 밤기차를 타고 내릴 역을 고르는 이야기 콘텐츠도 새로 추가했습니다.";
-const updatedResultNote = "결과는 각 페이지에서 선택한 내용에 따른 참고 정보입니다. 월드컵은 마지막까지 선택한 항목을 보여 주며, 야식 월드컵 랭킹에는 완주한 대진의 우승 메뉴가 집계됩니다. 성향 테스트는 선택에서 드러난 경향을 살펴보는 콘텐츠입니다. 어떤 결과도 전문 심리검사나 의료·법률·교육·채용 판단을 대신하지 않습니다.";
+const siteInventoryIds = [
+  "weekend", "late-night-food", "animal-test", "mbti", "teto-egen", "attachment-style", "past-life",
+  "spending-habits", "travel-role", "romance-style", "fantasy-class", "fantasy-shop", "night-train",
+  "month-stay", "rest-style", "hobby-discovery"
+].sort();
+assert(JSON.stringify([...registryContentIds].sort()) === JSON.stringify(siteInventoryIds), "site service inventory must be updated when the content registry changes");
+const updatedAboutOfferings = "몰까에서는 주말 취향·야식·한 달 살기 월드컵, 동물 캐릭터·MBTI·대화 스타일·관계 유형·전생 이야기·소비 스타일·친구 여행·연애 스타일·판타지 직업·휴식 취향 테스트, 취미 찾기 테스트와 판타지 가게·밤기차 이야기를 즐길 수 있습니다. 애착 유형 콘텐츠는 관련 연구를 참고해 몰까가 직접 만든 질문과 설명으로 구성합니다.";
+const updatedResultNote = "각 월드컵은 마지막까지 선택한 항목을 결과로 보여 주고, 인기 랭킹에는 각 월드컵을 완주했을 때의 우승 항목을 집계합니다. 테스트 결과는 답변에서 드러난 경향을 가볍게 살펴보는 참고 정보예요. 전문 심리검사나 의료·법률·교육·채용 판단을 대신하지 않습니다.";
+const updatedRankingDisclosure = "월드컵 인기 랭킹을 이용하면 월드컵 종류, 완주한 대진의 최종 우승 항목과 대진 규모, 기록 시각, 중복 집계를 막기 위한 무작위 1회성 제출 ID를 Cloudflare D1에 저장합니다. 이 정보로 월드컵별 우승 항목을 집계합니다. 대진 중 선택 과정, 이름, 이메일 등은 랭킹을 위해 저장하지 않습니다.";
+const expectedAboutOfferings = {
+  ko: updatedAboutOfferings,
+  en: "molgga offers the Weekend Preference, Late-Night Food, and Month-Stay matchups; quizzes on MBTI, animal characters, Teto/Egen, attachment styles, past lives, spending habits, trip roles, romance styles, fantasy classes, and how you recharge; a hobby finder; and stories about a fantasy village shop and a night train. The attachment-style quiz draws on published research, while molgga writes its own questions and explanations.",
+  ja: "molggaでは、週末の好み・夜食・1か月暮らしのワールドカップ、MBTI・動物キャラクター・テト／エゲン・愛着スタイル・前世・お金の使い方・旅行での役割・恋愛スタイル・ファンタジー職業・休み方のテスト、趣味探し、ファンタジーのお店と夜行列車の物語を楽しめます。愛着スタイルの質問と説明は、関連研究を参考にmolggaが独自に作成しています。",
+  zh: "molgga 提供周末偏好、夜宵和住一个月选择赛；MBTI、动物角色、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格、奇幻职业和休息偏好测试；爱好探索；以及奇幻商店和夜行列车故事。依恋风格测试参考相关研究，问题和说明由 molgga 自行撰写。"
+};
 const expectedTermsServices = {
-  en: "molgga offers a weekend preference matchup and a late-night food tournament, along with quizzes for MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, travel roles, romance styles, and fantasy classes, plus a hobby-finder quiz and a story game about opening a shop in a fantasy village. All current content is free and available without registration.",
-  ja: "molggaでは、週末の好みマッチと夜食メニュー対決のほか、MBTI、動物タイプ、テト／エゲン、愛着スタイル、前世、お金の使い方、旅行での役割、恋愛スタイル、ファンタジー職業のテスト、趣味探しのテスト、ファンタジーの村でお店を開く物語コンテンツを提供しています。現在のコンテンツは無料で、会員登録なしで利用できます。",
-  zh: "molgga 提供周末偏好选择赛和夜宵菜单对决，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格和奇幻职业测试，还有寻找爱好的趣味测试和在奇幻小镇开店的故事体验。目前所有内容均免费，无需注册即可使用。"
+  ko: "몰까는 주말 취향·야식·한 달 살기 월드컵과 동물 캐릭터·MBTI·대화 스타일·관계 유형·전생 이야기·소비 스타일·친구 여행·연애 스타일·판타지 직업·휴식 취향·취미 찾기 테스트, 판타지 가게·밤기차 이야기를 제공합니다. 모든 콘텐츠는 무료이며 회원 가입 없이 이용할 수 있습니다.",
+  en: "molgga offers weekend, late-night food, and month-stay matchups; quizzes on MBTI, animal characters, Teto/Egen, attachment styles, past lives, spending habits, trip roles, romance styles, fantasy classes, recharge styles, and hobbies; and stories about a fantasy shop and a night train. All content is free and available without registration.",
+  ja: "molggaでは、週末の好み・夜食・1か月暮らしのワールドカップと、MBTI・動物キャラクター・テト／エゲン・愛着スタイル・前世・お金の使い方・旅行での役割・恋愛スタイル・ファンタジー職業・休み方・趣味探しのテスト、ファンタジーのお店と夜行列車の物語を提供しています。すべて無料で、会員登録なしで利用できます。",
+  zh: "molgga 提供周末偏好、夜宵和住一个月选择赛，以及 MBTI、动物角色、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格、奇幻职业、休息偏好和爱好探索测试，还有奇幻商店与夜行列车故事。所有内容均免费，无需注册即可使用。"
 };
 const expectedPrivacyScope = {
-  en: "molgga is a static website operated by Kloud-C. This policy applies to every page and piece of content on molgga.com, including the weekend and late-night matchups; MBTI, animal-style, Teto/Egen, attachment-style, past-life, spending-habits, hobby-finder, travel-role, romance-style, and fantasy-class quizzes; the fantasy village shop story game; and the About, Contact, and Terms pages.",
-  ja: "molggaはKloud-Cが運営する静的ウェブサイトです。このポリシーは、週末・夜食の対決、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・趣味探し・旅行での役割・恋愛スタイル・ファンタジー職業のテスト、ファンタジーの村でお店を開く物語コンテンツ、紹介・お問い合わせ・利用案内を含む、molgga.comのすべてのページとコンテンツに適用されます。",
-  zh: "molgga 是由 Kloud-C 运营的静态网站。本政策适用于 molgga.com 的所有页面和内容，包括周末与夜宵选择赛、MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、爱好探索、旅行角色、恋爱风格和奇幻职业测试、奇幻小镇开店故事，以及关于我们、联系和使用说明页面。"
+  ko: "몰까는 Kloud-C가 운영하는 웹사이트입니다. 이 방침은 molgga.com의 모든 페이지에 적용되며, 주말 취향·야식·한 달 살기 월드컵, 동물 캐릭터·MBTI·대화 스타일·관계 유형·전생 이야기·소비 스타일·친구 여행·연애 스타일·판타지 직업·휴식 취향·취미 찾기 테스트, 판타지 가게·밤기차 이야기와 소개·문의·이용 안내를 포함합니다.",
+  en: "molgga is a website operated by Kloud-C. This policy applies to every page on molgga.com, including the weekend, late-night food, and month-stay matchups; quizzes on MBTI, animal characters, Teto/Egen, attachment styles, past lives, spending habits, trip roles, romance styles, fantasy classes, recharge styles, and hobbies; the fantasy shop and night-train stories; and the About, Contact, and Terms pages.",
+  ja: "molggaはKloud-Cが運営するウェブサイトです。この方針はmolgga.comのすべてのページに適用され、週末・夜食・1か月暮らしのワールドカップ、MBTI・動物キャラクター・テト／エゲン・愛着スタイル・前世・お金の使い方・旅行での役割・恋愛スタイル・ファンタジー職業・休み方・趣味探しのテスト、ファンタジーのお店と夜行列車の物語、紹介・お問い合わせ・利用案内を含みます。",
+  zh: "molgga 是由 Kloud-C 运营的网站。本政策适用于 molgga.com 的所有页面，包括周末偏好、夜宵和住一个月选择赛；MBTI、动物角色、Teto/Egen、依恋风格、前世、消费习惯、旅行角色、恋爱风格、奇幻职业、休息偏好和爱好探索测试；奇幻商店与夜行列车故事；以及关于我们、联系和使用说明页面。"
+};
+const expectedResultNote = {
+  ko: updatedResultNote,
+  en: "Each matchup shows the item you chose in its final round, and its popularity ranking counts winners from completed games of that matchup. Quiz results are a light reference to tendencies in your answers; they do not replace professional psychological testing or medical, legal, educational, or hiring decisions.",
+  ja: "各ワールドカップでは最後まで選んだ項目が結果に表示され、人気ランキングには最後までプレイした対戦の優勝項目が集計されます。テスト結果は回答に表れた傾向を気軽に振り返るための参考情報です。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。",
+  zh: "每项选择赛都会显示你一路选到最后的项目，人气排行则统计完成对决后的冠军项目。测试结果仅用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"
+};
+const expectedRankingDisclosure = {
+  ko: updatedRankingDisclosure,
+  en: "If you use a World Cup popularity ranking, Cloudflare D1 stores the matchup ID, its final winning item, bracket size, timestamp, and a one-time random submission ID used to prevent duplicate records. The service counts winners by matchup. It does not store your choices along the way, name, or email for these rankings.",
+  ja: "ワールドカップの人気ランキングを利用すると、対戦の種類、最後までプレイした対戦の優勝項目と対戦数、記録時刻、重複を防ぐ一回限りのランダムな送信IDをCloudflare D1に保存します。この情報を使ってワールドカップごとの優勝項目を集計します。対戦中の選択、氏名、メールアドレスはランキングのために保存しません。",
+  zh: "使用世界杯人气排行时，Cloudflare D1 会保存对决类型、完成对决后的冠军项目、对战规模、记录时间，以及用于防止重复记录的一次性随机提交编号。我们据此按对决类型统计冠军项目。人气排行不会保存对决过程中的选择、姓名或邮箱。"
 };
 const expectedPrivacyContactForm = {
   en: "On the contact page, you may submit your name and email (both optional), a topic, and a message. Formspree processes the submission so the site operator can review and respond to it. The submission is stored in the operator's Formspree account and may be forwarded to the operator's email depending on account settings. Formspree may process information in several countries, including the United States. For details, see",
@@ -445,27 +475,15 @@ const expectedLocalQuizNote = {
   ja: "このテストはこのページ内で回答を計算し、保存しません。詳しくは",
   zh: "本测试仅在当前页面计算答案，不会保存。详情请参见"
 };
-const nightTrainCopy = {
-  about: {
-    en: "A new story also follows a night train and lets you choose where to get off.",
-    ja: "夜行列車に乗り、降りる駅を選ぶ物語コンテンツも追加しました。",
-    zh: "网站还新增了乘坐夜行列车并选择下车站的故事体验。"
-  },
-  terms: {
-    en: "A night-train story lets you choose where to get off.",
-    ja: "夜行列車で降りる駅を選ぶ物語も提供しています。",
-    zh: "网站还提供乘坐夜行列车选择下车站的故事体验。"
-  },
-  privacy: {
-    en: "This also covers the night-train story content.",
-    ja: "夜行列車の物語コンテンツも対象です。",
-    zh: "本政策也适用于夜行列车故事内容。"
-  }
-};
+assert(localeResources.ko["about.offerings.current"] === expectedAboutOfferings.ko, "ko: About service inventory is missing or stale");
+assert(localeResources.ko["terms.services.current"] === expectedTermsServices.ko, "ko: Terms service inventory is missing or stale");
+assert(localeResources.ko["privacy.scope"] === expectedPrivacyScope.ko, "ko: Privacy scope inventory is missing or stale");
+assert(localeResources.ko[updatedResultNote] === expectedResultNote.ko, "ko: result interpretation paragraph translation is missing or stale");
+assert(localeResources.ko[updatedRankingDisclosure] === expectedRankingDisclosure.ko, "ko: World Cup ranking disclosure is missing or stale");
 for (const [locale, expected] of Object.entries({
-  en: ["Explore the weekend and late-night food matchups, plus quizzes about MBTI, animal styles, Teto/Egen, attachment styles, past lives, spending habits, your role on a trip with friends, romance styles, and fantasy classes. You can also follow a story game about opening a shop in a fantasy village. The late-night matchup randomly draws a 16- or 32-entry bracket from 50 dishes, and the past-life quiz takes 25 questions. Attachment-style content draws on research; molgga writes its own questions and explanations. You can also try a short hobby-finder quiz.", "Results are a reference based on the choices you make on each page. A matchup shows the item you select through the final round; the late-night food leaderboard counts winners from completed matchups. Preference quizzes offer a light look at tendencies in your answers. None of these results replace professional psychological testing or medical, legal, educational, or employment decisions."],
-  ja: ["週末・夜食の対決と、MBTI・動物タイプ・テト／エゲン・愛着スタイル・前世・お金の使い方・友達との旅行での役割・恋愛スタイル・ファンタジー職業のテストに加え、ファンタジーの村でお店を開く物語も楽しめます。夜食対決は50種類のメニューから16または32品をランダムに選び、前世テストは25問です。愛着スタイルの内容は研究資料を参考にし、質問と説明はmolggaが作成しています。趣味探しのテストも楽しめます。", "結果は各ページで選んだ内容をもとにした参考情報です。マッチでは最後まで選んだ項目が表示され、夜食マッチのランキングには完了した対戦の優勝メニューが集計されます。好みのテストは回答に表れた傾向を気軽に見るためのものです。専門的な心理検査や医療・法律・教育・採用の判断に代わるものではありません。"],
-  zh: ["可以体验周末和夜宵选择赛，以及 MBTI、动物类型、Teto/Egen、依恋风格、前世、消费习惯、朋友旅行角色、恋爱风格和奇幻职业测试，也可以体验在奇幻小镇开店的故事。夜宵选择赛会从50种菜单中随机组成16强或32强，前世测试共25道题。依恋风格内容参考相关研究，各项问题和说明均由molgga原创。也可以通过趣味测试寻找适合自己的爱好。", "结果仅供参考，依据你在各页面中的选择生成。选择赛会显示你一路选到最后的项目；夜宵排行榜只统计完成整场对决后胜出的菜单。偏好测试用于轻松了解答案中体现的倾向，不能替代专业心理测评或医疗、法律、教育、招聘等判断。"]
+  en: [expectedAboutOfferings.en, expectedResultNote.en],
+  ja: [expectedAboutOfferings.ja, expectedResultNote.ja],
+  zh: [expectedAboutOfferings.zh, expectedResultNote.zh]
 })) {
   const aboutHtml = read(`${locale}/about.html`);
   assert(aboutHtml.includes(updatedAboutOfferings) && aboutHtml.includes(updatedResultNote), `${locale}: About page source text is out of sync with its translation keys`);
@@ -482,16 +500,17 @@ for (const [locale, expected] of Object.entries({
   const untranslatedHomeCopy = [...new Set([...homeText, ...homeLabels])]
     .filter((value) => translate(value) === value);
   assert(untranslatedHomeCopy.length === 0, `${locale}: home page has missing translations: ${untranslatedHomeCopy.join(" | ")}`);
-  assert(translate("about.offerings.current").startsWith(expected[0]) && translate("about.offerings.current").includes(nightTrainCopy.about[locale]), `${locale}: About offerings paragraph is missing the night-train story or its previous service list`);
-  assert(translate("terms.services.current").startsWith(expectedTermsServices[locale]) && translate("terms.services.current").includes(nightTrainCopy.terms[locale]), `${locale}: Terms service list is missing the night-train story or its previous service list`);
-  assert(translate("privacy.scope").startsWith(expectedPrivacyScope[locale]) && translate("privacy.scope").includes(nightTrainCopy.privacy[locale]), `${locale}: Privacy scope is missing the night-train story or its previous service list`);
+  assert(translate("about.offerings.current") === expectedAboutOfferings[locale], `${locale}: About service inventory is missing or stale`);
+  assert(translate("terms.services.current") === expectedTermsServices[locale], `${locale}: Terms service inventory is missing or stale`);
+  assert(translate("privacy.scope") === expectedPrivacyScope[locale], `${locale}: Privacy scope inventory is missing or stale`);
   assert(translate("privacy.contactForm") === expectedPrivacyContactForm[locale], `${locale}: Privacy contact-form translation is missing or stale`);
   assert(translate("privacy.localQuizNote") === expectedLocalQuizNote[locale], `${locale}: Quiz privacy-note translation is missing or stale`);
-  assert(translate(updatedResultNote) === expected[1], `${locale}: result interpretation paragraph translation is missing or stale`);
+  assert(translate(updatedResultNote) === expectedResultNote[locale], `${locale}: result interpretation paragraph translation is missing or stale`);
   const termsHtml = read(`${locale}/terms.html`);
   assert(termsHtml.includes('data-i18n="terms.services.current"'), `${locale}: Terms service list is not connected to its translation`);
   const privacyHtml = read(`${locale}/privacy.html`);
-  assert(privacyHtml.includes('data-i18n="privacy.scope"') && privacyHtml.includes('data-i18n="privacy.contactForm"'), `${locale}: Privacy scope or contact-form copy is not connected to its translation`);
+  assert(privacyHtml.includes('data-i18n="privacy.scope"') && privacyHtml.includes('data-i18n="privacy.contactForm"') && privacyHtml.includes(`data-i18n="${updatedRankingDisclosure}"`), `${locale}: Privacy scope, ranking-data disclosure, or contact-form copy is not connected to its translation`);
+  assert(translate(updatedRankingDisclosure) === expectedRankingDisclosure[locale], `${locale}: World Cup ranking disclosure is missing the stored matchup ID or other stored fields`);
   const contactHtml = read(`${locale}/contact.html`);
   for (const option of ["선택해 주세요", "오류 제보", "개선 의견", "콘텐츠 제안", "기타 문의"]) {
     assert(contactHtml.includes(`data-i18n="${option}"`), `${locale}: contact option is missing its translation: ${option}`);
@@ -552,6 +571,26 @@ assert(animalProfiles.size === 6, "animal quiz: expected six result profiles");
 for (const [, value] of animalHtml.matchAll(/\bname="q\d+"[^>]*\bvalue="([^"]+)"/g)) {
   for (const profileId of value.split(",")) assert(animalProfiles.has(profileId), `animal quiz: answer scores unknown profile ${profileId}`);
 }
+const animalPositionCounts = Object.fromEntries([...animalProfiles.keys()].map((profileId) => [profileId, Array(4).fill(0)]));
+const animalChoiceOrders = [];
+for (const [questionIndex, [, question]] of [...animalHtml.matchAll(/<fieldset class="field-question">([\s\S]*?)<\/fieldset>/g)].entries()) {
+  const choices = [...question.matchAll(/\bname="q\d+"[^>]*\bvalue="([^"]+)"/g)].map(([, value]) => value.split(","));
+  animalChoiceOrders.push(choices.map((ids) => ids.join(",")));
+  assert(choices.length === 4, `animal quiz: question ${questionIndex + 1} must have four choices`);
+  choices.forEach((ids, position) => ids.forEach((profileId) => {
+    if (animalPositionCounts[profileId]) animalPositionCounts[profileId][position] += 1;
+  }));
+}
+for (const [profileId, positions] of Object.entries(animalPositionCounts)) {
+  const appearances = positions.reduce((total, count) => total + count, 0);
+  assert(positions.filter((count) => count > 0).length >= 2, `animal/${profileId}: result is tied to one answer position (${positions.join(", ")})`);
+  assert(Math.max(...positions) <= Math.ceil(appearances * 0.75), `animal/${profileId}: answer position is overly dominant (${positions.join(", ")})`);
+}
+for (const locale of locales.filter((value) => value !== "ko")) {
+  const page = read(`${locale}/animal-test.html`);
+  const orders = [...page.matchAll(/<fieldset class="field-question">([\s\S]*?)<\/fieldset>/g)].map(([, question]) => [...question.matchAll(/\bname="q\d+"[^>]*\bvalue="([^"]+)"/g)].map(([, value]) => value.split(",").join(",")));
+  assert(JSON.stringify(orders) === JSON.stringify(animalChoiceOrders), `${locale}: animal answer ordering differs from Korean`);
+}
 for (const [profileId, image] of animalProfiles) {
   assert(fs.existsSync(path.resolve(root, "ko", image)), `animal/${profileId}: missing result image ${image}`);
 }
@@ -571,6 +610,31 @@ for (const name of expectedMbtiNames) {
   const expected = expectedAxisValues[name.slice(0, 2)];
   const actual = [...(mbtiFieldValues.get(name) || [])].sort();
   assert(JSON.stringify(actual) === JSON.stringify([...expected].sort()), `MBTI quiz: ${name} does not offer both expected axis answers`);
+}
+const mbtiFirstPositionPolicy = {
+  ei: ["E", "I", "E", "I", "E"],
+  sn: ["S", "N", "S", "N", "N"],
+  tf: ["F", "T", "T", "F", "T"],
+  jp: ["J", "P", "P", "J", "P"]
+};
+let koreanMbtiOrder;
+for (const locale of locales) {
+  const page = read(`${locale}/mbti.html`);
+  const order = new Map();
+  for (const [, fieldset] of page.matchAll(/<fieldset class="field-question">([\s\S]*?)<\/fieldset>/g)) {
+    const choices = [...fieldset.matchAll(/\bname="((?:ei|sn|tf|jp)[1-5])"[^>]*\bvalue="([^"]+)"/g)];
+    if (!choices.length) continue;
+    assert(choices.length === 2, `${locale}: MBTI ${choices[0][1]} must have exactly two ordered choices`);
+    const name = choices[0][1];
+    const values = choices.map(([, , value]) => value);
+    assert(JSON.stringify([...values].sort()) === JSON.stringify([...expectedAxisValues[name.slice(0, 2)]].sort()), `${locale}: MBTI ${name} does not offer both expected axis answers`);
+    assert(values[0] === mbtiFirstPositionPolicy[name.slice(0, 2)][Number(name.slice(2)) - 1], `${locale}: MBTI ${name} answer positions are unbalanced`);
+    order.set(name, values);
+  }
+  assert(order.size === 20, `${locale}: MBTI answer-order audit expects all 20 questions`);
+  const serializedOrder = JSON.stringify([...order]);
+  if (locale === "ko") koreanMbtiOrder = serializedOrder;
+  else assert(serializedOrder === koreanMbtiOrder, `${locale}: MBTI answer ordering differs from Korean`);
 }
 const mbtiTypes = ["E", "I"].flatMap((ei) => ["S", "N"].flatMap((sn) => ["T", "F"].flatMap((tf) => ["J", "P"].map((jp) => ei + sn + tf + jp))));
 assert(mbtiProfiles.size === 16 && mbtiTypes.every((type) => mbtiProfiles.has(type)), "MBTI quiz: one or more of the 16 result profiles are missing");
@@ -812,6 +876,24 @@ for (const id of hobbyResultIds) {
 assert(new Set(hobbyOrders.map((order) => order.join("|"))).size === 12, "hobby-discovery: answer ordering repeats across questions");
 for (const [testId, config] of Object.entries(archetypeSandbox.window.MOA_ARCHETYPE_TESTS || {})) {
   const profileIds = Object.keys(config.profiles || {});
+  assert(config.answerPositionPolicy === "balanced", `${testId}: declare and maintain the balanced answer-position policy`);
+  const choiceCounts = new Set((config.questions || []).map((question) => question.choices?.length));
+  assert(choiceCounts.size === 1, `${testId}: answer choices must keep the same number of positions across questions`);
+  const answerPositions = Object.fromEntries(profileIds.map((profileId) => [profileId, Array(Math.max(0, ...choiceCounts)).fill(0)]));
+  for (const question of config.questions || []) {
+    for (const [position, choice] of (question.choices || []).entries()) {
+      for (const entry of choice.scores || []) {
+        const profileId = typeof entry === "string" ? entry : entry.id;
+        if (answerPositions[profileId]) answerPositions[profileId][position] += 1;
+      }
+    }
+  }
+  for (const [profileId, positions] of Object.entries(answerPositions)) {
+    const appearances = positions.reduce((total, count) => total + count, 0);
+    if (appearances < 2) continue;
+    assert(positions.filter((count) => count > 0).length >= 2, `${testId}/${profileId}: result is tied to one answer position (${positions.join(", ")})`);
+    assert(Math.max(...positions) <= Math.ceil(appearances * 0.75), `${testId}/${profileId}: answer position is overly dominant (${positions.join(", ")})`);
+  }
   assert(config.questions?.length > 0, `${testId}: no questions configured`);
   assert(!/(?:\d+\s*(?:문항|questions|問|题)|(?:약|about|approximately)\s*\d+\s*(?:분|min))/i.test(config.eyebrow || ""), `${testId}: eyebrow repeats question count or estimated duration`);
   config.questions.forEach((question, questionIndex) => {

@@ -1,5 +1,6 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["rest-style"] = {
+  answerPositionPolicy: "balanced",
   title: "restStyle.quizTitle",
   resultLabel: "restStyle.resultLabel",
   eyebrow: "restStyle.eyebrow",
@@ -8,53 +9,53 @@ window.MOA_ARCHETYPE_TESTS["rest-style"] = {
   url: "https://molgga.com/rest-style-test.html",
   questions: [
     { prompt: "restStyle.question.1", choices: [
-      { text: "restStyle.answer.1.quiet", scores: ["quiet"] },
       { text: "restStyle.answer.1.movement", scores: ["movement"] },
       { text: "restStyle.answer.1.connection", scores: ["connection"] },
       { text: "restStyle.answer.1.immersion", scores: ["immersion"] },
-      { text: "restStyle.answer.1.novelty", scores: ["novelty"] }
+      { text: "restStyle.answer.1.novelty", scores: ["novelty"] },
+      { text: "restStyle.answer.1.quiet", scores: ["quiet"] }
     ] },
     { prompt: "restStyle.question.2", choices: [
+      { text: "restStyle.answer.2.quiet", scores: ["quiet"] },
       { text: "restStyle.answer.2.movement", scores: ["movement"] },
       { text: "restStyle.answer.2.connection", scores: ["connection"] },
       { text: "restStyle.answer.2.immersion", scores: ["immersion"] },
-      { text: "restStyle.answer.2.novelty", scores: ["novelty"] },
-      { text: "restStyle.answer.2.quiet", scores: ["quiet"] }
+      { text: "restStyle.answer.2.novelty", scores: ["novelty"] }
     ] },
     { prompt: "restStyle.question.3", choices: [
-      { text: "restStyle.answer.3.connection", scores: ["connection"] },
       { text: "restStyle.answer.3.immersion", scores: ["immersion"] },
       { text: "restStyle.answer.3.novelty", scores: ["novelty"] },
       { text: "restStyle.answer.3.quiet", scores: ["quiet"] },
-      { text: "restStyle.answer.3.movement", scores: ["movement"] }
+      { text: "restStyle.answer.3.movement", scores: ["movement"] },
+      { text: "restStyle.answer.3.connection", scores: ["connection"] }
     ] },
     { prompt: "restStyle.question.4", choices: [
-      { text: "restStyle.answer.4.immersion", scores: ["immersion"] },
       { text: "restStyle.answer.4.novelty", scores: ["novelty"] },
       { text: "restStyle.answer.4.quiet", scores: ["quiet"] },
       { text: "restStyle.answer.4.movement", scores: ["movement"] },
-      { text: "restStyle.answer.4.connection", scores: ["connection"] }
+      { text: "restStyle.answer.4.connection", scores: ["connection"] },
+      { text: "restStyle.answer.4.immersion", scores: ["immersion"] }
     ] },
     { prompt: "restStyle.question.5", choices: [
+      { text: "restStyle.answer.5.connection", scores: ["connection"] },
+      { text: "restStyle.answer.5.immersion", scores: ["immersion"] },
       { text: "restStyle.answer.5.novelty", scores: ["novelty"] },
       { text: "restStyle.answer.5.quiet", scores: ["quiet"] },
-      { text: "restStyle.answer.5.movement", scores: ["movement"] },
-      { text: "restStyle.answer.5.connection", scores: ["connection"] },
-      { text: "restStyle.answer.5.immersion", scores: ["immersion"] }
+      { text: "restStyle.answer.5.movement", scores: ["movement"] }
     ] },
     { prompt: "restStyle.question.6", choices: [
-      { text: "restStyle.answer.6.novelty", scores: ["novelty"] },
-      { text: "restStyle.answer.6.connection", scores: ["connection"] },
       { text: "restStyle.answer.6.quiet", scores: ["quiet"] },
       { text: "restStyle.answer.6.movement", scores: ["movement"] },
-      { text: "restStyle.answer.6.immersion", scores: ["immersion"] }
+      { text: "restStyle.answer.6.immersion", scores: ["immersion"] },
+      { text: "restStyle.answer.6.novelty", scores: ["novelty"] },
+      { text: "restStyle.answer.6.connection", scores: ["connection"] }
     ] },
     { prompt: "restStyle.question.7", choices: [
+      { text: "restStyle.answer.7.novelty", scores: ["novelty"] },
+      { text: "restStyle.answer.7.connection", scores: ["connection"] },
       { text: "restStyle.answer.7.movement", scores: ["movement"] },
       { text: "restStyle.answer.7.quiet", scores: ["quiet"] },
-      { text: "restStyle.answer.7.immersion", scores: ["immersion"] },
-      { text: "restStyle.answer.7.novelty", scores: ["novelty"] },
-      { text: "restStyle.answer.7.connection", scores: ["connection"] }
+      { text: "restStyle.answer.7.immersion", scores: ["immersion"] }
     ] }
   ],
   profiles: {

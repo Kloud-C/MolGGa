@@ -7,6 +7,7 @@ const nightTrainChoice = (text, reaction, resultId, weight = 1) => ({
 });
 
 window.MOA_ARCHETYPE_TESTS["night-train"] = {
+  answerPositionPolicy: "balanced",
   storyMode: true,
   title: "nightTrain.title",
   sharePrompt: "nightTrain.sharePrompt",
@@ -14,6 +15,7 @@ window.MOA_ARCHETYPE_TESTS["night-train"] = {
   estimatedMinutes: 4,
   resultLabel: "nightTrain.resultLabel",
   url: "https://molgga.com/ko/night-train-test.html",
+  balanceResultExposure: true,
   story: {
     showFinalReactionInResult: true,
     startTitle: "nightTrain.startTitle",
@@ -33,10 +35,10 @@ window.MOA_ARCHETYPE_TESTS["night-train"] = {
       image: "../image/tests/night-train/scene-01.webp",
       imageAlt: "nightTrain.scene.1.imageAlt",
       choices: [
-        nightTrainChoice("nightTrain.scene.1.choice.a", "nightTrain.scene.1.reaction.a", "harbor"),
         nightTrainChoice("nightTrain.scene.1.choice.b", "nightTrain.scene.1.reaction.b", "clock"),
         nightTrainChoice("nightTrain.scene.1.choice.c", "nightTrain.scene.1.reaction.c", "market"),
-        nightTrainChoice("nightTrain.scene.1.choice.d", "nightTrain.scene.1.reaction.d", "greenhouse")
+        nightTrainChoice("nightTrain.scene.1.choice.d", "nightTrain.scene.1.reaction.d", "greenhouse"),
+        nightTrainChoice("nightTrain.scene.1.choice.a", "nightTrain.scene.1.reaction.a", "harbor")
       ]
     },
     {
@@ -46,10 +48,10 @@ window.MOA_ARCHETYPE_TESTS["night-train"] = {
       image: "../image/tests/night-train/scene-02.webp",
       imageAlt: "nightTrain.scene.2.imageAlt",
       choices: [
-        nightTrainChoice("nightTrain.scene.2.choice.a", "nightTrain.scene.2.reaction.a", "harbor"),
-        nightTrainChoice("nightTrain.scene.2.choice.b", "nightTrain.scene.2.reaction.b", "forest"),
         nightTrainChoice("nightTrain.scene.2.choice.c", "nightTrain.scene.2.reaction.c", "market"),
-        nightTrainChoice("nightTrain.scene.2.choice.d", "nightTrain.scene.2.reaction.d", "snow")
+        nightTrainChoice("nightTrain.scene.2.choice.d", "nightTrain.scene.2.reaction.d", "snow"),
+        nightTrainChoice("nightTrain.scene.2.choice.a", "nightTrain.scene.2.reaction.a", "harbor"),
+        nightTrainChoice("nightTrain.scene.2.choice.b", "nightTrain.scene.2.reaction.b", "forest")
       ]
     },
     {
@@ -59,10 +61,10 @@ window.MOA_ARCHETYPE_TESTS["night-train"] = {
       image: "../image/tests/night-train/scene-03.webp",
       imageAlt: "nightTrain.scene.3.imageAlt",
       choices: [
+        nightTrainChoice("nightTrain.scene.3.choice.d", "nightTrain.scene.3.reaction.d", "greenhouse"),
         nightTrainChoice("nightTrain.scene.3.choice.a", "nightTrain.scene.3.reaction.a", "harbor"),
         nightTrainChoice("nightTrain.scene.3.choice.b", "nightTrain.scene.3.reaction.b", "forest"),
-        nightTrainChoice("nightTrain.scene.3.choice.c", "nightTrain.scene.3.reaction.c", "market"),
-        nightTrainChoice("nightTrain.scene.3.choice.d", "nightTrain.scene.3.reaction.d", "greenhouse")
+        nightTrainChoice("nightTrain.scene.3.choice.c", "nightTrain.scene.3.reaction.c", "market")
       ]
     },
     {
@@ -111,10 +113,10 @@ window.MOA_ARCHETYPE_TESTS["night-train"] = {
       image: "../image/tests/night-train/scene-07.webp",
       imageAlt: "nightTrain.scene.7.imageAlt",
       choices: [
-        nightTrainChoice("nightTrain.scene.7.choice.a", "nightTrain.scene.7.reaction.a", "snow"),
-        nightTrainChoice("nightTrain.scene.7.choice.b", "nightTrain.scene.7.reaction.b", "forest"),
         nightTrainChoice("nightTrain.scene.7.choice.c", "nightTrain.scene.7.reaction.c", "market"),
-        nightTrainChoice("nightTrain.scene.7.choice.d", "nightTrain.scene.7.reaction.d", "clock")
+        nightTrainChoice("nightTrain.scene.7.choice.d", "nightTrain.scene.7.reaction.d", "clock"),
+        nightTrainChoice("nightTrain.scene.7.choice.a", "nightTrain.scene.7.reaction.a", "snow"),
+        nightTrainChoice("nightTrain.scene.7.choice.b", "nightTrain.scene.7.reaction.b", "forest")
       ]
     },
     {

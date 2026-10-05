@@ -1,5 +1,6 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["hobby-discovery"] = {
+  answerPositionPolicy: "balanced",
   title: "hobbyDiscovery.quizTitle",
   resultLabel: "hobbyDiscovery.resultLabel",
   eyebrow: "hobbyDiscovery.eyebrow",

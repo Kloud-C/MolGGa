@@ -29,6 +29,7 @@ const sampleSize = 2_000_000;
 let unreachableFindings = 0;
 let inconclusiveSampleZeroes = 0;
 let distributionFloorFindings = 0;
+let distributionBalanceFindings = 0;
 const minimumResultShare = 0.03;
 
 function stableTieIndex(contentId, answerIndexes, candidateCount) {
@@ -41,7 +42,7 @@ function stableTieIndex(contentId, answerIndexes, candidateCount) {
   return (hash >>> 0) % candidateCount;
 }
 
-function tally(name, questions, resultIds, scoreAnswers, { awardLists } = {}) {
+function tally(name, questions, resultIds, scoreAnswers, { awardLists, maxTieRate, minShare, maxShare } = {}) {
   const total = questions.reduce((count, choices) => count * choices.length, 1);
   const exact = total <= exactLimit;
   const runs = exact ? total : sampleSize;
@@ -99,6 +100,20 @@ function tally(name, questions, resultIds, scoreAnswers, { awardLists } = {}) {
   }
   const nonzeroShares = [...counts.values()].filter((count) => count > 0);
   if (nonzeroShares.length) console.log(`  observed range         ${(Math.min(...nonzeroShares) / runs * 100).toFixed(3)}%–${(Math.max(...nonzeroShares) / runs * 100).toFixed(3)}%`);
+  const tieRate = tiedResponses / runs;
+  if (Number.isFinite(maxTieRate) && tieRate > maxTieRate) {
+    distributionBalanceFindings += 1;
+    console.log(`  TIE RATE ABOVE LIMIT   ${(tieRate * 100).toFixed(3)}% > ${(maxTieRate * 100).toFixed(3)}%`);
+  }
+  if (Number.isFinite(minShare) && Number.isFinite(maxShare)) {
+    for (const [id, count] of counts) {
+      const share = count / runs;
+      if (share < minShare || share > maxShare) {
+        distributionBalanceFindings += 1;
+        console.log(`  OUTSIDE BALANCE RANGE  ${id} ${(share * 100).toFixed(3)}% (expected ${(minShare * 100).toFixed(1)}%–${(maxShare * 100).toFixed(1)}%)`);
+      }
+    }
+  }
   const belowMinimum = [...counts].filter(([, count]) => count / runs < minimumResultShare);
   if (belowMinimum.length) {
     distributionFloorFindings += belowMinimum.length;
@@ -207,8 +222,11 @@ for (const [id, config] of Object.entries(archetypes)) {
     });
     const high = Math.max(...Object.values(scores));
     return resultIds.filter((resultId) => scores[resultId] === high);
-  }, { awardLists: questions });
+  }, {
+    awardLists: questions,
+    ...(id === "teto-egen" ? { maxTieRate: 0.05, minShare: 0.08, maxShare: 0.17 } : {})
+  });
 }
 
-console.log(`\nDistribution audit complete. Below 3%: ${distributionFloorFindings}; proven/exhaustive unreachable results: ${unreachableFindings}; inconclusive sampled zeroes: ${inconclusiveSampleZeroes}.`);
-if (unreachableFindings || distributionFloorFindings) process.exitCode = 1;
+console.log(`\nDistribution audit complete. Below 3%: ${distributionFloorFindings}; distribution balance findings: ${distributionBalanceFindings}; proven/exhaustive unreachable results: ${unreachableFindings}; inconclusive sampled zeroes: ${inconclusiveSampleZeroes}.`);
+if (unreachableFindings || distributionFloorFindings || distributionBalanceFindings) process.exitCode = 1;

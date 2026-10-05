@@ -1,11 +1,13 @@
 window.MOA_ARCHETYPE_TESTS = window.MOA_ARCHETYPE_TESTS || {};
 window.MOA_ARCHETYPE_TESTS["fantasy-class"] = {
+  answerPositionPolicy: "balanced",
   title: "fantasyClass.title",
   sharePrompt: "fantasyClass.sharePrompt",
   eyebrow: "fantasyClass.eyebrow",
   estimatedMinutes: 2,
   resultLabel: "fantasyClass.resultLabel",
   url: "https://molgga.com/fantasy-class-test.html",
+  balanceResultExposure: true,
   questions: [
     { prompt: "fantasyClass.question.1", choices: [
       { text: "fantasyClass.question.1.a", scores: [{ id: "warrior", weight: 2 }, "knight"] },
@@ -14,40 +16,40 @@ window.MOA_ARCHETYPE_TESTS["fantasy-class"] = {
       { text: "fantasyClass.question.1.d", scores: [{ id: "ranger", weight: 2 }, "rogue"] }
     ] },
     { prompt: "fantasyClass.question.2", choices: [
+      { text: "fantasyClass.question.2.d", scores: [{ id: "merchant", weight: 2 }, "bard"] },
       { text: "fantasyClass.question.2.a", scores: [{ id: "ranger", weight: 2 }, { id: "rogue", weight: 2 }] },
       { text: "fantasyClass.question.2.b", scores: [{ id: "mage", weight: 2 }] },
-      { text: "fantasyClass.question.2.c", scores: [{ id: "priest", weight: 2 }] },
-      { text: "fantasyClass.question.2.d", scores: [{ id: "merchant", weight: 2 }, "bard"] }
+      { text: "fantasyClass.question.2.c", scores: [{ id: "priest", weight: 2 }] }
     ] },
     { prompt: "fantasyClass.question.3", choices: [
-      { text: "fantasyClass.question.3.a", scores: [{ id: "warrior", weight: 2 }, "knight"] },
       { text: "fantasyClass.question.3.b", scores: [{ id: "mage", weight: 2 }] },
       { text: "fantasyClass.question.3.c", scores: [{ id: "rogue", weight: 2 }, "ranger"] },
-      { text: "fantasyClass.question.3.d", scores: [{ id: "bard", weight: 2 }, "merchant"] }
+      { text: "fantasyClass.question.3.d", scores: [{ id: "bard", weight: 2 }, "merchant"] },
+      { text: "fantasyClass.question.3.a", scores: [{ id: "warrior", weight: 2 }, "knight"] }
     ] },
     { prompt: "fantasyClass.question.4", choices: [
-      { text: "fantasyClass.question.4.a", scores: [{ id: "knight", weight: 2 }, "warrior"] },
-      { text: "fantasyClass.question.4.b", scores: [{ id: "ranger", weight: 2 }, "mage"] },
       { text: "fantasyClass.question.4.c", scores: [{ id: "priest", weight: 2 }] },
-      { text: "fantasyClass.question.4.d", scores: [{ id: "bard", weight: 2 }] }
+      { text: "fantasyClass.question.4.d", scores: [{ id: "bard", weight: 2 }] },
+      { text: "fantasyClass.question.4.a", scores: [{ id: "knight", weight: 2 }, "warrior"] },
+      { text: "fantasyClass.question.4.b", scores: [{ id: "ranger", weight: 2 }, "mage"] }
     ] },
     { prompt: "fantasyClass.question.5", choices: [
-      { text: "fantasyClass.question.5.a", scores: [{ id: "warrior", weight: 2 }] },
-      { text: "fantasyClass.question.5.b", scores: [{ id: "knight", weight: 2 }, "priest"] },
       { text: "fantasyClass.question.5.c", scores: [{ id: "ranger", weight: 2 }, "rogue"] },
-      { text: "fantasyClass.question.5.d", scores: [{ id: "mage", weight: 2 }] }
+      { text: "fantasyClass.question.5.d", scores: [{ id: "mage", weight: 2 }] },
+      { text: "fantasyClass.question.5.a", scores: [{ id: "warrior", weight: 2 }] },
+      { text: "fantasyClass.question.5.b", scores: [{ id: "knight", weight: 2 }, "priest"] }
     ] },
     { prompt: "fantasyClass.question.6", choices: [
-      { text: "fantasyClass.question.6.a", scores: [{ id: "merchant", weight: 2 }, "warrior"] },
       { text: "fantasyClass.question.6.b", scores: [{ id: "merchant", weight: 2 }] },
       { text: "fantasyClass.question.6.c", scores: [{ id: "merchant", weight: 2 }] },
-      { text: "fantasyClass.question.6.d", scores: [{ id: "rogue", weight: 2 }, "ranger"] }
+      { text: "fantasyClass.question.6.d", scores: [{ id: "rogue", weight: 2 }, "ranger"] },
+      { text: "fantasyClass.question.6.a", scores: [{ id: "merchant", weight: 2 }, "warrior"] }
     ] },
     { prompt: "fantasyClass.question.7", choices: [
+      { text: "fantasyClass.question.7.d", scores: [{ id: "bard", weight: 2 }] },
       { text: "fantasyClass.question.7.a", scores: [{ id: "warrior", weight: 2 }, "knight"] },
       { text: "fantasyClass.question.7.b", scores: [{ id: "mage", weight: 2 }] },
-      { text: "fantasyClass.question.7.c", scores: [{ id: "ranger", weight: 2 }, "rogue"] },
-      { text: "fantasyClass.question.7.d", scores: [{ id: "bard", weight: 2 }] }
+      { text: "fantasyClass.question.7.c", scores: [{ id: "ranger", weight: 2 }, "rogue"] }
     ] },
     { prompt: "fantasyClass.question.8", choices: [
       { text: "fantasyClass.question.8.a", scores: [{ id: "knight", weight: 2 }, "warrior"] },
