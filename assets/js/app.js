@@ -45,7 +45,7 @@
   };
 
   const formatShareText = (resultLine, url) => `${resultLine}\n---------------------------------------------------\n${tr("나도 테스트 해보고 싶다면?")}\n${url}`;
-  const publicPageUrl = (page) => `https://molgga.com/${window.MOA_I18N?.language || "ko"}/${page}`;
+  const publicPageUrl = (page) => `https://molgga.com/${window.MOA_I18N?.language || "ko"}/${String(page).replace(/\.html$/i, "")}`;
 
   // Shared one-question-at-a-time flow for the classic radio-button quizzes.
   const setupSteppedForm = (form) => {

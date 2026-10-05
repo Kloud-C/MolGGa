@@ -54,7 +54,7 @@ npx wrangler d1 execute molgga-worldcup-rankings --remote --file=migrations/0002
 
 현재 Cloudflare WAF 규칙 하나를 두 POST 경로에 모두 적용하세요. 규칙 식은 `(http.request.method eq "POST" and http.request.uri.path in {"/api/worldcup-vote" "/api/content-start"})`입니다. 저장소에서는 Cloudflare 대시보드를 변경하지 않으므로 새 API 운영 전에 직접 규칙을 저장하고 활성화해야 합니다. 적용한 임계값이 두 API 요청을 합산하는지 확인하고 공유 네트워크의 정상 이용이 막히지 않도록 조정하세요. [Cloudflare WAF Rate Limiting 안내](https://developers.cloudflare.com/waf/rate-limiting-rules/create-zone-dashboard/)와 [규칙식 문법](https://developers.cloudflare.com/ruleset-engine/rules-language/operators/)을 참고하세요. `Origin` 검사는 교차 사이트 요청을 줄이는 장치이며 인증이나 봇 방지 기능은 아닙니다.
 
-연동 상태를 로컬에서 점검하려면 저장소 루트에서 `node scripts/audit-integrations.mjs`와 `node scripts/audit-result-distributions.mjs`를 실행합니다. 첫 번째 점검은 공통 레지스트리와 실제 정의 데이터·네 언어 번역·이미지·페이지 경로를 대조하고 SEO 메타데이터, API, 랭킹 문서도 확인합니다. 두 번째는 퀴즈 응답 조합을 전수 조사하거나 고정 표본으로 실행해 결과별 출현 비율과 도달 가능성을 살핍니다.
+일반적인 전체 사이트 점검은 [사이트 품질 프레임](docs/site-quality-framework.md)과 [콘텐츠 감사 기준선](docs/content-audit-baseline.md)의 재검토 범위를 따릅니다. 공통 페이지·공유 기능과 변경된 번역 키를 표적으로 확인하고, 기존 콘텐츠 16개의 문항·결과·이미지는 다시 열어 심층 검토하지 않습니다. `scripts/audit-integrations.mjs`와 `scripts/audit-result-distributions.mjs`는 현재 전체 콘텐츠를 순회하므로 일반 점검이나 특정 콘텐츠 한 건의 점검에서는 실행하지 않습니다. 사용자가 `[1]Content package를 포함하여 전체 검사 및 싱크를 조율해주세요`라고 명시한 경우에만 전체 감사 스크립트를 실행합니다. `[1]컨텐츠 묶음을 포함하여 전체 검사 및 싱크를 조율해주세요`도 같은 요청입니다. 점수·가중치를 바꾼 특정 콘텐츠는 해당 콘텐츠만 범위를 제한해 결과 분포를 확인합니다.
 
 공통 콘텐츠 메타데이터는 `assets/js/content-registry.js`에서 관리합니다. 홈의 검색·분류·정렬·보기 방식·시작 전 미리보기와 결과 후 추천은 이 레지스트리를 함께 읽습니다. 새 콘텐츠는 별도 홈 카드 HTML을 만들지 않고 레지스트리에 제목·설명 키, 이미지, 분류·태그, 공개 경로, 실제 등록일과 수치를 등록합니다. 네 언어 번역과 콘텐츠 데이터·페이지를 추가하고, 문항·후보 수와 예상 시간은 감사 스크립트에서 원본과 대조합니다. 서비스 범위를 설명하는 소개·이용 안내·개인정보처리방침도 네 언어에서 같은 콘텐츠 목록을 사용합니다. 공통 스타일이나 스크립트를 바꾸면 HTML의 캐시 토큰도 갱신합니다.
 

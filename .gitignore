@@ -11,3 +11,6 @@ Thumbs.db
 .vscode/
 .idea/
 /%SystemDrive%/ProgramData/Microsoft/Windows/Caches/
+
+# Local-only content archive; do not include it in Git or static-site deployments.
+/\[1\]Content package/
