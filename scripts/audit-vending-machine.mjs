@@ -44,8 +44,13 @@ assert.match(machineJs, /current\.origin/);
 assert.match(machineJs, /mobileLockerTray\.hidden/);
 assert.match(machineJs, /data-vm-temp-locker/);
 assert.match(machineJs, /t\("ready"\)/);
-assert.match(machineJs, /slotRect\.left \+ slotRect\.width \/ 2 - 34/);
+assert.match(machineJs, /slotRect\.left \+ slotRect\.width \/ 2 - chipWidth \/ 2/);
 assert.match(machineJs, /vm-drag-preview/);
+assert.match(machineJs, /cardLiftSize\(\)/);
+assert.match(machineJs, /insertCard\(current\.contentId, current\.dragCard\)/);
+assert.match(machineJs, /scaleY\(\$\{slotThickness\}\) rotate\(90deg\)/);
+assert.match(machineJs, /overlay\.classList\.add\("is-returning"\)/);
+assert.match(machineJs, /overlay\.hidden = true;[\s\S]*?const chip = make\("div", "vm-eject-chip"\)/);
 assert.doesNotMatch(machineJs, /vm-card-insert|data-vm-insert\]/);
 assert.doesNotMatch(machineJs, /frame\.style\.(top|left|width|height)/);
 assert.match(machineJs, /localStorage\.setItem\(storageKey/);
@@ -66,6 +71,9 @@ assert.match(css, /--vm-lime:#dafa98/);
 assert.match(css, /transform:rotateX\(58deg\)/);
 assert.match(css, /vm-card\.is-revealed[^\{]*\{ width:/);
 assert.match(css, /\.vm-drag-preview \{[^}]*pointer-events:none/);
+assert.match(css, /\.vm-drag-preview\.is-lifting \.vm-card-inner/);
+assert.match(css, /\.vm-focus\.is-returning \.vm-focus-screen \{ background:transparent; \}/);
+assert.match(css, /@keyframes vm-chip-eject[\s\S]*?100%\{transform:translateY\(34px\) scale\(1\);opacity:1\}/);
 
 for (const language of languages) {
   const home = read(`${language}/index.html`);

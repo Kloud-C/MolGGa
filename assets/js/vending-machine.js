@@ -41,6 +41,13 @@
     if (window.matchMedia("(max-width: 900px)").matches) return clamp(window.innerWidth * .12, 112, 132);
     return clamp(window.innerWidth * .1, 112, 140);
   };
+  const cardLiftSize = () => {
+    const mobile = window.matchMedia("(max-width: 680px)").matches;
+    const width = mobile
+      ? clamp(window.innerWidth * .48, 156, 190)
+      : clamp(window.innerWidth * (window.matchMedia("(max-width: 900px)").matches ? .24 : .16), 164, 210);
+    return { width, height:width / .62 };
+  };
   const defaultPositions = { weekend:{x:8,y:22,r:-11,z:1}, mbti:{x:39,y:43,r:7,z:2}, "night-train":{x:70,y:14,r:12,z:3} };
   const groupForEntry = (entry) => entry.type === "worldcup" || entry.formatId === "worldcup" ? "matchups" : entry.formatId === "story" || entry.source?.kind === "story" || entry.source?.kind === "survival" ? "stories" : "tests";
   const groupForId = (id) => groupForEntry(contentById.get(id) || {});
@@ -546,55 +553,75 @@
     await wait(reducedMotion ? 30 : 650);
   };
 
-  const insertCard = async (contentId) => {
-    if (activeContent || !state.owned.includes(contentId)) return;
+  const insertCard = async (contentId, flightCard = null) => {
+    if (activeContent || !state.owned.includes(contentId)) { flightCard?.remove(); return; }
     const entry = contentById.get(contentId);
-    if (!entry) return;
+    if (!entry) { flightCard?.remove(); return; }
     const card = floor.querySelector(`[data-vm-card="${CSS.escape(contentId)}"]`);
-    if (!card) return;
+    if (!card) { flightCard?.remove(); return; }
     activeContent = entry;
     document.body.classList.remove("vm-is-dragging");
     const machineOutOfView = (() => {
       const rect = machine.getBoundingClientRect();
       return rect.top >= window.innerHeight || rect.bottom <= 0;
     })();
-    let clone = null;
+    let clone = flightCard;
     const createFlightCard = () => {
-      const rect = card.getBoundingClientRect();
-      clone = card.cloneNode(true);
-      clone.classList.add("vm-insert-animation", "is-revealed");
-      clone.style.left = `${rect.left}px`;
-      clone.style.top = `${rect.top}px`;
-      clone.style.width = `${rect.width}px`;
-      clone.style.height = `${rect.height}px`;
-      clone.style.transform = `rotate(${state.positions[contentId].r}deg)`;
-      document.body.append(clone);
+      if (clone) {
+        const computed = window.getComputedStyle(clone);
+        const currentWidth = Number.parseFloat(computed.width) || clone.offsetWidth;
+        const currentHeight = Number.parseFloat(computed.height) || clone.offsetHeight;
+        clone.style.width = `${currentWidth}px`;
+        clone.style.height = `${currentHeight}px`;
+        clone.classList.remove("vm-drag-preview", "is-dragging");
+        clone.classList.add("vm-insert-animation", "is-revealed");
+      } else {
+        const rect = card.getBoundingClientRect();
+        const width = card.offsetWidth;
+        const height = card.offsetHeight;
+        clone = card.cloneNode(true);
+        clone.classList.add("vm-insert-animation", "is-revealed");
+        clone.style.left = `${rect.left + rect.width / 2 - width / 2}px`;
+        clone.style.top = `${rect.top + rect.height / 2 - height / 2}px`;
+        clone.style.width = `${width}px`;
+        clone.style.height = `${height}px`;
+        clone.style.transform = `rotate(${state.positions[contentId].r}deg)`;
+        document.body.append(clone);
+      }
       card.style.visibility = "hidden";
-      return rect;
+      return clone;
     };
+    createFlightCard();
+    const cardWidth = clone.offsetWidth;
+    const cardHeight = clone.offsetHeight;
     if (machineOutOfView) {
-      const rect = createFlightCard();
       requestAnimationFrame(() => {
-        clone.style.left = `${Math.max(8, window.innerWidth / 2 - rect.width / 2)}px`;
-        clone.style.top = `${Math.max(8, window.innerHeight - rect.height - 24)}px`;
-        clone.style.transform = "rotate(90deg)";
+        clone.style.left = `${Math.max(8, window.innerWidth / 2 - cardWidth / 2)}px`;
+        clone.style.top = `${Math.max(8, window.innerHeight - cardHeight - 28)}px`;
+        clone.style.transform = "rotate(0deg) translateY(-8px) scale(.96)";
       });
-      await waitForMotion(620);
+      await waitForMotion(420);
       machine.scrollIntoView({ behavior:"smooth", block:"center" });
       await waitForMotion(650);
-    } else {
-      createFlightCard();
     }
     const slotRect = slot.getBoundingClientRect();
-    const flightRect = clone.getBoundingClientRect();
+    const centerX = slotRect.left + slotRect.width / 2;
+    const centerY = slotRect.top + slotRect.height / 2;
+    const slotCenterLeft = centerX - cardWidth / 2;
+    const slotCenterTop = centerY - cardHeight / 2;
     requestAnimationFrame(() => {
-      clone.style.left = `${slotRect.left + slotRect.width / 2 - flightRect.width / 2}px`;
-      clone.style.top = `${slotRect.top + slotRect.height / 2 - flightRect.height / 2}px`;
-      clone.style.transform = "rotate(90deg) scale(.82)";
+      clone.style.left = `${slotCenterLeft}px`;
+      clone.style.top = `${slotCenterTop}px`;
+      clone.style.transform = "rotate(90deg)";
     });
-    await waitForMotion(590);
-    clone.style.transform = "rotate(90deg) scale(.08)";
-    await waitForMotion(190);
+    await waitForMotion(520);
+    const slotThickness = clamp((Math.max(8, slotRect.height) * .72) / Math.max(1, cardWidth), .08, .24);
+    clone.style.transform = `scaleY(${slotThickness}) rotate(90deg)`;
+    await waitForMotion(230);
+    clone.style.top = `${slotCenterTop - Math.min(5, slotRect.height * .22)}px`;
+    clone.style.transform = `scaleY(${slotThickness * .28}) rotate(90deg)`;
+    clone.style.opacity = ".12";
+    await waitForMotion(260);
     clone.remove();
     card.style.visibility = "";
     machineTray.classList.remove("is-drop-target");
@@ -626,16 +653,21 @@
       completionObserver?.disconnect(); completionObserver = null;
       activeIframe?.remove(); activeIframe = null;
       screen.replaceChildren();
+      overlay.classList.add("is-returning");
       overlay.classList.remove("is-zoomed");
       await waitForMotion(620);
+      overlay.hidden = true;
+      overlay.classList.remove("is-returning");
       const chip = make("div", "vm-eject-chip");
       chip.setAttribute("aria-hidden", "true");
+      if (previous) chip.append(newPixelIcon(previous, 10, "vm-eject-chip-icon"));
       const slotRect = slot.getBoundingClientRect();
-      chip.style.left = `${slotRect.left + slotRect.width / 2 - 34}px`;
-      chip.style.top = `${slotRect.top + slotRect.height / 2 - 12}px`;
+      const chipWidth = 84;
+      const chipHeight = 46;
+      chip.style.left = `${slotRect.left + slotRect.width / 2 - chipWidth / 2}px`;
+      chip.style.top = `${slotRect.top + slotRect.height / 2 - chipHeight / 2}px`;
       document.body.append(chip);
-      await waitForMotion(580); chip.remove();
-      overlay.hidden = true;
+      await waitForMotion(820); chip.remove();
       document.body.style.overflow = "";
       activeContent = null;
       closePromise = null;
@@ -652,17 +684,25 @@
     const contentId = card.dataset.vmCard;
     const rect = card.getBoundingClientRect();
     const dragCard = card.cloneNode(true);
-    dragCard.classList.add("vm-drag-preview", "is-dragging", "is-revealed");
-    dragCard.querySelector(".vm-card-front")?.setAttribute("aria-hidden", "false");
-    dragCard.querySelector(".vm-card-back")?.setAttribute("aria-hidden", "true");
+    const startsRevealed = card.classList.contains("is-revealed");
+    dragCard.classList.remove("vm-insert-animation");
+    dragCard.classList.add("vm-drag-preview", "is-dragging");
+    if (startsRevealed) dragCard.classList.add("is-revealed", "is-lifting");
+    else dragCard.classList.remove("is-revealed");
+    dragCard.querySelector(".vm-card-front")?.setAttribute("aria-hidden", String(!startsRevealed));
+    dragCard.querySelector(".vm-card-back")?.setAttribute("aria-hidden", String(startsRevealed));
     dragCard.style.position = "fixed";
     dragCard.style.left = "0px";
     dragCard.style.top = "0px";
-    dragCard.style.transform = "rotate(0deg)";
+    const initialWidth = card.offsetWidth;
+    const initialHeight = card.offsetHeight;
+    dragCard.style.width = `${initialWidth}px`;
+    dragCard.style.height = `${initialHeight}px`;
+    dragCard.style.transform = `rotate(${state.positions[contentId].r}deg)`;
     dragCard.style.zIndex = "20000";
     document.body.append(dragCard);
-    const initialLeft = rect.left + rect.width / 2 - dragCard.offsetWidth / 2;
-    const initialTop = rect.top + rect.height / 2 - dragCard.offsetHeight / 2;
+    const initialLeft = rect.left + rect.width / 2 - initialWidth / 2;
+    const initialTop = rect.top + rect.height / 2 - initialHeight / 2;
     dragCard.style.left = `${initialLeft}px`;
     dragCard.style.top = `${initialTop}px`;
     card.style.visibility = "hidden";
@@ -670,7 +710,12 @@
     try { card.setPointerCapture(event.pointerId); } catch { /* Mouse-like pointers may not support capture. */ }
     card.style.zIndex = String(++state.nextZ);
     state.positions[contentId].z = state.nextZ;
-    dragging = { card, dragCard, contentId, startX:event.clientX, startY:event.clientY, offsetX:event.clientX - initialLeft, offsetY:event.clientY - initialTop, left:initialLeft, top:initialTop, moved:false, origin:{ ...state.positions[contentId] } };
+    dragging = {
+      card, dragCard, contentId, startX:event.clientX, startY:event.clientY,
+      anchorX:clamp((event.clientX - initialLeft) / Math.max(1, initialWidth), 0, 1),
+      anchorY:clamp((event.clientY - initialTop) / Math.max(1, initialHeight), 0, 1),
+      left:initialLeft, top:initialTop, moved:false, lifted:startsRevealed, origin:{ ...state.positions[contentId] }
+    };
     document.body.classList.add("vm-is-dragging");
   });
 
@@ -680,10 +725,20 @@
     const dy = event.clientY - dragging.startY;
     if (Math.abs(dx) + Math.abs(dy) > 5) {
       dragging.moved = true;
+      if (!dragging.lifted) {
+        dragging.lifted = true;
+        const size = cardLiftSize();
+        dragging.dragCard.classList.add("is-lifting", "is-revealed");
+        dragging.dragCard.querySelector(".vm-card-front")?.setAttribute("aria-hidden", "false");
+        dragging.dragCard.querySelector(".vm-card-back")?.setAttribute("aria-hidden", "true");
+        dragging.dragCard.style.width = `${size.width}px`;
+        dragging.dragCard.style.height = `${size.height}px`;
+        dragging.dragCard.style.transform = "rotate(0deg) translateY(-8px) scale(1.015)";
+      }
     }
     const lift = event.pointerType === "touch" ? 44 : 0;
-    dragging.left = event.clientX - dragging.offsetX;
-    dragging.top = event.clientY - dragging.offsetY - lift;
+    dragging.left = event.clientX - dragging.dragCard.offsetWidth * dragging.anchorX;
+    dragging.top = event.clientY - dragging.dragCard.offsetHeight * dragging.anchorY - lift;
     dragging.dragCard.style.left = `${dragging.left}px`;
     dragging.dragCard.style.top = `${dragging.top}px`;
     if (event.clientY > window.innerHeight - 64) window.scrollBy(0, 18);
@@ -711,10 +766,19 @@
     const onMachineTray = Boolean(target?.closest("[data-vm-insert-tray]"));
     const trayRect = mobileTray.getBoundingClientRect();
     const overTray = window.matchMedia("(max-width: 680px)").matches && !mobileTray.hidden && document.body.classList.contains("vm-is-dragging") && event.clientX >= trayRect.left && event.clientX <= trayRect.right && event.clientY >= trayRect.top && event.clientY <= trayRect.bottom;
-    current.dragCard.remove();
+    const shouldInsert = overTray || onMachineTray;
+    current.left = event.clientX - current.dragCard.offsetWidth * current.anchorX;
+    current.top = event.clientY - current.dragCard.offsetHeight * current.anchorY - (event.pointerType === "touch" ? 44 : 0);
+    if (shouldInsert) {
+      current.dragCard.style.left = `${current.left}px`;
+      current.dragCard.style.top = `${current.top}px`;
+    } else {
+      current.dragCard.remove();
+    }
     current.card.style.visibility = "";
     current.card.setAttribute("aria-grabbed", "false");
     if (!current.moved) {
+      current.dragCard.remove();
       state.positions[current.contentId].z = state.nextZ;
       save();
       dragging = null;
@@ -729,11 +793,11 @@
     const inFloor = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
     const left = clamp(current.left - bounds.left, 0, Math.max(0, bounds.width - cardWidth));
     const top = clamp(current.top - bounds.top, 0, Math.max(0, bounds.height - cardHeight));
-    if (overTray || onMachineTray) {
+    if (shouldInsert) {
       state.positions[current.contentId].x = bounds.width ? left / bounds.width * 100 : current.origin.x;
       state.positions[current.contentId].y = bounds.height ? top / bounds.height * 100 : current.origin.y;
       save(); render();
-      insertCard(current.contentId);
+      insertCard(current.contentId, current.dragCard);
     } else if ((locker && locker.dataset.vmLocker) || (tempLocker && tempLocker.dataset.vmTempLocker)) {
       const groupId = locker?.dataset.vmLocker || tempLocker?.dataset.vmTempLocker;
       const accepted = categoryDrop(groupId, current.contentId);
