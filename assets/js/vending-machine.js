@@ -6,21 +6,27 @@
   const lang = () => (window.MOA_I18N?.language || document.documentElement.lang || "ko").slice(0, 2);
   const ejectButtonText = () => ({ ko:"카드 꺼내기", en:"Eject card", ja:"カードを取り出す", zh:"取出卡片" }[lang()] || "Eject card");
   const strings = {
-      ko: {
-      brand:"딸깍 자판기", kicker:"MOLGGA · 심야 카드 골목", title:"밤 골목에서 카드를 찾아보자", intro:"바닥에 놓인 카드를 살펴보고, 마음에 드는 한 장을 자판기에 넣어보자.", points:"보유 포인트", floor:"골목 바닥", floorHint:"카드를 눌러 앞면을 확인하거나 끌어 옮길 수 있다.", auto:"자동 정리", cardBack:"MOLGGA", turnCard:"카드를 뒤집어 내용 보기", insert:"자판기에 넣기", useCard:"이 카드로 시작", tray:"카드를 여기에 놓기", machine:"딸깍 자판기", machineHint:"카드를 초록색 받침에 놓으면 시작된다", screenIdle:"카드 대기 중", screenHint:"골목에서 카드 한 장을 골라보자", slot:"카드 슬롯", trayLabel:"카드 투입구", lockers:"카드 정리함", emptyLocker:"아직 보관한 카드가 없다.", open:"열기", close:"닫기", takeOut:"바닥에 꺼내기", cards:"장", autoConfirm:"카드를 자동 정리하겠습니까?", autoExplain:"지금 배치한 카드 위치가 바뀐다.", cancel:"취소", confirmArrange:"자동 정리", sorted:"바닥의 카드를 가지런히 놓았다.", noCards:"정리할 카드가 없다.", standard:"골목 카드팩", standardDesc:"아직 찾지 못한 카드 한 장이 나온다. 한 팩에 40P가 든다.", buyStandard:"40P로 카드팩 뜯기", theme:"테마 확장팩", themeDesc:"테마와 들어 있는 카드를 확인한 뒤 무료로 구매 흐름을 체험할 수 있다.", buyTheme:"무료 테스트 구매", allOwned:"이 정리함의 카드를 모두 찾았다.", insufficient:"포인트가 부족하다.", packEmpty:"새 카드가 남아 있지 않다.", packGet:"새 카드를 찾았다: {{name}}", stored:"정리함에 넣었다.", returned:"골목 바닥에 꺼내놓았다.", start:"카드 인식 중", scanHint:"잠시만 기다려줘", ready:"카드 인식 완료", startContent:"콘텐츠를 불러오는 중이다", eject:"게임칩 빼기", saved:"카드와 포인트는 이 브라우저에 저장된다.", completed:"처음 완료한 콘텐츠다. 20P를 받았다.", completedBefore:"이미 완료한 콘텐츠다.", chooseTheme:"테마를 고르자", count:"보유 카드", floorCount:"바닥에 놓인 카드", folderStored:"정리함에 보관 중", source:"콘텐츠 페이지 열기", shop:"카드팩 상점", closeOverlay:"자판기 닫기", fallback:"이 콘텐츠를 새 탭에서 연다.", backToAlley:"골목으로 돌아왔다.", kindMatch:"월드컵", kindTest:"테스트", kindStory:"이야기", completion:"끝까지 완료하면 20P", included:"팩에 들어 있는 카드", kindPrefix:"콘텐츠", standardOpening:"카드팩을 뜯는 중", lockerHint:"카드를 유형에 맞는 칸에 놓자", dragInsert:"카드를 넣을 곳", dragLocker:"정리함에 넣기"
+    ko: {
+      brand:"딸깍 자판기", kicker:"MOLGGA · 심야 카드 골목", title:"밤 골목에서 카드를 찾아보자", intro:"바닥에 놓인 카드를 살펴보고, 마음에 드는 한 장을 자판기에 넣어보자.", points:"보유 포인트", floor:"골목 바닥", floorHint:"카드를 눌러 앞면을 확인하거나 끌어 옮길 수 있다.", auto:"자동 정리", cardBack:"MOLGGA", turnCard:"카드를 뒤집어 내용 보기", insert:"자판기에 넣기", useCard:"이 카드로 시작", tray:"카드를 여기에 놓기", machine:"딸깍 자판기", machineHint:"카드를 초록색 받침에 놓으면 시작된다", screenIdle:"카드 대기 중", screenHint:"골목에서 카드 한 장을 골라보자", slot:"카드 슬롯", trayLabel:"카드 투입구", lockers:"카드 정리함", emptyLocker:"아직 보관한 카드가 없다.", open:"열기", close:"닫기", takeOut:"바닥에 꺼내기", cards:"장", autoConfirm:"카드를 자동 정리하겠습니까?", autoExplain:"지금 배치한 카드 위치가 바뀐다.", cancel:"취소", confirmArrange:"자동 정리", sorted:"바닥의 카드를 가지런히 놓았다.", noCards:"정리할 카드가 없다.", standard:"골목 카드팩", standardDesc:"아직 찾지 못한 카드 한 장이 나온다. 한 팩에 40P가 든다.", buyStandard:"40P로 카드팩 뜯기", theme:"테마 확장팩", themeDesc:"테마와 들어 있는 카드를 확인한 뒤 무료로 구매 흐름을 체험할 수 있다.", buyTheme:"무료 테스트 구매", allOwned:"이 유형의 카드는 모두 찾았다.", insufficient:"포인트가 부족하다.", packEmpty:"새 카드가 남아 있지 않다.", packGet:"새 카드를 찾았다: {{name}}", stored:"정리함에 넣었다.", returned:"골목 바닥에 꺼내놓았다.", start:"카드 인식 중", scanHint:"잠시만 기다려줘", ready:"카드 인식 완료", startContent:"콘텐츠를 불러오는 중이다", eject:"게임칩 빼기", saved:"카드와 포인트는 이 브라우저에 저장된다.", completed:"처음 완료한 콘텐츠다. 20P를 받았다.", completedBefore:"이미 완료한 콘텐츠다.", chooseTheme:"테마를 고르자", count:"보유 카드", floorCount:"바닥에 놓인 카드", folderStored:"정리함에 보관 중", source:"콘텐츠 페이지 열기", shop:"카드팩 상점", closeOverlay:"자판기 닫기", fallback:"이 콘텐츠를 새 탭에서 연다.", backToAlley:"골목으로 돌아왔다.", kindMatch:"월드컵", kindTest:"테스트", kindStory:"이야기", completion:"끝까지 완료하면 20P", included:"팩에 들어 있는 카드", kindPrefix:"콘텐츠", standardOpening:"카드팩을 뜯는 중", lockerHint:"카드를 유형에 맞는 칸에 놓자", dragInsert:"카드를 넣을 곳", dragLocker:"정리함에 넣기"
     },
     en: {
-      brand:"Click Card Arcade", kicker:"MOLGGA · THE MIDNIGHT ALLEY", title:"Find a card in the night alley", intro:"Turn over a card on the pavement, then feed the one you like into the machine.", points:"Your points", floor:"Cards on the pavement", floorHint:"Tap a card to see its front, or drag it to move it.", auto:"Arrange cards", cardBack:"MOLGGA", turnCard:"Turn over this card", insert:"Insert into machine", useCard:"Play this card", tray:"Drop a card here", machine:"Click Card Machine", machineHint:"Place a card on the green tray to begin", screenIdle:"CARD WAITING", screenHint:"Pick one card from the alley", slot:"Card slot", trayLabel:"Insert card", lockers:"Card lockers", emptyLocker:"Nothing stored here yet.", open:"Open", close:"Close", takeOut:"Return to floor", cards:"cards", autoConfirm:"Arrange the cards automatically?", autoExplain:"The positions you chose will change.", cancel:"Cancel", confirmArrange:"Arrange cards", sorted:"The cards are lined up on the floor.", noCards:"There are no cards to arrange.", standard:"Alley card pack", standardDesc:"Get one card you have not found yet. Each pack costs 40P.", buyStandard:"Open pack · 40P", theme:"Themed expansion", themeDesc:"Preview its theme and cards, then try the purchase flow for free.", buyTheme:"Try a free purchase", allOwned:"You found every card in this locker.", insufficient:"You need more points.", packEmpty:"No new cards remain.", packGet:"New card found: {{name}}", stored:"Card placed in the locker.", returned:"Card returned to the pavement.", start:"Reading card", scanHint:"Just a moment", ready:"Card recognized", startContent:"Loading your content", eject:"Eject game chip", saved:"Cards and points are saved in this browser.", completed:"First completion. You earned 20P.", completedBefore:"This content was already completed.", chooseTheme:"Choose a theme", count:"owned", floorCount:"on the floor", folderStored:"stored", source:"Open content page", shop:"Card pack shop", closeOverlay:"Close machine", fallback:"Opening this content in a new tab.", backToAlley:"Back in the alley.", kindMatch:"Matchup", kindTest:"Quiz", kindStory:"Story", completion:"Earn 20P by completing it", included:"Cards in this pack", kindPrefix:"Content", standardOpening:"Opening the pack", lockerHint:"Place each card in its matching locker", dragInsert:"Drop card to play", dragLocker:"Store in a locker"
+      brand:"Click Card Arcade", kicker:"MOLGGA · THE MIDNIGHT ALLEY", title:"Find a card in the night alley", intro:"Turn over a card on the pavement, then feed the one you like into the machine.", points:"Your points", floor:"Cards on the pavement", floorHint:"Tap a card to see its front, or drag it to move it.", auto:"Arrange cards", cardBack:"MOLGGA", turnCard:"Turn over this card", insert:"Insert into machine", useCard:"Play this card", tray:"Drop a card here", machine:"Click Card Machine", machineHint:"Place a card on the green tray to begin", screenIdle:"CARD WAITING", screenHint:"Pick one card from the alley", slot:"Card slot", trayLabel:"Insert card", lockers:"Card lockers", emptyLocker:"Nothing stored here yet.", open:"Open", close:"Close", takeOut:"Return to floor", cards:"cards", autoConfirm:"Arrange the cards automatically?", autoExplain:"The positions you chose will change.", cancel:"Cancel", confirmArrange:"Arrange cards", sorted:"The cards are lined up on the floor.", noCards:"There are no cards to arrange.", standard:"Alley card pack", standardDesc:"Get one card you have not found yet. Each pack costs 40P.", buyStandard:"Open pack · 40P", theme:"Themed expansion", themeDesc:"Preview its theme and cards, then try the purchase flow for free.", buyTheme:"Try a free purchase", allOwned:"You found every card of this type.", insufficient:"You need more points.", packEmpty:"No new cards remain.", packGet:"New card found: {{name}}", stored:"Card placed in the locker.", returned:"Card returned to the pavement.", start:"Reading card", scanHint:"Just a moment", ready:"Card recognized", startContent:"Loading your content", eject:"Eject game chip", saved:"Cards and points are saved in this browser.", completed:"First completion. You earned 20P.", completedBefore:"This content was already completed.", chooseTheme:"Choose a theme", count:"owned", floorCount:"on the floor", folderStored:"stored", source:"Open content page", shop:"Card pack shop", closeOverlay:"Close machine", fallback:"Opening this content in a new tab.", backToAlley:"Back in the alley.", kindMatch:"Matchup", kindTest:"Quiz", kindStory:"Story", completion:"Earn 20P by completing it", included:"Cards in this pack", kindPrefix:"Content", standardOpening:"Opening the pack", lockerHint:"Place each card in its matching locker", dragInsert:"Drop card to play", dragLocker:"Store in a locker"
     },
     ja: {
-      brand:"カード自販機", kicker:"MOLGGA · 深夜のカード路地", title:"夜の路地でカードを探そう", intro:"路地に落ちているカードをめくり、気になる一枚を自販機に入れてみよう。", points:"所持ポイント", floor:"路地のカード", floorHint:"カードを押して表を見たり、ドラッグして動かしたりできる。", auto:"カードを整える", cardBack:"MOLGGA", turnCard:"カードをめくる", insert:"自販機に入れる", useCard:"このカードで始める", tray:"ここにカードを置く", machine:"カード自販機", machineHint:"緑の受け皿にカードを置くと始まる", screenIdle:"カード待機中", screenHint:"路地でカードを一枚選ぼう", slot:"カードスロット", trayLabel:"カード投入口", lockers:"カード整理箱", emptyLocker:"まだカードはありません。", open:"開く", close:"閉じる", takeOut:"床に戻す", cards:"枚", autoConfirm:"カードを自動で整理しますか？", autoExplain:"今のカードの位置が変わります。", cancel:"キャンセル", confirmArrange:"自動で整理", sorted:"床のカードを並べました。", noCards:"整理するカードがありません。", standard:"路地のカードパック", standardDesc:"まだ見つけていないカードが一枚出る。1パック40P。", buyStandard:"パックを開く · 40P", theme:"テーマ拡張パック", themeDesc:"テーマとカードを確認してから、無料で購入の流れを試せる。", buyTheme:"無料で試す", allOwned:"この整理箱のカードはすべて見つけました。", insufficient:"ポイントが足りません。", packEmpty:"新しいカードは残っていません。", packGet:"新しいカードを見つけた: {{name}}", stored:"整理箱に入れました。", returned:"路地の床に戻しました。", start:"カードを読み取り中", scanHint:"少々お待ちください", ready:"カード認識完了", startContent:"コンテンツを読み込み中", eject:"ゲームチップを取り出す", saved:"カードとポイントはこのブラウザーに保存されます。", completed:"初回クリア。20Pを獲得しました。", completedBefore:"このコンテンツはクリア済みです。", chooseTheme:"テーマを選ぶ", count:"枚所持", floorCount:"床にある", folderStored:"収納中", source:"コンテンツページを開く", shop:"カードパックショップ", closeOverlay:"自販機を閉じる", fallback:"コンテンツを新しいタブで開きます。", backToAlley:"路地に戻りました。", kindMatch:"対戦", kindTest:"テスト", kindStory:"ストーリー", completion:"最後まで進むと20P", included:"パックに入っているカード", kindPrefix:"種類", standardOpening:"パックを開封中", lockerHint:"カードの種類に合った整理箱に入れよう", dragInsert:"カードを入れる", dragLocker:"整理箱に入れる"
+      brand:"カード自販機", kicker:"MOLGGA · 深夜のカード路地", title:"夜の路地でカードを探そう", intro:"路地に落ちているカードをめくり、気になる一枚を自販機に入れてみよう。", points:"所持ポイント", floor:"路地のカード", floorHint:"カードを押して表を見たり、ドラッグして動かしたりできる。", auto:"カードを整える", cardBack:"MOLGGA", turnCard:"カードをめくる", insert:"自販機に入れる", useCard:"このカードで始める", tray:"ここにカードを置く", machine:"カード自販機", machineHint:"緑の受け皿にカードを置くと始まる", screenIdle:"カード待機中", screenHint:"路地でカードを一枚選ぼう", slot:"カードスロット", trayLabel:"カード投入口", lockers:"カード整理箱", emptyLocker:"まだカードはありません。", open:"開く", close:"閉じる", takeOut:"床に戻す", cards:"枚", autoConfirm:"カードを自動で整理しますか？", autoExplain:"今のカードの位置が変わります。", cancel:"キャンセル", confirmArrange:"自動で整理", sorted:"床のカードを並べました。", noCards:"整理するカードがありません。", standard:"路地のカードパック", standardDesc:"まだ見つけていないカードが一枚出る。1パック40P。", buyStandard:"パックを開く · 40P", theme:"テーマ拡張パック", themeDesc:"テーマとカードを確認してから、無料で購入の流れを試せる。", buyTheme:"無料で試す", allOwned:"この種類のカードはすべて見つけました。", insufficient:"ポイントが足りません。", packEmpty:"新しいカードは残っていません。", packGet:"新しいカードを見つけた: {{name}}", stored:"整理箱に入れました。", returned:"路地の床に戻しました。", start:"カードを読み取り中", scanHint:"少々お待ちください", ready:"カード認識完了", startContent:"コンテンツを読み込み中", eject:"ゲームチップを取り出す", saved:"カードとポイントはこのブラウザーに保存されます。", completed:"初回クリア。20Pを獲得しました。", completedBefore:"このコンテンツはクリア済みです。", chooseTheme:"テーマを選ぶ", count:"枚所持", floorCount:"床にある", folderStored:"収納中", source:"コンテンツページを開く", shop:"カードパックショップ", closeOverlay:"自販機を閉じる", fallback:"コンテンツを新しいタブで開きます。", backToAlley:"路地に戻りました。", kindMatch:"対戦", kindTest:"テスト", kindStory:"ストーリー", completion:"最後まで進むと20P", included:"パックに入っているカード", kindPrefix:"種類", standardOpening:"パックを開封中", lockerHint:"カードの種類に合った整理箱に入れよう", dragInsert:"カードを入れる", dragLocker:"整理箱に入れる"
     },
     zh: {
-      brand:"卡片贩卖机", kicker:"MOLGGA · 深夜卡片小巷", title:"在夜巷里找一张卡", intro:"翻开地上的卡片，挑一张喜欢的放进贩卖机。", points:"当前积分", floor:"巷子里的卡片", floorHint:"点击卡片查看正面，也可以拖动它。", auto:"整理卡片", cardBack:"MOLGGA", turnCard:"翻开这张卡", insert:"投入贩卖机", useCard:"用这张卡开始", tray:"把卡放在这里", machine:"卡片贩卖机", machineHint:"把卡放到绿色托盘上即可开始", screenIdle:"等待卡片", screenHint:"从巷子里挑一张卡吧", slot:"卡片插槽", trayLabel:"卡片入口", lockers:"卡片收纳柜", emptyLocker:"这里还没有卡片。", open:"打开", close:"关闭", takeOut:"放回地面", cards:"张", autoConfirm:"要自动整理卡片吗？", autoExplain:"卡片现在的位置会改变。", cancel:"取消", confirmArrange:"自动整理", sorted:"地上的卡片已摆放整齐。", noCards:"没有需要整理的卡片。", standard:"巷子卡包", standardDesc:"随机获得一张尚未找到的卡片。每包40P。", buyStandard:"打开卡包 · 40P", theme:"主题扩展包", themeDesc:"先查看主题和卡片，再免费体验购买流程。", buyTheme:"免费体验购买", allOwned:"这个收纳格的卡片都找到了。", insufficient:"积分不足。", packEmpty:"没有新卡了。", packGet:"发现新卡：{{name}}", stored:"已放入收纳柜。", returned:"已放回巷子地面。", start:"正在识别卡片", scanHint:"请稍候", ready:"卡片识别完成", startContent:"正在加载内容", eject:"取出游戏芯片", saved:"卡片和积分保存在此浏览器中。", completed:"首次完成，获得20P。", completedBefore:"此内容已完成过。", chooseTheme:"选择主题", count:"张已拥有", floorCount:"张在地面", folderStored:"已收纳", source:"打开内容页面", shop:"卡包商店", closeOverlay:"关闭贩卖机", fallback:"将在新标签页打开此内容。", backToAlley:"已回到巷子。", kindMatch:"对决", kindTest:"测试", kindStory:"故事", completion:"完成内容可获得20P", included:"卡包内的卡片", kindPrefix:"类型", standardOpening:"正在拆开卡包", lockerHint:"请把卡片放入对应收纳格", dragInsert:"放入贩卖机", dragLocker:"放入收纳柜"
+      brand:"卡片贩卖机", kicker:"MOLGGA · 深夜卡片小巷", title:"在夜巷里找一张卡", intro:"翻开地上的卡片，挑一张喜欢的放进贩卖机。", points:"当前积分", floor:"巷子里的卡片", floorHint:"点击卡片查看正面，也可以拖动它。", auto:"整理卡片", cardBack:"MOLGGA", turnCard:"翻开这张卡", insert:"投入贩卖机", useCard:"用这张卡开始", tray:"把卡放在这里", machine:"卡片贩卖机", machineHint:"把卡放到绿色托盘上即可开始", screenIdle:"等待卡片", screenHint:"从巷子里挑一张卡吧", slot:"卡片插槽", trayLabel:"卡片入口", lockers:"卡片收纳柜", emptyLocker:"这里还没有卡片。", open:"打开", close:"关闭", takeOut:"放回地面", cards:"张", autoConfirm:"要自动整理卡片吗？", autoExplain:"卡片现在的位置会改变。", cancel:"取消", confirmArrange:"自动整理", sorted:"地上的卡片已摆放整齐。", noCards:"没有需要整理的卡片。", standard:"巷子卡包", standardDesc:"随机获得一张尚未找到的卡片。每包40P。", buyStandard:"打开卡包 · 40P", theme:"主题扩展包", themeDesc:"先查看主题和卡片，再免费体验购买流程。", buyTheme:"免费体验购买", allOwned:"这一类卡片都已找到。", insufficient:"积分不足。", packEmpty:"没有新卡了。", packGet:"发现新卡：{{name}}", stored:"已放入收纳柜。", returned:"已放回巷子地面。", start:"正在识别卡片", scanHint:"请稍候", ready:"卡片识别完成", startContent:"正在加载内容", eject:"取出游戏芯片", saved:"卡片和积分保存在此浏览器中。", completed:"首次完成，获得20P。", completedBefore:"此内容已完成过。", chooseTheme:"选择主题", count:"张已拥有", floorCount:"张在地面", folderStored:"已收纳", source:"打开内容页面", shop:"卡包商店", closeOverlay:"关闭贩卖机", fallback:"将在新标签页打开此内容。", backToAlley:"已回到巷子。", kindMatch:"对决", kindTest:"测试", kindStory:"故事", completion:"完成内容可获得20P", included:"卡包内的卡片", kindPrefix:"类型", standardOpening:"正在拆开卡包", lockerHint:"请把卡片放入对应收纳格", dragInsert:"放入贩卖机", dragLocker:"放入收纳柜"
     }
   };
+  const basketStrings = {
+    ko:{ baskets:"내 바구니", addBasket:"바구니 추가", basketDefault:"바구니 {{n}}", basketName:"바구니 이름", saveBasket:"저장", renameBasket:"이름 바꾸기", deleteBasket:"바구니 빼기", basketEmpty:"아직 카드가 없다.", basketNameRequired:"바구니 이름을 입력해줘.", basketRemoved:"바구니를 치웠다. 안에 있던 카드는 바닥으로 돌아왔다.", stored:"바구니에 넣었다.", dragBasket:"바구니에 넣기", basketLabel:"바구니 {{name}} · {{count}}장", basketDeleteConfirm:"이 바구니를 치울까? 안의 카드는 바닥으로 돌아온다."},
+    en:{baskets:"My baskets", addBasket:"Add basket", basketDefault:"Basket {{n}}", basketName:"Basket name", saveBasket:"Save", renameBasket:"Rename", deleteBasket:"Remove basket", basketEmpty:"No cards here yet.", basketNameRequired:"Enter a basket name.", basketRemoved:"Basket removed. Its cards are back on the floor.", stored:"Card placed in the basket.", dragBasket:"Store in basket", basketLabel:"Basket {{name}} · {{count}} cards", basketDeleteConfirm:"Remove this basket? Its cards will return to the floor."},
+    ja:{baskets:"マイバスケット", addBasket:"バスケットを追加", basketDefault:"バスケット {{n}}", basketName:"バスケット名", saveBasket:"保存", renameBasket:"名前を変更", deleteBasket:"バスケットを外す", basketEmpty:"カードはまだありません。", basketNameRequired:"バスケット名を入力してください。", basketRemoved:"バスケットを外しました。中のカードは床に戻りました。", stored:"バスケットに入れました。", dragBasket:"バスケットに入れる", basketLabel:"{{name}} · {{count}}枚", basketDeleteConfirm:"このバスケットを外しますか？中のカードは床に戻ります。"},
+    zh:{baskets:"我的篮子", addBasket:"添加篮子", basketDefault:"篮子 {{n}}", basketName:"篮子名称", saveBasket:"保存", renameBasket:"重命名", deleteBasket:"移除篮子", basketEmpty:"这里还没有卡片。", basketNameRequired:"请输入篮子名称。", basketRemoved:"篮子已移除，卡片已放回地面。", stored:"已放入篮子。", dragBasket:"放入篮子", basketLabel:"{{name}} · {{count}} 张", basketDeleteConfirm:"移除此篮子？里面的卡片会放回地面。"}
+  };
   const t = (key, values = {}) => {
-    const template = key === "eject" ? ejectButtonText() : (strings[lang()]?.[key] || strings.ko[key] || key);
+    const template = key === "eject" ? ejectButtonText() : (basketStrings[lang()]?.[key] || strings[lang()]?.[key] || basketStrings.ko[key] || strings.ko[key] || key);
     return template.replace(/\{\{(\w+)\}\}/g, (_, name) => values[name] ?? "");
   };
   const returnCardText = () => ({
@@ -38,15 +44,24 @@
   ];
   const contentById = new Map(contents.map((entry) => [entry.id, entry]));
   const starterIds = ["weekend", "mbti", "night-train"].filter((id) => contentById.has(id));
-  const storageKey = "molgga.vendingMachine.v2";
+  const storageKey = "molgga.vendingMachine.v3";
+  const previousStorageKey = "molgga.vendingMachine.v2";
   const legacyStorageKey = "molgga.vendingMachine.v1";
   const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
   const safeRandom = () => Math.random();
   const cardAspectRatio = 0.66;
   const cardWidthForViewport = () => {
-    if (window.matchMedia("(max-width: 680px)").matches) return clamp(window.innerWidth * .36, 112, 132);
+    if (window.matchMedia("(max-width: 360px)").matches) return clamp(window.innerWidth * .29, 84, 104);
+    if (window.matchMedia("(max-width: 680px)").matches) return clamp(window.innerWidth * .29, 90, 112);
     if (window.matchMedia("(max-width: 900px)").matches) return clamp(window.innerWidth * .12, 112, 132);
     return clamp(window.innerWidth * .1, 112, 140);
+  };
+  const cardInsets = (width, height, rotation = 0) => {
+    const radians = Math.abs(rotation) * Math.PI / 180;
+    return {
+      x:Math.max(0, (Math.abs(width * Math.cos(radians)) + Math.abs(height * Math.sin(radians)) - width) / 2),
+      y:Math.max(0, (Math.abs(height * Math.cos(radians)) + Math.abs(width * Math.sin(radians)) - height) / 2)
+    };
   };
   const defaultPositions = { weekend:{x:8,y:22,r:-11,z:1}, mbti:{x:39,y:43,r:7,z:2}, "night-train":{x:70,y:14,r:12,z:3} };
   const groupForEntry = (entry) => entry.type === "worldcup" || entry.formatId === "worldcup" ? "matchups" : entry.formatId === "story" || entry.source?.kind === "story" || entry.source?.kind === "survival" ? "stories" : "tests";
@@ -56,13 +71,33 @@
     const validIds = new Set(contents.map((entry) => entry.id));
     const owned = Array.isArray(raw?.owned) ? [...new Set(raw.owned.filter((id) => validIds.has(id)))] : [];
     starterIds.forEach((id) => { if (!owned.includes(id)) owned.push(id); });
-    const stored = {};
-    categories.forEach((category) => {
-      const legacyIds = Object.values(raw?.stored || {}).flatMap((ids) => Array.isArray(ids) ? ids : []);
-      const storedIds = [...(Array.isArray(raw?.stored?.[category.id]) ? raw.stored[category.id] : []), ...legacyIds];
-      stored[category.id] = [...new Set(storedIds.filter((id) => owned.includes(id) && validIds.has(id) && groupForId(id) === category.id))];
-    });
-    const storedIds = new Set(Object.values(stored).flat());
+    const baskets = [];
+    const storedIds = new Set();
+    const addNormalizedBasket = (candidate, index, fallbackId) => {
+      const id = String(candidate?.id || fallbackId || "").slice(0, 48);
+      if (!id || baskets.some((basket) => basket.id === id)) return;
+      const cardIds = [...new Set((Array.isArray(candidate?.cards) ? candidate.cards : []).filter((cardId) => owned.includes(cardId) && validIds.has(cardId) && !storedIds.has(cardId)))];
+      cardIds.forEach((cardId) => storedIds.add(cardId));
+      const defaultName = t("basketDefault", { n:index + 1 });
+      const name = String(candidate?.name || defaultName).trim().slice(0, 24) || defaultName;
+      baskets.push({ id, name, cards:cardIds });
+    };
+    if (Array.isArray(raw?.baskets)) {
+      raw.baskets.forEach((basket, index) => addNormalizedBasket(basket, index, `basket-${index + 1}`));
+    } else {
+      categories.forEach((category, index) => {
+        const legacyIds = [...new Set((Array.isArray(raw?.stored?.[category.id]) ? raw.stored[category.id] : []).filter((id) => owned.includes(id) && validIds.has(id) && !storedIds.has(id)))];
+        if (legacyIds.length) {
+          const legacyNames = {
+            ko:{matchups:"고르는 재미",tests:"나의 성향",stories:"이야기"},
+            en:{matchups:"Matchups",tests:"My quizzes",stories:"Stories"},
+            ja:{matchups:"対決",tests:"テスト",stories:"ストーリー"},
+            zh:{matchups:"对决",tests:"测试",stories:"故事"}
+          };
+          addNormalizedBasket({ id:`basket-legacy-${category.id}`, name:legacyNames[lang()]?.[category.id] || category.id, cards:legacyIds }, index);
+        }
+      });
+    }
     const positions = {};
     owned.forEach((id, index) => {
       const candidate = raw?.positions?.[id];
@@ -71,24 +106,38 @@
         x: clamp(Number.isFinite(candidate?.x) ? candidate.x : fallback.x, 0, 94),
         y: clamp(Number.isFinite(candidate?.y) ? candidate.y : fallback.y, 0, 82),
         r: clamp(Number.isFinite(candidate?.r) ? candidate.r : fallback.r, -15, 15),
-        z: Number.isFinite(candidate?.z) ? candidate.z : fallback.z
+        z: Number.isFinite(candidate?.z) ? Math.max(0, Math.floor(candidate.z)) : fallback.z
       };
     });
+    const maxZ = Math.max(0, ...Object.values(positions).map((position) => position.z));
     return {
-      version:2,
+      version:3,
       points:Number.isFinite(raw?.points) ? Math.max(0, Math.floor(raw.points)) : 0,
       owned,
-      stored,
+      baskets,
       positions,
       completed:[...new Set((Array.isArray(raw?.completed) ? raw.completed : []).filter((id) => validIds.has(id)))],
-      nextZ:Number.isFinite(raw?.nextZ) ? raw.nextZ : owned.length + 1
+      nextZ:Math.max(Number.isFinite(raw?.nextZ) ? Math.floor(raw.nextZ) : owned.length + 1, maxZ)
     };
   };
   const readState = () => {
-    try { return normalizeState(JSON.parse(localStorage.getItem(storageKey) || localStorage.getItem(legacyStorageKey) || "null")); }
+    try { return normalizeState(JSON.parse(localStorage.getItem(storageKey) || localStorage.getItem(previousStorageKey) || localStorage.getItem(legacyStorageKey) || "null")); }
     catch { return normalizeState(null); }
   };
   let state = readState();
+  const storedCardIds = () => new Set(state.baskets.flatMap((basket) => basket.cards));
+  const floorCardIds = () => state.owned.filter((id) => !storedCardIds().has(id));
+  const basketFloorSpace = () => {
+    if (!state.baskets.length) return 0;
+    const mobile = window.matchMedia("(max-width: 680px)").matches;
+    const width = floor?.clientWidth || Math.max(240, window.innerWidth - 40);
+    const basketWidth = mobile ? (window.innerWidth <= 360 ? 140 : 152) : 154;
+    const gap = mobile ? 5 : 7;
+    const columns = Math.max(1, Math.floor((width + gap) / (basketWidth + gap)));
+    return Math.ceil(state.baskets.length / columns) * (mobile ? 59 : 63) + 10;
+  };
+  let editingBasketId = null;
+  let expandedBasketId = null;
   const save = () => {
     try { localStorage.setItem(storageKey, JSON.stringify(state)); }
     catch { setStatus(lang() === "ko" ? "이 브라우저에서 저장 공간을 사용할 수 없다." : "Browser storage is unavailable."); }
@@ -100,8 +149,8 @@
   const crt = by("[data-vm-crt]");
   const machineTray = by("[data-vm-insert-tray]");
   const mobileTray = by("[data-vm-mobile-tray]");
-  const mobileLockerTray = by("[data-vm-mobile-lockers]");
-  const lockers = by("[data-vm-lockers]");
+  const mobileBasketTray = by("[data-vm-mobile-baskets]");
+  const basketRail = by("[data-vm-baskets]");
   const autoDialog = by("[data-vm-confirm]");
   const overlay = by("[data-vm-overlay]");
   const frame = by("[data-vm-focus-crt]");
@@ -145,19 +194,13 @@
     };
     return formats[kind]?.[lang()] || formats[kind].ko;
   };
-  const wrongLockerMessage = () => ({
-    ko:"이 카드는 주제에 맞는 정리함에 넣어야 한다.",
-    en:"This card belongs in a different topic locker.",
-    ja:"このカードは別のテーマの整理箱に入れてください。",
-    zh:"这张卡应放入对应主题的收纳柜。"
-  }[lang()] || "This card belongs in a different topic locker.");
   const setStaticLabels = () => {
     const values = [
       ["[data-vm-brand]", "brand"], ["[data-vm-kicker]", "kicker"], ["[data-vm-title]", "title"], ["[data-vm-intro]", "intro"],
       ["[data-vm-points-label]", "points"], ["[data-vm-floor-title]", "floor"], ["[data-vm-floor-hint]", "floorHint"],
       ["[data-vm-auto]", "auto"], ["[data-vm-machine-hint]", "machineHint"], ["[data-vm-screen-idle]", "screenIdle"],
       ["[data-vm-screen-hint]", "screenHint"], ["[data-vm-slot-label]", "slot"], ["[data-vm-tray-label]", "trayLabel"],
-      ["[data-vm-mobile-tray-label]", "tray"], ["[data-vm-lockers-title]", "lockers"], ["[data-vm-standard-title]", "standard"],
+      ["[data-vm-mobile-tray-label]", "tray"], ["[data-vm-add-basket]", "addBasket"], ["[data-vm-standard-title]", "standard"],
       ["[data-vm-standard-desc]", "standardDesc"], ["[data-vm-buy-standard]", "buyStandard"], ["[data-vm-theme-title]", "theme"],
       ["[data-vm-theme-desc]", "themeDesc"], ["[data-vm-buy-theme]", "buyTheme"], ["[data-vm-theme-label]", "chooseTheme"],
       ["[data-vm-save-note]", "saved"], ["[data-vm-eject]", "eject"],
@@ -175,15 +218,6 @@
     if (frame) frame.setAttribute("aria-label", t("machine"));
     const mobileTrayLabel = by("[data-vm-mobile-tray]");
     if (mobileTrayLabel) mobileTrayLabel.textContent = t("dragInsert");
-    const mobileLockersLabel = by("[data-vm-mobile-lockers]");
-    if (mobileLockersLabel) {
-      mobileLockersLabel.replaceChildren(...categories.map((category) => {
-        const target = make("button", "vm-mobile-locker-target", `${categoryLabel(category.id)} · ${t("dragLocker")}`);
-        target.type = "button";
-        target.dataset.vmTempLocker = category.id;
-        return target;
-      }));
-    }
   };
   const primaryCategory = (entry) => groupForEntry(entry);
   const cardAccent = (entry) => {
@@ -280,10 +314,13 @@
       card.setAttribute("aria-expanded", String(reveal));
       card.style.transform = `rotate(${state.positions[entry.id].r}deg) scale(${reveal ? 1.035 : 1})`;
       const bounds = floor.getBoundingClientRect();
-      const maxX = Math.max(0, (bounds.width - card.offsetWidth) / Math.max(1, bounds.width) * 100);
-      const maxY = Math.max(0, (bounds.height - card.offsetHeight) / Math.max(1, bounds.height) * 100);
-      state.positions[entry.id].x = Math.min(state.positions[entry.id].x, maxX);
-      state.positions[entry.id].y = Math.min(state.positions[entry.id].y, maxY);
+      const insets = cardInsets(card.offsetWidth * 1.035, card.offsetHeight * 1.035, state.positions[entry.id].r);
+      const minX = insets.x / Math.max(1,bounds.width) * 100;
+      const maxX = Math.max(minX, (bounds.width - card.offsetWidth * 1.035 - insets.x) / Math.max(1,bounds.width) * 100);
+      const minY = insets.y / Math.max(1,bounds.height) * 100;
+      const maxY = Math.max(minY, (bounds.height - basketFloorSpace() - card.offsetHeight * 1.035 - insets.y) / Math.max(1,bounds.height) * 100);
+      state.positions[entry.id].x = clamp(state.positions[entry.id].x, minX, maxX);
+      state.positions[entry.id].y = clamp(state.positions[entry.id].y, minY, maxY);
       card.style.left = `${state.positions[entry.id].x}%`;
       card.style.top = `${state.positions[entry.id].y}%`;
       if (card.classList.contains("is-revealed")) {
@@ -302,58 +339,118 @@
     return card;
   };
 
+  const renderBasket = (basket) => {
+    const section = make("section", "vm-basket");
+    section.dataset.vmBasketTarget = basket.id;
+    const top = make("div", "vm-basket-top");
+    if (editingBasketId === basket.id) {
+      const edit = make("div", "vm-basket-edit");
+      edit.append(make("span", "vm-basket-icon", "▱"));
+      const input = make("input", "vm-basket-name-input");
+      input.type = "text";
+      input.maxLength = 24;
+      input.value = basket.name;
+      input.placeholder = t("basketName");
+      input.setAttribute("aria-label", t("basketName"));
+      input.dataset.vmBasketNameInput = basket.id;
+      edit.append(input);
+      const saveButton = make("button", "vm-basket-save", t("saveBasket"));
+      saveButton.type = "button";
+      saveButton.dataset.vmSaveBasket = basket.id;
+      top.append(edit, saveButton);
+    } else {
+      const toggle = make("button", "vm-basket-toggle");
+      toggle.type = "button";
+      toggle.dataset.vmOpenBasket = basket.id;
+      toggle.setAttribute("aria-expanded", String(expandedBasketId === basket.id));
+      toggle.setAttribute("aria-label", t("basketLabel", { name:basket.name, count:basket.cards.length }));
+      toggle.append(make("span", "vm-basket-icon", "▱"));
+      toggle.append(make("strong", "vm-basket-name", basket.name), make("span", "vm-basket-count", String(basket.cards.length)));
+      top.append(toggle);
+    }
+    section.append(top);
+    const contents = make("div", "vm-basket-items");
+    contents.dataset.vmBasketContents = basket.id;
+    contents.hidden = expandedBasketId !== basket.id;
+    if (!contents.hidden) {
+      const actions = make("div", "vm-basket-manage");
+      const rename = make("button", "vm-basket-action", t("renameBasket"));
+      rename.type = "button";
+      rename.dataset.vmEditBasket = basket.id;
+      const remove = make("button", "vm-basket-action", t("deleteBasket"));
+      remove.type = "button";
+      remove.dataset.vmDeleteBasket = basket.id;
+      actions.append(rename, remove);
+      contents.append(actions);
+    }
+    const cards = basket.cards.map((id) => contentById.get(id)).filter(Boolean);
+    if (!cards.length) contents.append(make("p", "vm-basket-empty", t("basketEmpty")));
+    cards.forEach((entry) => {
+      const item = make("div", "vm-basket-card");
+      const image = make("img");
+      image.src = assetUrl(entry.thumbnail);
+      image.alt = "";
+      image.loading = "lazy";
+      item.append(image, make("strong", "", label(entry)));
+      const takeOut = make("button", "", t("takeOut"));
+      takeOut.type = "button";
+      takeOut.dataset.vmTakeOut = entry.id;
+      item.append(takeOut);
+      contents.append(item);
+    });
+    section.append(contents);
+    section.addEventListener("dragover", (event) => { event.preventDefault(); section.classList.add("is-drop-target"); });
+    section.addEventListener("dragleave", (event) => { if (!section.contains(event.relatedTarget)) section.classList.remove("is-drop-target"); });
+    return section;
+  };
+
+  const renderMobileBasketTargets = () => {
+    mobileBasketTray.replaceChildren(...state.baskets.map((basket) => {
+      const button = make("button", "vm-mobile-basket-target", basket.name);
+      button.type = "button";
+      button.dataset.vmTempBasket = basket.id;
+      button.setAttribute("aria-label", t("basketLabel", { name:basket.name, count:basket.cards.length }));
+      return button;
+    }));
+    mobileBasketTray.setAttribute("aria-label", t("baskets"));
+  };
+
   const render = () => {
     setStaticLabels();
     document.querySelectorAll("[data-vm-points]").forEach((node) => { node.textContent = `${state.points}P`; });
     const visibleOwned = state.owned.filter((id) => contentById.has(id));
-    const onFloor = visibleOwned.filter((id) => !Object.values(state.stored).some((ids) => ids.includes(id)));
-    by("[data-vm-owned-count]").textContent = cardCount(visibleOwned.length, "owned");
-    by("[data-vm-floor-count]").textContent = cardCount(onFloor.length, "floor");
+    const storedIds = storedCardIds();
+    const onFloor = visibleOwned.filter((id) => !storedIds.has(id));
+    const ownedCount = by("[data-vm-owned-count]");
+    if (ownedCount) ownedCount.textContent = cardCount(visibleOwned.length, "owned");
+    const floorCount = by("[data-vm-floor-count]");
+    if (floorCount) floorCount.textContent = cardCount(onFloor.length, "floor");
     const mobile = window.matchMedia("(max-width: 680px)").matches;
     const cardWidth = cardWidthForViewport();
     const columns = mobile ? 2 : 4;
     const rows = Math.ceil(onFloor.length / columns);
-    const baseHeight = mobile ? 360 : 500;
-    const floorHeight = Math.max(baseHeight, rows * (cardWidth / cardAspectRatio + 38) + 30);
+    const baseHeight = mobile ? 430 : 500;
+    const basketSpace = basketFloorSpace();
+    const floorHeight = Math.max(baseHeight, rows * (cardWidth / cardAspectRatio + 38) + basketSpace + 30);
     floor.style.minHeight = `${floorHeight}px`;
+    floor.style.setProperty("--vm-basket-space", `${basketSpace}px`);
     const floorWidth = floor.getBoundingClientRect().width;
-    const maxCardX = Math.max(0, (floorWidth - cardWidth) / Math.max(1,floorWidth) * 100);
-    const maxCardY = Math.max(0, (floorHeight - cardWidth / cardAspectRatio) / floorHeight * 100);
-    floor.replaceChildren(...onFloor.map((id) => {
+    const cardElements = onFloor.map((id) => {
       const entry = contentById.get(id);
       const position = state.positions[id];
-      return entry ? makeCard(entry, { ...position, x:Math.min(position.x,maxCardX), y:Math.min(position.y,maxCardY) }) : null;
-    }).filter(Boolean));
-    lockers.replaceChildren(...categories.map((category) => {
-      const section = make("section", "vm-locker");
-      section.dataset.vmLocker = category.id;
-      const cards = (state.stored[category.id] || []).filter((id) => contentById.has(id));
-      const toggle = make("button", "vm-locker-head");
-      toggle.type = "button";
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.dataset.vmOpenLocker = category.id;
-      toggle.append(make("strong", "", categoryLabel(category.id)), make("span", "", cardCount(cards.length, "stored")), make("span", "", t("open")));
-      const body = make("div", "vm-locker-content");
-      body.hidden = true;
-      body.dataset.vmLockerBody = category.id;
-      body.addEventListener("dragover", (event) => event.preventDefault());
-      body.addEventListener("drop", (event) => event.preventDefault());
-      if (!cards.length) body.append(make("p", "vm-locker-empty", t("emptyLocker")));
-      cards.forEach((id) => {
-        const entry = contentById.get(id);
-        if (!entry) return;
-        const row = make("div", "vm-locker-card");
-        const img = make("img"); img.src = assetUrl(entry.thumbnail); img.alt = ""; img.loading = "lazy";
-        row.append(img, make("strong", "", label(entry)));
-        const takeOut = make("button", "", t("takeOut"));
-        takeOut.type = "button"; takeOut.dataset.vmTakeOut = id;
-        row.append(takeOut); body.append(row);
-      });
-      section.addEventListener("dragover", (event) => { event.preventDefault(); section.classList.add("is-drop-target"); });
-      section.addEventListener("dragleave", (event) => { if (!section.contains(event.relatedTarget)) section.classList.remove("is-drop-target"); });
-      section.append(toggle, body);
-      return section;
-    }));
+      if (!entry) return null;
+      const cardHeight = cardWidth / cardAspectRatio;
+      const insets = cardInsets(cardWidth, cardHeight, position.r);
+      const minX = insets.x / Math.max(1,floorWidth) * 100;
+      const maxX = Math.max(minX, (floorWidth - cardWidth - insets.x) / Math.max(1,floorWidth) * 100);
+      const minY = insets.y / floorHeight * 100;
+      const maxY = Math.max(minY, (floorHeight - basketSpace - cardHeight - insets.y) / floorHeight * 100);
+      return makeCard(entry, { ...position, x:clamp(position.x,minX,maxX), y:clamp(position.y,minY,maxY) });
+    }).filter(Boolean);
+    basketRail.replaceChildren(...state.baskets.map(renderBasket));
+    basketRail.querySelectorAll(".vm-basket").forEach((basket) => basket.classList.toggle("is-right-basket", basket.offsetLeft > basketRail.clientWidth / 2));
+    renderMobileBasketTargets();
+    floor.replaceChildren(...cardElements, basketRail);
     const options = by("[data-vm-theme]");
     const selectedTheme = options.value;
     options.replaceChildren();
@@ -426,7 +523,7 @@
   };
 
   const arrange = () => {
-    const floorIds = state.owned.filter((id) => !Object.values(state.stored).some((ids) => ids.includes(id)));
+    const floorIds = floorCardIds();
     if (!floorIds.length) { setStatus(t("noCards")); return; }
     const dialog = by("[data-vm-confirm]");
     if (dialog?.showModal) { dialog.showModal(); return; }
@@ -434,24 +531,27 @@
     arrangeCards(floorIds);
   };
 
-  const arrangeCards = (floorIds = state.owned.filter((id) => !Object.values(state.stored).some((ids) => ids.includes(id)))) => {
+  const arrangeCards = (floorIds = floorCardIds()) => {
     if (!floorIds.length) return;
     floor.classList.add("is-auto-arranging");
     const columns = window.matchMedia("(max-width: 680px)").matches ? 2 : 4;
     const bounds = floor.getBoundingClientRect();
     const cardWidth = cardWidthForViewport();
     const cardHeight = cardWidth / cardAspectRatio;
-    const maxX = Math.max(0, (bounds.width - cardWidth) / bounds.width * 100);
-    const maxY = Math.max(0, (bounds.height - cardHeight) / bounds.height * 100);
     const rows = Math.ceil(floorIds.length / columns);
     floorIds.forEach((id, index) => {
       const col = index % columns;
       const row = Math.floor(index / columns);
       const pos = state.positions[id];
-      pos.x = 2 + (col * Math.max(0, maxX - 4)) / Math.max(1, columns - 1);
-      pos.y = rows < 2 ? Math.min(18, maxY) : Math.min(maxY, 4 + row * (maxY / (rows - 1)));
       pos.r = ((index % 5) - 2) * 1.2;
-      pos.z = index + 1;
+      const insets = cardInsets(cardWidth, cardHeight, pos.r);
+      const minX = insets.x / bounds.width * 100;
+      const maxX = Math.max(minX, (bounds.width - cardWidth - insets.x) / bounds.width * 100);
+      const minY = insets.y / bounds.height * 100;
+      const maxY = Math.max(minY, (bounds.height - basketFloorSpace() - cardHeight - insets.y) / bounds.height * 100);
+      pos.x = clamp(2 + (col * Math.max(0, maxX - minX - 4)) / Math.max(1, columns - 1), minX, maxX);
+      pos.y = clamp(rows < 2 ? Math.min(18, maxY) : 4 + row * (maxY / (rows - 1)), minY, maxY);
+      pos.z = ++state.nextZ;
     });
     save(); render();
     floor.classList.add("is-auto-arranging");
@@ -459,33 +559,65 @@
     setStatus(t("sorted"));
   };
 
-  const categoryDrop = (categoryId, contentId) => {
-    const entry = contentById.get(contentId);
-    if (!entry || groupForEntry(entry) !== categoryId) return false;
-    Object.values(state.stored).forEach((ids) => { const index = ids.indexOf(contentId); if (index >= 0) ids.splice(index,1); });
-    state.stored[categoryId] ||= [];
-    state.stored[categoryId].push(contentId);
+  const basketDrop = (basketId, contentId) => {
+    const basket = state.baskets.find((item) => item.id === basketId);
+    if (!basket || !contentById.has(contentId)) return false;
+    state.baskets.forEach((item) => { item.cards = item.cards.filter((id) => id !== contentId); });
+    basket.cards.push(contentId);
+    expandedBasketId = basket.id;
     save(); render();
-    const section = root.querySelector(`[data-vm-locker="${CSS.escape(categoryId)}"]`);
-    const body = section?.querySelector("[data-vm-locker-body]");
-    const button = section?.querySelector("[data-vm-open-locker]");
-    if (body) body.hidden = false;
-    if (button) { button.setAttribute("aria-expanded", "true"); button.lastElementChild.textContent = t("close"); }
     setStatus(t("stored"));
     return true;
   };
 
   const putOnFloor = (contentId, leftPx = null, topPx = null) => {
-    Object.values(state.stored).forEach((ids) => { const index = ids.indexOf(contentId); if (index >= 0) ids.splice(index,1); });
+    state.baskets.forEach((basket) => { basket.cards = basket.cards.filter((id) => id !== contentId); });
     if (leftPx !== null && topPx !== null) {
       const bounds = floor.getBoundingClientRect();
       const cardWidth = cardWidthForViewport();
       const cardHeight = cardWidth / cardAspectRatio;
-      state.positions[contentId].x = clamp(((leftPx - bounds.left) / Math.max(1,bounds.width)) * 100, 0, Math.max(0, (bounds.width - cardWidth) / bounds.width * 100));
-      state.positions[contentId].y = clamp(((topPx - bounds.top) / Math.max(1,bounds.height)) * 100, 0, Math.max(0, (bounds.height - cardHeight) / bounds.height * 100));
+      const insets = cardInsets(cardWidth, cardHeight, state.positions[contentId].r);
+      const minX = insets.x / Math.max(1,bounds.width) * 100;
+      const maxX = Math.max(minX, (bounds.width - cardWidth - insets.x) / Math.max(1,bounds.width) * 100);
+      const minY = insets.y / Math.max(1,bounds.height) * 100;
+      const maxY = Math.max(minY, (bounds.height - basketFloorSpace() - cardHeight - insets.y) / Math.max(1,bounds.height) * 100);
+      state.positions[contentId].x = clamp(((leftPx - bounds.left) / Math.max(1,bounds.width)) * 100, minX, maxX);
+      state.positions[contentId].y = clamp(((topPx - bounds.top) / Math.max(1,bounds.height)) * 100, minY, maxY);
     }
     state.positions[contentId].z = ++state.nextZ;
     save(); render(); setStatus(t("returned"));
+  };
+
+  const addBasket = () => {
+    const id = `basket-${Date.now().toString(36)}-${Math.floor(safeRandom() * 1e6).toString(36)}`;
+    const basket = { id, name:t("basketDefault", { n:state.baskets.length + 1 }), cards:[] };
+    state.baskets.push(basket);
+    editingBasketId = basket.id;
+    expandedBasketId = basket.id;
+    save(); render();
+    const input = root.querySelector("[data-vm-basket-name-input]");
+    input?.focus();
+    input?.select();
+  };
+
+  const saveBasketName = (basketId) => {
+    const basket = state.baskets.find((item) => item.id === basketId);
+    const input = root.querySelector(`[data-vm-basket-name-input="${CSS.escape(basketId)}"]`);
+    const name = input?.value.trim().slice(0, 24);
+    if (!basket || !name) { setStatus(t("basketNameRequired")); input?.focus(); return; }
+    basket.name = name;
+    editingBasketId = null;
+    save(); render();
+  };
+
+  const removeBasket = (basketId) => {
+    const basket = state.baskets.find((item) => item.id === basketId);
+    if (!basket || !window.confirm(t("basketDeleteConfirm"))) return;
+    basket.cards.forEach((id) => { state.positions[id].z = ++state.nextZ; });
+    state.baskets = state.baskets.filter((item) => item.id !== basketId);
+    if (editingBasketId === basketId) editingBasketId = null;
+    if (expandedBasketId === basketId) expandedBasketId = null;
+    save(); render(); setStatus(t("basketRemoved"));
   };
 
   const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -651,12 +783,32 @@
       clone.style.transform = "rotate(0deg)";
     });
     await waitForMotion(520);
-    if (!isCurrentLaunch()) { clone.remove(); return; }
-    clone.style.setProperty("--vm-feed-up", `-${Math.max(16, Math.min(26, slotRect.height))}px`);
+    if (!isCurrentLaunch()) { clone.remove(); card.style.visibility = ""; return; }
+    const feedWindow = document.createElement("div");
+    const feedWidth = Math.max(1, slotRect.width - 4);
+    const feedHeight = Math.max(1, slotRect.height - 4);
+    feedWindow.className = "vm-slot-feed-window";
+    feedWindow.style.left = `${slotRect.left + 2}px`;
+    feedWindow.style.top = `${slotRect.top + 2}px`;
+    feedWindow.style.width = `${feedWidth}px`;
+    feedWindow.style.height = `${feedHeight}px`;
+    clone.classList.remove("vm-insert-animation");
+    clone.classList.add("vm-slot-feed-card");
+    clone.style.left = `${(feedWidth - cardWidth) / 2}px`;
+    clone.style.top = `${feedHeight / 2 - 2}px`;
+    clone.style.width = `${cardWidth}px`;
+    clone.style.height = `${cardHeight}px`;
+    clone.style.setProperty("--vm-feed-distance", `-${cardHeight + feedHeight}px`);
+    feedWindow.append(clone);
+    document.body.append(feedWindow);
+    slot.classList.add("is-feeding-card");
+    await waitForMotion(120);
+    if (!isCurrentLaunch()) { feedWindow.remove(); slot.classList.remove("is-feeding-card"); card.style.visibility = ""; return; }
     clone.classList.add("is-feeding-up");
-    await waitForMotion(600);
-    if (!isCurrentLaunch()) { clone.remove(); return; }
-    clone.remove();
+    await waitForMotion(900);
+    if (!isCurrentLaunch()) { feedWindow.remove(); slot.classList.remove("is-feeding-card"); card.style.visibility = ""; return; }
+    feedWindow.remove();
+    slot.classList.remove("is-feeding-card");
     card.style.visibility = "";
     card.classList.add("is-return-target");
     card.setAttribute("aria-hidden", "true");
@@ -858,14 +1010,16 @@
     if (dragging.returning) return;
     const isMobile = window.matchMedia("(max-width: 680px)").matches;
     const machineRect = machine.getBoundingClientRect();
-    const lockerRect = lockers.getBoundingClientRect();
+    const basketRect = basketRail.getBoundingClientRect();
     mobileTray.hidden = !(isMobile && (machineRect.bottom < 0 || machineRect.top > window.innerHeight));
-    mobileLockerTray.hidden = !(isMobile && (lockerRect.bottom < 0 || lockerRect.top > window.innerHeight));
+    mobileBasketTray.hidden = !(isMobile && state.baskets.length && (basketRect.bottom < 0 || basketRect.top > window.innerHeight));
     mobileTray.setAttribute("aria-hidden", String(mobileTray.hidden));
-    mobileLockerTray.setAttribute("aria-hidden", String(mobileLockerTray.hidden));
+    mobileBasketTray.setAttribute("aria-hidden", String(mobileBasketTray.hidden));
     mobileTray.classList.toggle("is-drop-target", Boolean(isMobile && !mobileTray.hidden && event.clientX >= mobileTray.getBoundingClientRect().left && event.clientX <= mobileTray.getBoundingClientRect().right && event.clientY >= mobileTray.getBoundingClientRect().top && event.clientY <= mobileTray.getBoundingClientRect().bottom));
     const hoverTarget = document.elementFromPoint(event.clientX, event.clientY);
     machineTray.classList.toggle("is-drop-target", Boolean(hoverTarget?.closest("[data-vm-insert-tray]")));
+    basketRail.querySelectorAll("[data-vm-basket-target]").forEach((basket) => basket.classList.toggle("is-drop-target", hoverTarget?.closest("[data-vm-basket-target]") === basket));
+    mobileBasketTray.querySelectorAll("[data-vm-temp-basket]").forEach((basket) => basket.classList.toggle("is-drop-target", hoverTarget?.closest("[data-vm-temp-basket]") === basket));
   });
 
   window.addEventListener("pointerup", (event) => {
@@ -886,16 +1040,16 @@
       dragging = null;
       document.body.classList.remove("vm-is-dragging");
       mobileTray.hidden = true;
-      mobileLockerTray.hidden = true;
+      mobileBasketTray.hidden = true;
       mobileTray.setAttribute("aria-hidden", "true");
-      mobileLockerTray.setAttribute("aria-hidden", "true");
+      mobileBasketTray.setAttribute("aria-hidden", "true");
       return;
     }
     const cardWidth = current.dragCard.offsetWidth;
     const cardHeight = current.dragCard.offsetHeight;
     const target = document.elementFromPoint(event.clientX, event.clientY);
-    const locker = target?.closest("[data-vm-locker]");
-    const tempLocker = target?.closest("[data-vm-temp-locker]");
+    const basketTarget = target?.closest("[data-vm-basket-target]");
+    const tempBasket = target?.closest("[data-vm-temp-basket]");
     const onMachineTray = Boolean(target?.closest("[data-vm-insert-tray]"));
     const trayRect = mobileTray.getBoundingClientRect();
     const overTray = window.matchMedia("(max-width: 680px)").matches && !mobileTray.hidden && document.body.classList.contains("vm-is-dragging") && event.clientX >= trayRect.left && event.clientX <= trayRect.right && event.clientY >= trayRect.top && event.clientY <= trayRect.bottom;
@@ -917,27 +1071,25 @@
       dragging = null;
       document.body.classList.remove("vm-is-dragging");
       mobileTray.hidden = true;
-      mobileLockerTray.hidden = true;
+      mobileBasketTray.hidden = true;
+      mobileTray.setAttribute("aria-hidden", "true");
+      mobileBasketTray.setAttribute("aria-hidden", "true");
       return;
     }
     current.card.dataset.suppressClick = "1";
     window.setTimeout(() => { if (current.card.dataset.suppressClick === "1") current.card.dataset.suppressClick = "0"; }, 250);
     const bounds = floor.getBoundingClientRect();
     const inFloor = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
-    const left = clamp(current.left - bounds.left, 0, Math.max(0, bounds.width - cardWidth));
-    const top = clamp(current.top - bounds.top, 0, Math.max(0, bounds.height - cardHeight));
+    const insets = cardInsets(cardWidth, cardHeight, current.origin.r);
+    const left = clamp(current.left - bounds.left, insets.x, Math.max(insets.x, bounds.width - cardWidth - insets.x));
+    const top = clamp(current.top - bounds.top, insets.y, Math.max(insets.y, bounds.height - basketFloorSpace() - cardHeight - insets.y));
     if (shouldInsert) {
       state.positions[current.contentId] = { ...current.origin, z:++state.nextZ };
       save(); render();
       insertCard(current.contentId, current.dragCard, current.origin);
-    } else if ((locker && locker.dataset.vmLocker) || (tempLocker && tempLocker.dataset.vmTempLocker)) {
-      const groupId = locker?.dataset.vmLocker || tempLocker?.dataset.vmTempLocker;
-      const accepted = categoryDrop(groupId, current.contentId);
-      if (!accepted) {
-        state.positions[current.contentId] = current.origin;
-        setStatus(wrongLockerMessage());
-        render();
-      }
+    } else if ((basketTarget && basketTarget.dataset.vmBasketTarget) || (tempBasket && tempBasket.dataset.vmTempBasket)) {
+      const basketId = basketTarget?.dataset.vmBasketTarget || tempBasket?.dataset.vmTempBasket;
+      basketDrop(basketId, current.contentId);
     } else if (inFloor) {
       state.positions[current.contentId].x = bounds.width ? left / bounds.width * 100 : 0;
       state.positions[current.contentId].y = bounds.height ? top / bounds.height * 100 : 0;
@@ -950,9 +1102,9 @@
     dragging = null;
     document.body.classList.remove("vm-is-dragging");
     mobileTray.hidden = true;
-    mobileLockerTray.hidden = true;
+      mobileBasketTray.hidden = true;
     mobileTray.setAttribute("aria-hidden", "true");
-    mobileLockerTray.setAttribute("aria-hidden", "true");
+      mobileBasketTray.setAttribute("aria-hidden", "true");
     machineTray.classList.remove("is-drop-target");
   });
   window.addEventListener("pointercancel", () => {
@@ -973,26 +1125,44 @@
     dragging = null;
     document.body.classList.remove("vm-is-dragging");
     mobileTray.hidden = true;
-    mobileLockerTray.hidden = true;
+    mobileBasketTray.hidden = true;
     mobileTray.setAttribute("aria-hidden", "true");
-    mobileLockerTray.setAttribute("aria-hidden", "true");
+    mobileBasketTray.setAttribute("aria-hidden", "true");
     machineTray.classList.remove("is-drop-target");
     render();
   });
 
   root.addEventListener("click", (event) => {
-    const openLocker = event.target.closest("[data-vm-open-locker]");
-    if (openLocker) {
-      const body = root.querySelector(`[data-vm-locker-body="${CSS.escape(openLocker.dataset.vmOpenLocker)}"]`);
-      const isOpen = body && !body.hidden;
-      if (body) body.hidden = isOpen;
-      openLocker.setAttribute("aria-expanded", String(!isOpen));
-      openLocker.lastElementChild.textContent = isOpen ? t("open") : t("close");
+    const openBasket = event.target.closest("[data-vm-open-basket]");
+    if (openBasket) {
+      const basketId = openBasket.dataset.vmOpenBasket;
+      expandedBasketId = expandedBasketId === basketId ? null : basketId;
+      render();
       return;
     }
+    const editBasket = event.target.closest("[data-vm-edit-basket]");
+    if (editBasket) {
+      editingBasketId = editBasket.dataset.vmEditBasket;
+      render();
+      const input = root.querySelector("[data-vm-basket-name-input]");
+      input?.focus();
+      input?.select();
+      return;
+    }
+    const saveBasket = event.target.closest("[data-vm-save-basket]");
+    if (saveBasket) { saveBasketName(saveBasket.dataset.vmSaveBasket); return; }
+    const deleteBasket = event.target.closest("[data-vm-delete-basket]");
+    if (deleteBasket) { removeBasket(deleteBasket.dataset.vmDeleteBasket); return; }
     const takeOut = event.target.closest("[data-vm-take-out]");
     if (takeOut) { putOnFloor(takeOut.dataset.vmTakeOut); return; }
   });
+  root.addEventListener("keydown", (event) => {
+    const input = event.target.closest("[data-vm-basket-name-input]");
+    if (!input) return;
+    if (event.key === "Enter") { event.preventDefault(); saveBasketName(input.dataset.vmBasketNameInput); }
+    if (event.key === "Escape") { editingBasketId = null; render(); }
+  });
+  by("[data-vm-add-basket]").addEventListener("click", addBasket);
   by("[data-vm-auto]").addEventListener("click", arrange);
   by("[data-vm-auto-cancel]").addEventListener("click", () => autoDialog?.close("cancel"));
   by("[data-vm-auto-confirm]").addEventListener("click", () => autoDialog?.close("confirm"));
@@ -1004,7 +1174,7 @@
   window.addEventListener("resize", () => { if (!dragging && !activeContent) render(); });
   mobileTray.addEventListener("dragover", (event) => event.preventDefault());
   mobileTray.setAttribute("aria-hidden", "true");
-  mobileLockerTray.setAttribute("aria-hidden", "true");
+  mobileBasketTray.setAttribute("aria-hidden", "true");
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !overlay.hidden) eject();
   });
