@@ -7,16 +7,16 @@
   const ejectButtonText = () => ({ ko:"카드 꺼내기", en:"Eject card", ja:"カードを取り出す", zh:"取出卡片" }[lang()] || "Eject card");
   const strings = {
       ko: {
-      brand:"딸깍 자판기", kicker:"MOLGGA · 심야 카드 골목", title:"밤 골목에서 카드를 찾아보자", intro:"바닥에 놓인 카드를 살펴보고, 마음에 드는 한 장을 자판기에 넣어보자.", points:"보유 포인트", floor:"골목 바닥", floorHint:"카드를 눌러 앞면을 확인하거나 끌어 옮길 수 있다.", auto:"자동 정리", cardBack:"MOLGGA", turnCard:"카드를 뒤집어 내용 보기", insert:"자판기에 넣기", useCard:"이 카드로 시작", tray:"카드를 여기에 놓기", machine:"딸깍 자판기", machineHint:"카드를 초록색 받침에 놓으면 시작된다", screenIdle:"카드 대기 중", screenHint:"골목에서 카드 한 장을 골라보자", slot:"카드 슬롯", trayLabel:"카드 투입구", lockers:"카드 정리함", emptyLocker:"아직 보관한 카드가 없다.", open:"열기", close:"닫기", takeOut:"바닥에 꺼내기", cards:"장", autoConfirm:"카드를 자동 정리하겠습니까?", autoExplain:"지금 배치한 카드 위치가 바뀐다.", cancel:"취소", confirmArrange:"자동 정리", sorted:"바닥의 카드를 가지런히 놓았다.", noCards:"정리할 카드가 없다.", standard:"골목 카드팩", standardDesc:"아직 찾지 못한 카드 한 장이 나온다. 한 팩에 40P가 든다.", buyStandard:"40P로 카드팩 뜯기", theme:"테마 확장팩", themeDesc:"테마와 들어 있는 카드를 확인한 뒤 무료로 구매 흐름을 체험할 수 있다.", buyTheme:"무료 테스트 구매", allOwned:"이 정리함의 카드를 모두 찾았다.", insufficient:"포인트가 부족하다.", packEmpty:"새 카드가 남아 있지 않다.", packGet:"새 카드를 찾았다: {{name}}", stored:"정리함에 넣었다.", returned:"골목 바닥에 꺼내놓았다.", start:"카드 인식 중", scanHint:"잠시만 기다려줘", ready:"카드 인식 완료", startContent:"곧 콘텐츠가 시작된다", eject:"게임칩 빼기", saved:"카드와 포인트는 이 브라우저에 저장된다.", completed:"처음 완료한 콘텐츠다. 20P를 받았다.", completedBefore:"이미 완료한 콘텐츠다.", chooseTheme:"테마를 고르자", count:"보유 카드", floorCount:"바닥에 놓인 카드", folderStored:"정리함에 보관 중", source:"콘텐츠 페이지 열기", shop:"카드팩 상점", closeOverlay:"자판기 닫기", fallback:"이 콘텐츠를 새 탭에서 연다.", backToAlley:"골목으로 돌아왔다.", kindMatch:"월드컵", kindTest:"테스트", kindStory:"이야기", completion:"끝까지 완료하면 20P", included:"팩에 들어 있는 카드", kindPrefix:"콘텐츠", standardOpening:"카드팩을 뜯는 중", lockerHint:"카드를 유형에 맞는 칸에 놓자", dragInsert:"카드를 넣을 곳", dragLocker:"정리함에 넣기"
+      brand:"딸깍 자판기", kicker:"MOLGGA · 심야 카드 골목", title:"밤 골목에서 카드를 찾아보자", intro:"바닥에 놓인 카드를 살펴보고, 마음에 드는 한 장을 자판기에 넣어보자.", points:"보유 포인트", floor:"골목 바닥", floorHint:"카드를 눌러 앞면을 확인하거나 끌어 옮길 수 있다.", auto:"자동 정리", cardBack:"MOLGGA", turnCard:"카드를 뒤집어 내용 보기", insert:"자판기에 넣기", useCard:"이 카드로 시작", tray:"카드를 여기에 놓기", machine:"딸깍 자판기", machineHint:"카드를 초록색 받침에 놓으면 시작된다", screenIdle:"카드 대기 중", screenHint:"골목에서 카드 한 장을 골라보자", slot:"카드 슬롯", trayLabel:"카드 투입구", lockers:"카드 정리함", emptyLocker:"아직 보관한 카드가 없다.", open:"열기", close:"닫기", takeOut:"바닥에 꺼내기", cards:"장", autoConfirm:"카드를 자동 정리하겠습니까?", autoExplain:"지금 배치한 카드 위치가 바뀐다.", cancel:"취소", confirmArrange:"자동 정리", sorted:"바닥의 카드를 가지런히 놓았다.", noCards:"정리할 카드가 없다.", standard:"골목 카드팩", standardDesc:"아직 찾지 못한 카드 한 장이 나온다. 한 팩에 40P가 든다.", buyStandard:"40P로 카드팩 뜯기", theme:"테마 확장팩", themeDesc:"테마와 들어 있는 카드를 확인한 뒤 무료로 구매 흐름을 체험할 수 있다.", buyTheme:"무료 테스트 구매", allOwned:"이 정리함의 카드를 모두 찾았다.", insufficient:"포인트가 부족하다.", packEmpty:"새 카드가 남아 있지 않다.", packGet:"새 카드를 찾았다: {{name}}", stored:"정리함에 넣었다.", returned:"골목 바닥에 꺼내놓았다.", start:"카드 인식 중", scanHint:"잠시만 기다려줘", ready:"카드 인식 완료", startContent:"콘텐츠를 불러오는 중이다", eject:"게임칩 빼기", saved:"카드와 포인트는 이 브라우저에 저장된다.", completed:"처음 완료한 콘텐츠다. 20P를 받았다.", completedBefore:"이미 완료한 콘텐츠다.", chooseTheme:"테마를 고르자", count:"보유 카드", floorCount:"바닥에 놓인 카드", folderStored:"정리함에 보관 중", source:"콘텐츠 페이지 열기", shop:"카드팩 상점", closeOverlay:"자판기 닫기", fallback:"이 콘텐츠를 새 탭에서 연다.", backToAlley:"골목으로 돌아왔다.", kindMatch:"월드컵", kindTest:"테스트", kindStory:"이야기", completion:"끝까지 완료하면 20P", included:"팩에 들어 있는 카드", kindPrefix:"콘텐츠", standardOpening:"카드팩을 뜯는 중", lockerHint:"카드를 유형에 맞는 칸에 놓자", dragInsert:"카드를 넣을 곳", dragLocker:"정리함에 넣기"
     },
     en: {
-      brand:"Click Card Arcade", kicker:"MOLGGA · THE MIDNIGHT ALLEY", title:"Find a card in the night alley", intro:"Turn over a card on the pavement, then feed the one you like into the machine.", points:"Your points", floor:"Cards on the pavement", floorHint:"Tap a card to see its front, or drag it to move it.", auto:"Arrange cards", cardBack:"MOLGGA", turnCard:"Turn over this card", insert:"Insert into machine", useCard:"Play this card", tray:"Drop a card here", machine:"Click Card Machine", machineHint:"Place a card on the green tray to begin", screenIdle:"CARD WAITING", screenHint:"Pick one card from the alley", slot:"Card slot", trayLabel:"Insert card", lockers:"Card lockers", emptyLocker:"Nothing stored here yet.", open:"Open", close:"Close", takeOut:"Return to floor", cards:"cards", autoConfirm:"Arrange the cards automatically?", autoExplain:"The positions you chose will change.", cancel:"Cancel", confirmArrange:"Arrange cards", sorted:"The cards are lined up on the floor.", noCards:"There are no cards to arrange.", standard:"Alley card pack", standardDesc:"Get one card you have not found yet. Each pack costs 40P.", buyStandard:"Open pack · 40P", theme:"Themed expansion", themeDesc:"Preview its theme and cards, then try the purchase flow for free.", buyTheme:"Try a free purchase", allOwned:"You found every card in this locker.", insufficient:"You need more points.", packEmpty:"No new cards remain.", packGet:"New card found: {{name}}", stored:"Card placed in the locker.", returned:"Card returned to the pavement.", start:"Reading card", scanHint:"Just a moment", ready:"Card recognized", startContent:"Starting your content", eject:"Eject game chip", saved:"Cards and points are saved in this browser.", completed:"First completion. You earned 20P.", completedBefore:"This content was already completed.", chooseTheme:"Choose a theme", count:"owned", floorCount:"on the floor", folderStored:"stored", source:"Open content page", shop:"Card pack shop", closeOverlay:"Close machine", fallback:"Opening this content in a new tab.", backToAlley:"Back in the alley.", kindMatch:"Matchup", kindTest:"Quiz", kindStory:"Story", completion:"Earn 20P by completing it", included:"Cards in this pack", kindPrefix:"Content", standardOpening:"Opening the pack", lockerHint:"Place each card in its matching locker", dragInsert:"Drop card to play", dragLocker:"Store in a locker"
+      brand:"Click Card Arcade", kicker:"MOLGGA · THE MIDNIGHT ALLEY", title:"Find a card in the night alley", intro:"Turn over a card on the pavement, then feed the one you like into the machine.", points:"Your points", floor:"Cards on the pavement", floorHint:"Tap a card to see its front, or drag it to move it.", auto:"Arrange cards", cardBack:"MOLGGA", turnCard:"Turn over this card", insert:"Insert into machine", useCard:"Play this card", tray:"Drop a card here", machine:"Click Card Machine", machineHint:"Place a card on the green tray to begin", screenIdle:"CARD WAITING", screenHint:"Pick one card from the alley", slot:"Card slot", trayLabel:"Insert card", lockers:"Card lockers", emptyLocker:"Nothing stored here yet.", open:"Open", close:"Close", takeOut:"Return to floor", cards:"cards", autoConfirm:"Arrange the cards automatically?", autoExplain:"The positions you chose will change.", cancel:"Cancel", confirmArrange:"Arrange cards", sorted:"The cards are lined up on the floor.", noCards:"There are no cards to arrange.", standard:"Alley card pack", standardDesc:"Get one card you have not found yet. Each pack costs 40P.", buyStandard:"Open pack · 40P", theme:"Themed expansion", themeDesc:"Preview its theme and cards, then try the purchase flow for free.", buyTheme:"Try a free purchase", allOwned:"You found every card in this locker.", insufficient:"You need more points.", packEmpty:"No new cards remain.", packGet:"New card found: {{name}}", stored:"Card placed in the locker.", returned:"Card returned to the pavement.", start:"Reading card", scanHint:"Just a moment", ready:"Card recognized", startContent:"Loading your content", eject:"Eject game chip", saved:"Cards and points are saved in this browser.", completed:"First completion. You earned 20P.", completedBefore:"This content was already completed.", chooseTheme:"Choose a theme", count:"owned", floorCount:"on the floor", folderStored:"stored", source:"Open content page", shop:"Card pack shop", closeOverlay:"Close machine", fallback:"Opening this content in a new tab.", backToAlley:"Back in the alley.", kindMatch:"Matchup", kindTest:"Quiz", kindStory:"Story", completion:"Earn 20P by completing it", included:"Cards in this pack", kindPrefix:"Content", standardOpening:"Opening the pack", lockerHint:"Place each card in its matching locker", dragInsert:"Drop card to play", dragLocker:"Store in a locker"
     },
     ja: {
-      brand:"カード自販機", kicker:"MOLGGA · 深夜のカード路地", title:"夜の路地でカードを探そう", intro:"路地に落ちているカードをめくり、気になる一枚を自販機に入れてみよう。", points:"所持ポイント", floor:"路地のカード", floorHint:"カードを押して表を見たり、ドラッグして動かしたりできる。", auto:"カードを整える", cardBack:"MOLGGA", turnCard:"カードをめくる", insert:"自販機に入れる", useCard:"このカードで始める", tray:"ここにカードを置く", machine:"カード自販機", machineHint:"緑の受け皿にカードを置くと始まる", screenIdle:"カード待機中", screenHint:"路地でカードを一枚選ぼう", slot:"カードスロット", trayLabel:"カード投入口", lockers:"カード整理箱", emptyLocker:"まだカードはありません。", open:"開く", close:"閉じる", takeOut:"床に戻す", cards:"枚", autoConfirm:"カードを自動で整理しますか？", autoExplain:"今のカードの位置が変わります。", cancel:"キャンセル", confirmArrange:"自動で整理", sorted:"床のカードを並べました。", noCards:"整理するカードがありません。", standard:"路地のカードパック", standardDesc:"まだ見つけていないカードが一枚出る。1パック40P。", buyStandard:"パックを開く · 40P", theme:"テーマ拡張パック", themeDesc:"テーマとカードを確認してから、無料で購入の流れを試せる。", buyTheme:"無料で試す", allOwned:"この整理箱のカードはすべて見つけました。", insufficient:"ポイントが足りません。", packEmpty:"新しいカードは残っていません。", packGet:"新しいカードを見つけた: {{name}}", stored:"整理箱に入れました。", returned:"路地の床に戻しました。", start:"カードを読み取り中", scanHint:"少々お待ちください", ready:"カード認識完了", startContent:"まもなく始まります", eject:"ゲームチップを取り出す", saved:"カードとポイントはこのブラウザーに保存されます。", completed:"初回クリア。20Pを獲得しました。", completedBefore:"このコンテンツはクリア済みです。", chooseTheme:"テーマを選ぶ", count:"枚所持", floorCount:"床にある", folderStored:"収納中", source:"コンテンツページを開く", shop:"カードパックショップ", closeOverlay:"自販機を閉じる", fallback:"コンテンツを新しいタブで開きます。", backToAlley:"路地に戻りました。", kindMatch:"対戦", kindTest:"テスト", kindStory:"ストーリー", completion:"最後まで進むと20P", included:"パックに入っているカード", kindPrefix:"種類", standardOpening:"パックを開封中", lockerHint:"カードの種類に合った整理箱に入れよう", dragInsert:"カードを入れる", dragLocker:"整理箱に入れる"
+      brand:"カード自販機", kicker:"MOLGGA · 深夜のカード路地", title:"夜の路地でカードを探そう", intro:"路地に落ちているカードをめくり、気になる一枚を自販機に入れてみよう。", points:"所持ポイント", floor:"路地のカード", floorHint:"カードを押して表を見たり、ドラッグして動かしたりできる。", auto:"カードを整える", cardBack:"MOLGGA", turnCard:"カードをめくる", insert:"自販機に入れる", useCard:"このカードで始める", tray:"ここにカードを置く", machine:"カード自販機", machineHint:"緑の受け皿にカードを置くと始まる", screenIdle:"カード待機中", screenHint:"路地でカードを一枚選ぼう", slot:"カードスロット", trayLabel:"カード投入口", lockers:"カード整理箱", emptyLocker:"まだカードはありません。", open:"開く", close:"閉じる", takeOut:"床に戻す", cards:"枚", autoConfirm:"カードを自動で整理しますか？", autoExplain:"今のカードの位置が変わります。", cancel:"キャンセル", confirmArrange:"自動で整理", sorted:"床のカードを並べました。", noCards:"整理するカードがありません。", standard:"路地のカードパック", standardDesc:"まだ見つけていないカードが一枚出る。1パック40P。", buyStandard:"パックを開く · 40P", theme:"テーマ拡張パック", themeDesc:"テーマとカードを確認してから、無料で購入の流れを試せる。", buyTheme:"無料で試す", allOwned:"この整理箱のカードはすべて見つけました。", insufficient:"ポイントが足りません。", packEmpty:"新しいカードは残っていません。", packGet:"新しいカードを見つけた: {{name}}", stored:"整理箱に入れました。", returned:"路地の床に戻しました。", start:"カードを読み取り中", scanHint:"少々お待ちください", ready:"カード認識完了", startContent:"コンテンツを読み込み中", eject:"ゲームチップを取り出す", saved:"カードとポイントはこのブラウザーに保存されます。", completed:"初回クリア。20Pを獲得しました。", completedBefore:"このコンテンツはクリア済みです。", chooseTheme:"テーマを選ぶ", count:"枚所持", floorCount:"床にある", folderStored:"収納中", source:"コンテンツページを開く", shop:"カードパックショップ", closeOverlay:"自販機を閉じる", fallback:"コンテンツを新しいタブで開きます。", backToAlley:"路地に戻りました。", kindMatch:"対戦", kindTest:"テスト", kindStory:"ストーリー", completion:"最後まで進むと20P", included:"パックに入っているカード", kindPrefix:"種類", standardOpening:"パックを開封中", lockerHint:"カードの種類に合った整理箱に入れよう", dragInsert:"カードを入れる", dragLocker:"整理箱に入れる"
     },
     zh: {
-      brand:"卡片贩卖机", kicker:"MOLGGA · 深夜卡片小巷", title:"在夜巷里找一张卡", intro:"翻开地上的卡片，挑一张喜欢的放进贩卖机。", points:"当前积分", floor:"巷子里的卡片", floorHint:"点击卡片查看正面，也可以拖动它。", auto:"整理卡片", cardBack:"MOLGGA", turnCard:"翻开这张卡", insert:"投入贩卖机", useCard:"用这张卡开始", tray:"把卡放在这里", machine:"卡片贩卖机", machineHint:"把卡放到绿色托盘上即可开始", screenIdle:"等待卡片", screenHint:"从巷子里挑一张卡吧", slot:"卡片插槽", trayLabel:"卡片入口", lockers:"卡片收纳柜", emptyLocker:"这里还没有卡片。", open:"打开", close:"关闭", takeOut:"放回地面", cards:"张", autoConfirm:"要自动整理卡片吗？", autoExplain:"卡片现在的位置会改变。", cancel:"取消", confirmArrange:"自动整理", sorted:"地上的卡片已摆放整齐。", noCards:"没有需要整理的卡片。", standard:"巷子卡包", standardDesc:"随机获得一张尚未找到的卡片。每包40P。", buyStandard:"打开卡包 · 40P", theme:"主题扩展包", themeDesc:"先查看主题和卡片，再免费体验购买流程。", buyTheme:"免费体验购买", allOwned:"这个收纳格的卡片都找到了。", insufficient:"积分不足。", packEmpty:"没有新卡了。", packGet:"发现新卡：{{name}}", stored:"已放入收纳柜。", returned:"已放回巷子地面。", start:"正在识别卡片", scanHint:"请稍候", ready:"卡片识别完成", startContent:"内容即将开始", eject:"取出游戏芯片", saved:"卡片和积分保存在此浏览器中。", completed:"首次完成，获得20P。", completedBefore:"此内容已完成过。", chooseTheme:"选择主题", count:"张已拥有", floorCount:"张在地面", folderStored:"已收纳", source:"打开内容页面", shop:"卡包商店", closeOverlay:"关闭贩卖机", fallback:"将在新标签页打开此内容。", backToAlley:"已回到巷子。", kindMatch:"对决", kindTest:"测试", kindStory:"故事", completion:"完成内容可获得20P", included:"卡包内的卡片", kindPrefix:"类型", standardOpening:"正在拆开卡包", lockerHint:"请把卡片放入对应收纳格", dragInsert:"放入贩卖机", dragLocker:"放入收纳柜"
+      brand:"卡片贩卖机", kicker:"MOLGGA · 深夜卡片小巷", title:"在夜巷里找一张卡", intro:"翻开地上的卡片，挑一张喜欢的放进贩卖机。", points:"当前积分", floor:"巷子里的卡片", floorHint:"点击卡片查看正面，也可以拖动它。", auto:"整理卡片", cardBack:"MOLGGA", turnCard:"翻开这张卡", insert:"投入贩卖机", useCard:"用这张卡开始", tray:"把卡放在这里", machine:"卡片贩卖机", machineHint:"把卡放到绿色托盘上即可开始", screenIdle:"等待卡片", screenHint:"从巷子里挑一张卡吧", slot:"卡片插槽", trayLabel:"卡片入口", lockers:"卡片收纳柜", emptyLocker:"这里还没有卡片。", open:"打开", close:"关闭", takeOut:"放回地面", cards:"张", autoConfirm:"要自动整理卡片吗？", autoExplain:"卡片现在的位置会改变。", cancel:"取消", confirmArrange:"自动整理", sorted:"地上的卡片已摆放整齐。", noCards:"没有需要整理的卡片。", standard:"巷子卡包", standardDesc:"随机获得一张尚未找到的卡片。每包40P。", buyStandard:"打开卡包 · 40P", theme:"主题扩展包", themeDesc:"先查看主题和卡片，再免费体验购买流程。", buyTheme:"免费体验购买", allOwned:"这个收纳格的卡片都找到了。", insufficient:"积分不足。", packEmpty:"没有新卡了。", packGet:"发现新卡：{{name}}", stored:"已放入收纳柜。", returned:"已放回巷子地面。", start:"正在识别卡片", scanHint:"请稍候", ready:"卡片识别完成", startContent:"正在加载内容", eject:"取出游戏芯片", saved:"卡片和积分保存在此浏览器中。", completed:"首次完成，获得20P。", completedBefore:"此内容已完成过。", chooseTheme:"选择主题", count:"张已拥有", floorCount:"张在地面", folderStored:"已收纳", source:"打开内容页面", shop:"卡包商店", closeOverlay:"关闭贩卖机", fallback:"将在新标签页打开此内容。", backToAlley:"已回到巷子。", kindMatch:"对决", kindTest:"测试", kindStory:"故事", completion:"完成内容可获得20P", included:"卡包内的卡片", kindPrefix:"类型", standardOpening:"正在拆开卡包", lockerHint:"请把卡片放入对应收纳格", dragInsert:"放入贩卖机", dragLocker:"放入收纳柜"
     }
   };
   const t = (key, values = {}) => {
@@ -112,6 +112,7 @@
   let pendingReturn = null;
   let completionObserver = null;
   let activeIframe = null;
+  let launchGeneration = 0;
   let closePromise = null;
 
   const setStatus = (message) => { if (status) status.textContent = message; };
@@ -489,6 +490,29 @@
 
   const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
   const waitForMotion = (ms) => wait(window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 24 : ms);
+  const waitForFrameLoad = (iframe, timeoutMs = 15000) => new Promise((resolve) => {
+    let settled = false;
+    let timeoutId;
+    const cleanup = () => {
+      window.clearTimeout(timeoutId);
+      iframe.removeEventListener("load", onLoad);
+      iframe.removeEventListener("error", finish);
+    };
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve();
+    };
+    const onLoad = () => {
+      try { if (iframe.contentWindow?.location.href === "about:blank") return; }
+      catch { /* A cross-origin document has completed its navigation. */ }
+      finish();
+    };
+    iframe.addEventListener("load", onLoad);
+    iframe.addEventListener("error", finish);
+    timeoutId = window.setTimeout(finish, timeoutMs);
+  });
   const completionVisible = (doc, entry) => {
     if (!doc) return false;
     const selectors = entryDefinition(entry).completionCondition.selectors;
@@ -523,7 +547,8 @@
     iframe.addEventListener("load", () => {
       try {
         const doc = iframe.contentDocument;
-        if (!doc) return;
+        if (!doc || doc.URL === "about:blank") return;
+        completionObserver?.disconnect();
         completionObserver = new MutationObserver(inspect);
         completionObserver.observe(doc.documentElement, { subtree:true, childList:true, attributes:true, attributeFilter:["hidden","aria-hidden","class","style"] });
         inspect();
@@ -560,8 +585,13 @@
     if (!entry) { flightCard?.remove(); return; }
     const card = floor.querySelector(`[data-vm-card="${CSS.escape(contentId)}"]`);
     if (!card) { flightCard?.remove(); return; }
+    const launchId = ++launchGeneration;
+    const isCurrentLaunch = () => launchGeneration === launchId && activeContent?.id === entry.id;
     const returnOrigin = { ...(savedPosition || state.positions[contentId]) };
     activeContent = entry;
+    completionObserver?.disconnect(); completionObserver = null;
+    activeIframe?.remove(); activeIframe = null;
+    screen.replaceChildren();
     document.body.classList.remove("vm-is-dragging");
     const machineOutOfView = (() => {
       const rect = machine.getBoundingClientRect();
@@ -606,22 +636,26 @@
         clone.style.transform = "rotate(0deg) translateY(-8px)";
       });
       await waitForMotion(420);
+      if (!isCurrentLaunch()) { clone.remove(); return; }
       machine.scrollIntoView({ behavior:"smooth", block:"center" });
       await waitForMotion(650);
+      if (!isCurrentLaunch()) { clone.remove(); return; }
     }
     const slotRect = slot.getBoundingClientRect();
     const centerX = slotRect.left + slotRect.width / 2;
-    const centerY = slotRect.top + slotRect.height / 2;
     const slotCenterLeft = centerX - cardWidth / 2;
-    const slotCenterTop = centerY - cardHeight / 2;
+    const slotCenterTop = slotRect.top + slotRect.height / 2 - 2;
     requestAnimationFrame(() => {
       clone.style.left = `${slotCenterLeft}px`;
       clone.style.top = `${slotCenterTop}px`;
       clone.style.transform = "rotate(0deg)";
     });
     await waitForMotion(520);
+    if (!isCurrentLaunch()) { clone.remove(); return; }
+    clone.style.setProperty("--vm-feed-up", `-${Math.max(16, Math.min(26, slotRect.height))}px`);
     clone.classList.add("is-feeding-up");
     await waitForMotion(600);
+    if (!isCurrentLaunch()) { clone.remove(); return; }
     clone.remove();
     card.style.visibility = "";
     card.classList.add("is-return-target");
@@ -630,21 +664,30 @@
     machineTray.classList.remove("is-drop-target");
     const crtRect = crt.getBoundingClientRect();
     document.body.style.overflow = "hidden";
-    await zoomIntoCRT(crtRect);
     showRecognition(entry);
+    await zoomIntoCRT(crtRect);
+    if (!isCurrentLaunch()) return;
     await wait(900);
+    if (!isCurrentLaunch()) return;
     screen.replaceChildren();
     const ready = make("div", "vm-recognition");
-    ready.append(newPixelIcon(entry, 16), make("strong", "", t("ready")), make("h2", "", label(entry)), make("p", "", t("startContent")));
+    ready.append(newPixelIcon(entry, 16), make("strong", "", t("ready")), make("h2", "", label(entry)), make("p", "", t("startContent")), make("span", "vm-recognition-progress"));
     screen.append(ready);
     await wait(1450);
+    if (!isCurrentLaunch()) return;
     const iframe = make("iframe", "vm-embedded-game");
     iframe.title = label(entry);
     iframe.allow = "clipboard-read; clipboard-write; fullscreen";
+    iframe.style.visibility = "hidden";
+    const frameLoaded = waitForFrameLoad(iframe);
     iframe.src = new URL(entry.page, document.baseURI).href;
     activeIframe = iframe;
     observeCompletion(iframe, entry);
+    screen.append(iframe);
+    await frameLoaded;
+    if (!isCurrentLaunch()) { iframe.remove(); return; }
     screen.replaceChildren(iframe);
+    iframe.style.visibility = "";
     by("[data-vm-focus-name]").textContent = label(entry);
     iframe.focus({ preventScroll:true });
   };
@@ -683,6 +726,7 @@
 
   const eject = async () => {
     if (closePromise) return closePromise;
+    launchGeneration += 1;
     closePromise = (async () => {
       const previous = activeContent;
       completionObserver?.disconnect(); completionObserver = null;

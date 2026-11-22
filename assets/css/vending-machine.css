@@ -177,7 +177,7 @@
 .vm-eject { min-height:43px; padding:8px 14px; border:1px solid #b5d191; border-radius:999px; background:#283822eF; color:#f4ffdf; font:inherit; font-size:.82rem; font-weight:850; cursor:pointer; }
 .vm-insert-animation { position:fixed; z-index:10002; margin:0; pointer-events:none; transform-origin:center; transition:left .52s cubic-bezier(.2,.75,.2,1),top .52s cubic-bezier(.2,.75,.2,1),transform .46s cubic-bezier(.2,.75,.2,1),opacity .22s ease; }
 .vm-insert-animation.is-feeding-up { animation:vm-card-feed-up .6s cubic-bezier(.35,.02,.2,1) both; }
-@keyframes vm-card-feed-up { 0%{clip-path:inset(0);transform:rotate(0deg) translateY(0)} 20%{clip-path:inset(0);transform:rotate(0deg) translateY(-5%)} 66%{clip-path:inset(34% 0 0 0);transform:rotate(0deg) translateY(-36%)} 100%{clip-path:inset(100% 0 0 0);transform:rotate(0deg) translateY(-88%);opacity:0} }
+@keyframes vm-card-feed-up { 0%{clip-path:inset(0);transform:rotate(0deg) translateY(0)} 20%{clip-path:inset(0);transform:rotate(0deg) translateY(-3px)} 66%{clip-path:inset(34% 0 0 0);transform:rotate(0deg) translateY(-12px)} 100%{clip-path:inset(100% 0 0 0);transform:rotate(0deg) translateY(var(--vm-feed-up,-20px));opacity:0} }
 .vm-insert-animation .vm-card-inner { transform:rotateX(0deg) rotateY(180deg)!important; }
 .vm-floor.is-auto-arranging .vm-card { transition:left .48s cubic-bezier(.2,.8,.2,1),top .48s cubic-bezier(.2,.8,.2,1),transform .48s ease; }
 .vm-home button:focus-visible, .vm-home [tabindex="0"]:focus-visible, .vm-focus button:focus-visible, .vending-page .nav a:focus-visible, .vending-page .language-select:focus-visible { outline:3px solid #dafa98; outline-offset:3px; }
