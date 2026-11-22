@@ -35,6 +35,12 @@
   const legacyStorageKey = "molgga.vendingMachine.v1";
   const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
   const safeRandom = () => Math.random();
+  const cardAspectRatio = 0.66;
+  const cardWidthForViewport = () => {
+    if (window.matchMedia("(max-width: 680px)").matches) return clamp(window.innerWidth * .36, 112, 132);
+    if (window.matchMedia("(max-width: 900px)").matches) return clamp(window.innerWidth * .12, 112, 132);
+    return clamp(window.innerWidth * .1, 112, 140);
+  };
   const defaultPositions = { weekend:{x:8,y:22,r:-11,z:1}, mbti:{x:39,y:43,r:7,z:2}, "night-train":{x:70,y:14,r:12,z:3} };
   const groupForEntry = (entry) => entry.type === "worldcup" || entry.formatId === "worldcup" ? "matchups" : entry.formatId === "story" || entry.source?.kind === "story" || entry.source?.kind === "survival" ? "stories" : "tests";
   const groupForId = (id) => groupForEntry(contentById.get(id) || {});
@@ -225,15 +231,17 @@
     card.style.setProperty("--vm-card-rotation", `${position.r}deg`);
     card.style.transform = `rotate(${position.r}deg)`;
     card.style.zIndex = String(position.z);
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", label(entry));
+    card.setAttribute("aria-expanded", "false");
     card.setAttribute("aria-grabbed", "false");
     const inner = make("div", "vm-card-inner");
     const back = make("div", "vm-card-face vm-card-back");
     back.setAttribute("aria-hidden", "false");
     const backBrand = make("b", "", t("cardBack"));
-    const flip = make("button", "vm-card-turn", "↻");
-    flip.type = "button";
-    flip.tabIndex = 0;
-    flip.setAttribute("aria-label", t("turnCard"));
+    const flip = make("span", "vm-card-turn", "↻");
+    flip.setAttribute("aria-hidden", "true");
     back.append(backBrand, flip);
     const front = make("div", "vm-card-face vm-card-front");
     front.setAttribute("aria-hidden", "true");
@@ -251,27 +259,35 @@
     copy.append(make("strong", "vm-card-title", label(entry)));
     copy.append(make("p", "vm-card-description", description(entry)));
     copy.append(make("small", "vm-card-reward", t("completion")));
-    const insert = make("button", "vm-card-insert", t("insert"));
-    insert.type = "button";
-    insert.tabIndex = -1;
-    insert.dataset.vmInsert = entry.id;
-    copy.append(insert);
     front.append(image, pixel, copy);
     inner.append(back, front);
     card.append(inner);
     card.addEventListener("click", (event) => {
-      if (event.target.closest("[data-vm-insert]")) return;
       if (card.dataset.suppressClick === "1") { card.dataset.suppressClick = "0"; return; }
       const reveal = !card.classList.contains("is-revealed");
       card.classList.toggle("is-revealed", reveal);
       back.setAttribute("aria-hidden", String(reveal));
       front.setAttribute("aria-hidden", String(!reveal));
-      insert.tabIndex = reveal ? 0 : -1;
+      card.setAttribute("aria-expanded", String(reveal));
       card.style.transform = `rotate(${state.positions[entry.id].r}deg) scale(${reveal ? 1.035 : 1})`;
+      const bounds = floor.getBoundingClientRect();
+      const maxX = Math.max(0, (bounds.width - card.offsetWidth) / Math.max(1, bounds.width) * 100);
+      const maxY = Math.max(0, (bounds.height - card.offsetHeight) / Math.max(1, bounds.height) * 100);
+      state.positions[entry.id].x = Math.min(state.positions[entry.id].x, maxX);
+      state.positions[entry.id].y = Math.min(state.positions[entry.id].y, maxY);
+      card.style.left = `${state.positions[entry.id].x}%`;
+      card.style.top = `${state.positions[entry.id].y}%`;
       if (card.classList.contains("is-revealed")) {
         card.style.zIndex = String(++state.nextZ);
         state.positions[entry.id].z = state.nextZ;
         save();
+      }
+    });
+    card.addEventListener("keydown", (event) => {
+      if (event.key === " " || event.key === "Enter") {
+        event.preventDefault();
+        if (event.key === "Enter" && card.classList.contains("is-revealed")) insertCard(entry.id);
+        else card.click();
       }
     });
     return card;
@@ -285,15 +301,15 @@
     by("[data-vm-owned-count]").textContent = cardCount(visibleOwned.length, "owned");
     by("[data-vm-floor-count]").textContent = cardCount(onFloor.length, "floor");
     const mobile = window.matchMedia("(max-width: 680px)").matches;
-    const cardWidth = mobile ? clamp(window.innerWidth * .29, 88, 116) : clamp(window.innerWidth * .1, 112, 146);
+    const cardWidth = cardWidthForViewport();
     const columns = mobile ? 2 : 4;
     const rows = Math.ceil(onFloor.length / columns);
     const baseHeight = mobile ? 360 : 500;
-    const floorHeight = Math.max(baseHeight, rows * (cardWidth / .68 + 38) + 30);
+    const floorHeight = Math.max(baseHeight, rows * (cardWidth / cardAspectRatio + 38) + 30);
     floor.style.minHeight = `${floorHeight}px`;
     const floorWidth = floor.getBoundingClientRect().width;
     const maxCardX = Math.max(0, (floorWidth - cardWidth) / Math.max(1,floorWidth) * 100);
-    const maxCardY = Math.max(0, (floorHeight - cardWidth / .68) / floorHeight * 100);
+    const maxCardY = Math.max(0, (floorHeight - cardWidth / cardAspectRatio) / floorHeight * 100);
     floor.replaceChildren(...onFloor.map((id) => {
       const entry = contentById.get(id);
       const position = state.positions[id];
@@ -414,8 +430,8 @@
     floor.classList.add("is-auto-arranging");
     const columns = window.matchMedia("(max-width: 680px)").matches ? 2 : 4;
     const bounds = floor.getBoundingClientRect();
-    const cardWidth = window.matchMedia("(max-width: 680px)").matches ? clamp(window.innerWidth * .29, 88, 116) : clamp(window.innerWidth * .1, 112, 146);
-    const cardHeight = cardWidth / .68;
+    const cardWidth = cardWidthForViewport();
+    const cardHeight = cardWidth / cardAspectRatio;
     const maxX = Math.max(0, (bounds.width - cardWidth) / bounds.width * 100);
     const maxY = Math.max(0, (bounds.height - cardHeight) / bounds.height * 100);
     const rows = Math.ceil(floorIds.length / columns);
@@ -454,8 +470,8 @@
     Object.values(state.stored).forEach((ids) => { const index = ids.indexOf(contentId); if (index >= 0) ids.splice(index,1); });
     if (leftPx !== null && topPx !== null) {
       const bounds = floor.getBoundingClientRect();
-      const cardWidth = window.matchMedia("(max-width: 680px)").matches ? clamp(window.innerWidth * .29, 88, 116) : clamp(window.innerWidth * .1, 112, 146);
-      const cardHeight = cardWidth / .68;
+      const cardWidth = cardWidthForViewport();
+      const cardHeight = cardWidth / cardAspectRatio;
       state.positions[contentId].x = clamp(((leftPx - bounds.left) / Math.max(1,bounds.width)) * 100, 0, Math.max(0, (bounds.width - cardWidth) / bounds.width * 100));
       state.positions[contentId].y = clamp(((topPx - bounds.top) / Math.max(1,bounds.height)) * 100, 0, Math.max(0, (bounds.height - cardHeight) / bounds.height * 100));
     }
@@ -524,10 +540,6 @@
     frame.style.setProperty("--vm-y", `${sourceRect.top}px`);
     frame.style.setProperty("--vm-w", `${Math.max(1,sourceRect.width)}px`);
     frame.style.setProperty("--vm-h", `${Math.max(1,sourceRect.height)}px`);
-    frame.style.top = `${sourceRect.top}px`;
-    frame.style.left = `${sourceRect.left}px`;
-    frame.style.width = `${sourceRect.width}px`;
-    frame.style.height = `${sourceRect.height}px`;
     void frame.offsetWidth;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     requestAnimationFrame(() => overlay.classList.add("is-zoomed"));
@@ -639,14 +651,26 @@
     if (!card) return;
     const contentId = card.dataset.vmCard;
     const rect = card.getBoundingClientRect();
-    const initialLeft = rect.left + (rect.width - card.offsetWidth) / 2;
-    const initialTop = rect.top + (rect.height - card.offsetHeight) / 2;
-    card.classList.add("is-dragging");
+    const dragCard = card.cloneNode(true);
+    dragCard.classList.add("vm-drag-preview", "is-dragging", "is-revealed");
+    dragCard.querySelector(".vm-card-front")?.setAttribute("aria-hidden", "false");
+    dragCard.querySelector(".vm-card-back")?.setAttribute("aria-hidden", "true");
+    dragCard.style.position = "fixed";
+    dragCard.style.left = "0px";
+    dragCard.style.top = "0px";
+    dragCard.style.transform = "rotate(0deg)";
+    dragCard.style.zIndex = "20000";
+    document.body.append(dragCard);
+    const initialLeft = rect.left + rect.width / 2 - dragCard.offsetWidth / 2;
+    const initialTop = rect.top + rect.height / 2 - dragCard.offsetHeight / 2;
+    dragCard.style.left = `${initialLeft}px`;
+    dragCard.style.top = `${initialTop}px`;
+    card.style.visibility = "hidden";
     card.setAttribute("aria-grabbed", "true");
     try { card.setPointerCapture(event.pointerId); } catch { /* Mouse-like pointers may not support capture. */ }
     card.style.zIndex = String(++state.nextZ);
     state.positions[contentId].z = state.nextZ;
-    dragging = { card, contentId, startX:event.clientX, startY:event.clientY, offsetX:event.clientX - initialLeft, offsetY:event.clientY - initialTop, left:initialLeft, top:initialTop, moved:false, origin:{ ...state.positions[contentId] } };
+    dragging = { card, dragCard, contentId, startX:event.clientX, startY:event.clientY, offsetX:event.clientX - initialLeft, offsetY:event.clientY - initialTop, left:initialLeft, top:initialTop, moved:false, origin:{ ...state.positions[contentId] } };
     document.body.classList.add("vm-is-dragging");
   });
 
@@ -656,21 +680,12 @@
     const dy = event.clientY - dragging.startY;
     if (Math.abs(dx) + Math.abs(dy) > 5) {
       dragging.moved = true;
-      dragging.card.classList.add("is-revealed");
-      const front = dragging.card.querySelector(".vm-card-front");
-      const back = dragging.card.querySelector(".vm-card-back");
-      if (front) front.setAttribute("aria-hidden", "false");
-      if (back) back.setAttribute("aria-hidden", "true");
-      const insert = dragging.card.querySelector("[data-vm-insert]");
-      if (insert) insert.tabIndex = 0;
     }
     const lift = event.pointerType === "touch" ? 44 : 0;
     dragging.left = event.clientX - dragging.offsetX;
     dragging.top = event.clientY - dragging.offsetY - lift;
-    dragging.card.style.transform = "rotate(0deg)";
-    dragging.card.style.position = "fixed";
-    dragging.card.style.left = `${dragging.left}px`;
-    dragging.card.style.top = `${dragging.top}px`;
+    dragging.dragCard.style.left = `${dragging.left}px`;
+    dragging.dragCard.style.top = `${dragging.top}px`;
     if (event.clientY > window.innerHeight - 64) window.scrollBy(0, 18);
     else if (event.clientY < 48) window.scrollBy(0, -18);
     const isMobile = window.matchMedia("(max-width: 680px)").matches;
@@ -681,24 +696,23 @@
     mobileTray.setAttribute("aria-hidden", String(mobileTray.hidden));
     mobileLockerTray.setAttribute("aria-hidden", String(mobileLockerTray.hidden));
     mobileTray.classList.toggle("is-drop-target", Boolean(isMobile && !mobileTray.hidden && event.clientX >= mobileTray.getBoundingClientRect().left && event.clientX <= mobileTray.getBoundingClientRect().right && event.clientY >= mobileTray.getBoundingClientRect().top && event.clientY <= mobileTray.getBoundingClientRect().bottom));
-    dragging.card.style.visibility = "hidden";
     const hoverTarget = document.elementFromPoint(event.clientX, event.clientY);
-    dragging.card.style.visibility = "";
     machineTray.classList.toggle("is-drop-target", Boolean(hoverTarget?.closest("[data-vm-insert-tray]")));
   });
 
   window.addEventListener("pointerup", (event) => {
     if (!dragging) return;
     const current = dragging;
-    current.card.style.visibility = "hidden";
+    const cardWidth = current.dragCard.offsetWidth;
+    const cardHeight = current.dragCard.offsetHeight;
     const target = document.elementFromPoint(event.clientX, event.clientY);
-    current.card.style.visibility = "";
     const locker = target?.closest("[data-vm-locker]");
     const tempLocker = target?.closest("[data-vm-temp-locker]");
     const onMachineTray = Boolean(target?.closest("[data-vm-insert-tray]"));
     const trayRect = mobileTray.getBoundingClientRect();
     const overTray = window.matchMedia("(max-width: 680px)").matches && !mobileTray.hidden && document.body.classList.contains("vm-is-dragging") && event.clientX >= trayRect.left && event.clientX <= trayRect.right && event.clientY >= trayRect.top && event.clientY <= trayRect.bottom;
-    current.card.classList.remove("is-dragging");
+    current.dragCard.remove();
+    current.card.style.visibility = "";
     current.card.setAttribute("aria-grabbed", "false");
     if (!current.moved) {
       state.positions[current.contentId].z = state.nextZ;
@@ -712,15 +726,9 @@
     current.card.dataset.suppressClick = "1";
     window.setTimeout(() => { if (current.card.dataset.suppressClick === "1") current.card.dataset.suppressClick = "0"; }, 250);
     const bounds = floor.getBoundingClientRect();
-    const cardWidth = current.card.offsetWidth;
-    const cardHeight = current.card.offsetHeight;
     const inFloor = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
     const left = clamp(current.left - bounds.left, 0, Math.max(0, bounds.width - cardWidth));
     const top = clamp(current.top - bounds.top, 0, Math.max(0, bounds.height - cardHeight));
-    current.card.style.position = "absolute";
-    current.card.style.left = `${left}px`;
-    current.card.style.top = `${top}px`;
-    current.card.style.transform = `rotate(${state.positions[current.contentId].r}deg)`;
     if (overTray || onMachineTray) {
       state.positions[current.contentId].x = bounds.width ? left / bounds.width * 100 : current.origin.x;
       state.positions[current.contentId].y = bounds.height ? top / bounds.height * 100 : current.origin.y;
@@ -738,7 +746,7 @@
       state.positions[current.contentId].x = bounds.width ? left / bounds.width * 100 : 0;
       state.positions[current.contentId].y = bounds.height ? top / bounds.height * 100 : 0;
       state.positions[current.contentId].z = state.nextZ;
-      save();
+      save(); render();
     } else {
       state.positions[current.contentId] = current.origin;
       render();
@@ -753,18 +761,22 @@
   });
   window.addEventListener("pointercancel", () => {
     if (!dragging) return;
+    dragging.dragCard.remove();
+    dragging.card.style.visibility = "";
+    dragging.card.setAttribute("aria-grabbed", "false");
+    state.positions[dragging.contentId] = dragging.origin;
+    save();
     dragging = null;
     document.body.classList.remove("vm-is-dragging");
     mobileTray.hidden = true;
     mobileLockerTray.hidden = true;
     mobileTray.setAttribute("aria-hidden", "true");
     mobileLockerTray.setAttribute("aria-hidden", "true");
+    machineTray.classList.remove("is-drop-target");
     render();
   });
 
   root.addEventListener("click", (event) => {
-    const insert = event.target.closest("[data-vm-insert]");
-    if (insert) { insertCard(insert.dataset.vmInsert); return; }
     const openLocker = event.target.closest("[data-vm-open-locker]");
     if (openLocker) {
       const body = root.querySelector(`[data-vm-locker-body="${CSS.escape(openLocker.dataset.vmOpenLocker)}"]`);

@@ -45,6 +45,9 @@ assert.match(machineJs, /mobileLockerTray\.hidden/);
 assert.match(machineJs, /data-vm-temp-locker/);
 assert.match(machineJs, /t\("ready"\)/);
 assert.match(machineJs, /slotRect\.left \+ slotRect\.width \/ 2 - 34/);
+assert.match(machineJs, /vm-drag-preview/);
+assert.doesNotMatch(machineJs, /vm-card-insert|data-vm-insert\]/);
+assert.doesNotMatch(machineJs, /frame\.style\.(top|left|width|height)/);
 assert.match(machineJs, /localStorage\.setItem\(storageKey/);
 assert.match(machineJs, /\.archetype-result-card/);
 assert.match(machineJs, /\.island-ending/);
@@ -60,6 +63,9 @@ assert.match(css, /--vm-alley:#151121/);
 assert.match(css, /--vm-plum:#9177bd/);
 assert.match(css, /--vm-crt:#18221f/);
 assert.match(css, /--vm-lime:#dafa98/);
+assert.match(css, /transform:rotateX\(58deg\)/);
+assert.match(css, /vm-card\.is-revealed[^\{]*\{ width:/);
+assert.match(css, /\.vm-drag-preview \{[^}]*pointer-events:none/);
 
 for (const language of languages) {
   const home = read(`${language}/index.html`);
