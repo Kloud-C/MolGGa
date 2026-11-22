@@ -663,9 +663,8 @@
       if (previous) chip.append(newPixelIcon(previous, 10, "vm-eject-chip-icon"));
       const slotRect = slot.getBoundingClientRect();
       const chipWidth = 84;
-      const chipHeight = 46;
       chip.style.left = `${slotRect.left + slotRect.width / 2 - chipWidth / 2}px`;
-      chip.style.top = `${slotRect.top + slotRect.height / 2 - chipHeight / 2}px`;
+      chip.style.top = `${slotRect.top + Math.min(4, slotRect.height * .2)}px`;
       document.body.append(chip);
       await waitForMotion(820); chip.remove();
       document.body.style.overflow = "";

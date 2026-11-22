@@ -51,6 +51,7 @@ assert.match(machineJs, /insertCard\(current\.contentId, current\.dragCard\)/);
 assert.match(machineJs, /scaleY\(\$\{slotThickness\}\) rotate\(90deg\)/);
 assert.match(machineJs, /overlay\.classList\.add\("is-returning"\)/);
 assert.match(machineJs, /overlay\.hidden = true;[\s\S]*?const chip = make\("div", "vm-eject-chip"\)/);
+assert.match(machineJs, /slotRect\.top \+ Math\.min\(4, slotRect\.height \* \.2\)/);
 assert.doesNotMatch(machineJs, /vm-card-insert|data-vm-insert\]/);
 assert.doesNotMatch(machineJs, /frame\.style\.(top|left|width|height)/);
 assert.match(machineJs, /localStorage\.setItem\(storageKey/);
