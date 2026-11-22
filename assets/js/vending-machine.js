@@ -4,6 +4,7 @@
   if (!registry || !root) return;
 
   const lang = () => (window.MOA_I18N?.language || document.documentElement.lang || "ko").slice(0, 2);
+  const ejectButtonText = () => ({ ko:"카드 꺼내기", en:"Eject card", ja:"カードを取り出す", zh:"取出卡片" }[lang()] || "Eject card");
   const strings = {
       ko: {
       brand:"딸깍 자판기", kicker:"MOLGGA · 심야 카드 골목", title:"밤 골목에서 카드를 찾아보자", intro:"바닥에 놓인 카드를 살펴보고, 마음에 드는 한 장을 자판기에 넣어보자.", points:"보유 포인트", floor:"골목 바닥", floorHint:"카드를 눌러 앞면을 확인하거나 끌어 옮길 수 있다.", auto:"자동 정리", cardBack:"MOLGGA", turnCard:"카드를 뒤집어 내용 보기", insert:"자판기에 넣기", useCard:"이 카드로 시작", tray:"카드를 여기에 놓기", machine:"딸깍 자판기", machineHint:"카드를 초록색 받침에 놓으면 시작된다", screenIdle:"카드 대기 중", screenHint:"골목에서 카드 한 장을 골라보자", slot:"카드 슬롯", trayLabel:"카드 투입구", lockers:"카드 정리함", emptyLocker:"아직 보관한 카드가 없다.", open:"열기", close:"닫기", takeOut:"바닥에 꺼내기", cards:"장", autoConfirm:"카드를 자동 정리하겠습니까?", autoExplain:"지금 배치한 카드 위치가 바뀐다.", cancel:"취소", confirmArrange:"자동 정리", sorted:"바닥의 카드를 가지런히 놓았다.", noCards:"정리할 카드가 없다.", standard:"골목 카드팩", standardDesc:"아직 찾지 못한 카드 한 장이 나온다. 한 팩에 40P가 든다.", buyStandard:"40P로 카드팩 뜯기", theme:"테마 확장팩", themeDesc:"테마와 들어 있는 카드를 확인한 뒤 무료로 구매 흐름을 체험할 수 있다.", buyTheme:"무료 테스트 구매", allOwned:"이 정리함의 카드를 모두 찾았다.", insufficient:"포인트가 부족하다.", packEmpty:"새 카드가 남아 있지 않다.", packGet:"새 카드를 찾았다: {{name}}", stored:"정리함에 넣었다.", returned:"골목 바닥에 꺼내놓았다.", start:"카드 인식 중", scanHint:"잠시만 기다려줘", ready:"카드 인식 완료", startContent:"곧 콘텐츠가 시작된다", eject:"게임칩 빼기", saved:"카드와 포인트는 이 브라우저에 저장된다.", completed:"처음 완료한 콘텐츠다. 20P를 받았다.", completedBefore:"이미 완료한 콘텐츠다.", chooseTheme:"테마를 고르자", count:"보유 카드", floorCount:"바닥에 놓인 카드", folderStored:"정리함에 보관 중", source:"콘텐츠 페이지 열기", shop:"카드팩 상점", closeOverlay:"자판기 닫기", fallback:"이 콘텐츠를 새 탭에서 연다.", backToAlley:"골목으로 돌아왔다.", kindMatch:"월드컵", kindTest:"테스트", kindStory:"이야기", completion:"끝까지 완료하면 20P", included:"팩에 들어 있는 카드", kindPrefix:"콘텐츠", standardOpening:"카드팩을 뜯는 중", lockerHint:"카드를 유형에 맞는 칸에 놓자", dragInsert:"카드를 넣을 곳", dragLocker:"정리함에 넣기"
@@ -19,9 +20,15 @@
     }
   };
   const t = (key, values = {}) => {
-    const template = strings[lang()]?.[key] || strings.ko[key] || key;
+    const template = key === "eject" ? ejectButtonText() : (strings[lang()]?.[key] || strings.ko[key] || key);
     return template.replace(/\{\{(\w+)\}\}/g, (_, name) => values[name] ?? "");
   };
+  const returnCardText = () => ({
+    ko:"카드를 잡아 골목 바닥의 원래 자리에 돌려놓자.",
+    en:"Drag the card back to its place on the alley floor.",
+    ja:"カードを路地の元の場所に戻そう。",
+    zh:"把卡片拖回巷子地面的原位。"
+  }[lang()] || "Drag the card back to its place on the alley floor.");
   const tr = (key, fallback = "") => window.MOA_I18N?.t(key, { defaultValue: fallback }) || fallback || key;
   const contents = registry.contents.filter((entry) => !entry.availableLanguages || entry.availableLanguages.includes(lang()));
   const categories = [
@@ -40,13 +47,6 @@
     if (window.matchMedia("(max-width: 680px)").matches) return clamp(window.innerWidth * .36, 112, 132);
     if (window.matchMedia("(max-width: 900px)").matches) return clamp(window.innerWidth * .12, 112, 132);
     return clamp(window.innerWidth * .1, 112, 140);
-  };
-  const cardLiftSize = () => {
-    const mobile = window.matchMedia("(max-width: 680px)").matches;
-    const width = mobile
-      ? clamp(window.innerWidth * .48, 156, 190)
-      : clamp(window.innerWidth * (window.matchMedia("(max-width: 900px)").matches ? .24 : .16), 164, 210);
-    return { width, height:width / .62 };
   };
   const defaultPositions = { weekend:{x:8,y:22,r:-11,z:1}, mbti:{x:39,y:43,r:7,z:2}, "night-train":{x:70,y:14,r:12,z:3} };
   const groupForEntry = (entry) => entry.type === "worldcup" || entry.formatId === "worldcup" ? "matchups" : entry.formatId === "story" || entry.source?.kind === "story" || entry.source?.kind === "survival" ? "stories" : "tests";
@@ -109,6 +109,7 @@
   const status = by("[data-vm-status]");
   let dragging = null;
   let activeContent = null;
+  let pendingReturn = null;
   let completionObserver = null;
   let activeIframe = null;
   let closePromise = null;
@@ -553,12 +554,13 @@
     await wait(reducedMotion ? 30 : 650);
   };
 
-  const insertCard = async (contentId, flightCard = null) => {
-    if (activeContent || !state.owned.includes(contentId)) { flightCard?.remove(); return; }
+  const insertCard = async (contentId, flightCard = null, savedPosition = null) => {
+    if (activeContent || pendingReturn || !state.owned.includes(contentId)) { flightCard?.remove(); return; }
     const entry = contentById.get(contentId);
     if (!entry) { flightCard?.remove(); return; }
     const card = floor.querySelector(`[data-vm-card="${CSS.escape(contentId)}"]`);
     if (!card) { flightCard?.remove(); return; }
+    const returnOrigin = { ...(savedPosition || state.positions[contentId]) };
     activeContent = entry;
     document.body.classList.remove("vm-is-dragging");
     const machineOutOfView = (() => {
@@ -573,7 +575,7 @@
         const currentHeight = Number.parseFloat(computed.height) || clone.offsetHeight;
         clone.style.width = `${currentWidth}px`;
         clone.style.height = `${currentHeight}px`;
-        clone.classList.remove("vm-drag-preview", "is-dragging");
+        clone.classList.remove("vm-drag-preview", "is-dragging", "is-lifting");
         clone.classList.add("vm-insert-animation", "is-revealed");
       } else {
         const rect = card.getBoundingClientRect();
@@ -585,9 +587,12 @@
         clone.style.top = `${rect.top + rect.height / 2 - height / 2}px`;
         clone.style.width = `${width}px`;
         clone.style.height = `${height}px`;
-        clone.style.transform = `rotate(${state.positions[contentId].r}deg)`;
+        clone.style.transform = "rotate(0deg)";
         document.body.append(clone);
       }
+      clone.style.transform = "rotate(0deg)";
+      clone.querySelector(".vm-card-front")?.setAttribute("aria-hidden", "false");
+      clone.querySelector(".vm-card-back")?.setAttribute("aria-hidden", "true");
       card.style.visibility = "hidden";
       return clone;
     };
@@ -598,7 +603,7 @@
       requestAnimationFrame(() => {
         clone.style.left = `${Math.max(8, window.innerWidth / 2 - cardWidth / 2)}px`;
         clone.style.top = `${Math.max(8, window.innerHeight - cardHeight - 28)}px`;
-        clone.style.transform = "rotate(0deg) translateY(-8px) scale(.96)";
+        clone.style.transform = "rotate(0deg) translateY(-8px)";
       });
       await waitForMotion(420);
       machine.scrollIntoView({ behavior:"smooth", block:"center" });
@@ -612,18 +617,20 @@
     requestAnimationFrame(() => {
       clone.style.left = `${slotCenterLeft}px`;
       clone.style.top = `${slotCenterTop}px`;
-      clone.style.transform = "rotate(90deg)";
+      clone.style.transform = "rotate(0deg)";
     });
     await waitForMotion(520);
-    const slotThickness = clamp((Math.max(8, slotRect.height) * .72) / Math.max(1, cardWidth), .08, .24);
-    clone.style.transform = `scaleY(${slotThickness}) rotate(90deg)`;
+    clone.style.transform = "rotate(0deg) scale(.72)";
     await waitForMotion(230);
-    clone.style.top = `${slotCenterTop - Math.min(5, slotRect.height * .22)}px`;
-    clone.style.transform = `scaleY(${slotThickness * .28}) rotate(90deg)`;
+    const feedScale = clamp((Math.max(8, slotRect.height) * .72) / Math.max(1, cardHeight), .06, .14);
+    clone.style.transform = `rotate(0deg) scale(${feedScale})`;
     clone.style.opacity = ".12";
     await waitForMotion(260);
     clone.remove();
     card.style.visibility = "";
+    card.classList.add("is-return-target");
+    card.setAttribute("aria-hidden", "true");
+    pendingReturn = { contentId, origin:returnOrigin, sourceCard:card, card:null, slotLeft:0, slotTop:0, width:cardWidth, height:cardHeight };
     machineTray.classList.remove("is-drop-target");
     const crtRect = crt.getBoundingClientRect();
     document.body.style.overflow = "hidden";
@@ -646,6 +653,38 @@
     iframe.focus({ preventScroll:true });
   };
 
+  const restoreEjectedCard = () => {
+    if (!pendingReturn) return;
+    const returned = pendingReturn;
+    returned.card?.remove();
+    state.positions[returned.contentId] = { ...returned.origin, z:++state.nextZ };
+    save();
+    pendingReturn = null;
+    activeContent = null;
+    render();
+    setStatus(t("backToAlley"));
+    const floorCard = floor.querySelector(`[data-vm-card="${CSS.escape(returned.contentId)}"]`);
+    if (floorCard && returned.revealed) floorCard.click();
+    floorCard?.focus({ preventScroll:true });
+  };
+
+  const startEjectedCardDrag = (event) => {
+    if (event.button !== 0 || !pendingReturn?.card?.classList.contains("is-ready") || dragging) return;
+    event.preventDefault();
+    const card = pendingReturn.card;
+    const rect = card.getBoundingClientRect();
+    card.classList.add("is-dragging");
+    try { card.setPointerCapture(event.pointerId); } catch { /* Keep mouse and touch dragging available. */ }
+    dragging = {
+      returning:true, card, dragCard:card, contentId:pendingReturn.contentId,
+      startX:event.clientX, startY:event.clientY,
+      offsetX:event.clientX - rect.left, offsetY:event.clientY - rect.top,
+      left:rect.left, top:rect.top, moved:false,
+      origin:{ ...pendingReturn.origin }, slotLeft:pendingReturn.slotLeft, slotTop:pendingReturn.slotTop
+    };
+    document.body.classList.add("vm-is-dragging");
+  };
+
   const eject = async () => {
     if (closePromise) return closePromise;
     closePromise = (async () => {
@@ -658,20 +697,64 @@
       await waitForMotion(620);
       overlay.hidden = true;
       overlay.classList.remove("is-returning");
-      const chip = make("div", "vm-eject-chip");
-      chip.setAttribute("aria-hidden", "true");
-      if (previous) chip.append(newPixelIcon(previous, 10, "vm-eject-chip-icon"));
-      const slotRect = slot.getBoundingClientRect();
-      const chipWidth = 84;
-      chip.style.left = `${slotRect.left + slotRect.width / 2 - chipWidth / 2}px`;
-      chip.style.top = `${slotRect.top + Math.min(4, slotRect.height * .2)}px`;
-      document.body.append(chip);
-      await waitForMotion(820); chip.remove();
       document.body.style.overflow = "";
+      const sourceCard = previous && floor.querySelector(`[data-vm-card="${CSS.escape(previous.id)}"]`);
+      if (previous && sourceCard) {
+        const slotRect = slot.getBoundingClientRect();
+        const size = {
+          width:pendingReturn?.width || sourceCard.offsetWidth,
+          height:pendingReturn?.height || sourceCard.offsetHeight
+        };
+        const card = sourceCard.cloneNode(true);
+        card.classList.remove("is-return-target", "vm-insert-animation", "vm-drag-preview", "is-dragging", "is-lifting");
+        card.classList.add("vm-return-card", "is-revealed", "is-emerging");
+        card.style.position = "fixed";
+        card.style.width = `${size.width}px`;
+        card.style.height = `${size.height}px`;
+        card.style.left = `${slotRect.left + slotRect.width / 2 - size.width / 2}px`;
+        card.style.top = `${slotRect.top + slotRect.height / 2 - 2}px`;
+        card.style.transform = "rotate(0deg)";
+        card.style.zIndex = "20001";
+        card.tabIndex = 0;
+        card.setAttribute("role", "button");
+        card.setAttribute("aria-label", returnCardText());
+        card.setAttribute("aria-hidden", "false");
+        card.setAttribute("aria-expanded", "true");
+        card.setAttribute("aria-grabbed", "false");
+        card.querySelector(".vm-card-front")?.setAttribute("aria-hidden", "false");
+        card.querySelector(".vm-card-back")?.setAttribute("aria-hidden", "true");
+        const inner = card.querySelector(".vm-card-inner");
+        if (inner) {
+          inner.style.transition = "none";
+          inner.style.transform = "rotateX(0deg) rotateY(180deg)";
+        }
+        card.addEventListener("pointerdown", startEjectedCardDrag);
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            restoreEjectedCard();
+          }
+        });
+        document.body.append(card);
+        pendingReturn = {
+          contentId:previous.id,
+          origin:{ ...(pendingReturn?.origin || state.positions[previous.id]) },
+          sourceCard,
+          card,
+          width:size.width,
+          height:size.height,
+          revealed:true,
+          slotLeft:Number.parseFloat(card.style.left),
+          slotTop:Number.parseFloat(card.style.top)
+        };
+        await waitForMotion(880);
+        card.classList.remove("is-emerging");
+        card.classList.add("is-ready");
+        setStatus(returnCardText());
+      }
       activeContent = null;
       closePromise = null;
-      setStatus(previous && state.completed.includes(previous.id) ? t("completedBefore") : t("backToAlley"));
-      by("[data-vm-floor]").scrollIntoView({ behavior:"smooth", block:"center" });
+      if (!pendingReturn) setStatus(t("backToAlley"));
     })();
     return closePromise;
   };
@@ -682,14 +765,10 @@
     if (!card) return;
     const contentId = card.dataset.vmCard;
     const rect = card.getBoundingClientRect();
+    const origin = { ...state.positions[contentId] };
     const dragCard = card.cloneNode(true);
-    const startsRevealed = card.classList.contains("is-revealed");
     dragCard.classList.remove("vm-insert-animation");
     dragCard.classList.add("vm-drag-preview", "is-dragging");
-    if (startsRevealed) dragCard.classList.add("is-revealed", "is-lifting");
-    else dragCard.classList.remove("is-revealed");
-    dragCard.querySelector(".vm-card-front")?.setAttribute("aria-hidden", String(!startsRevealed));
-    dragCard.querySelector(".vm-card-back")?.setAttribute("aria-hidden", String(startsRevealed));
     dragCard.style.position = "fixed";
     dragCard.style.left = "0px";
     dragCard.style.top = "0px";
@@ -697,11 +776,18 @@
     const initialHeight = card.offsetHeight;
     dragCard.style.width = `${initialWidth}px`;
     dragCard.style.height = `${initialHeight}px`;
-    dragCard.style.transform = `rotate(${state.positions[contentId].r}deg)`;
+    dragCard.style.transform = window.getComputedStyle(card).transform;
+    const sourceInner = card.querySelector(".vm-card-inner");
+    const dragInner = dragCard.querySelector(".vm-card-inner");
+    if (sourceInner && dragInner) {
+      dragInner.style.transition = "none";
+      dragInner.style.transform = window.getComputedStyle(sourceInner).transform;
+    }
     dragCard.style.zIndex = "20000";
     document.body.append(dragCard);
-    const initialLeft = rect.left + rect.width / 2 - initialWidth / 2;
-    const initialTop = rect.top + rect.height / 2 - initialHeight / 2;
+    const cloneRect = dragCard.getBoundingClientRect();
+    const initialLeft = rect.left - cloneRect.left;
+    const initialTop = rect.top - cloneRect.top;
     dragCard.style.left = `${initialLeft}px`;
     dragCard.style.top = `${initialTop}px`;
     card.style.visibility = "hidden";
@@ -711,9 +797,8 @@
     state.positions[contentId].z = state.nextZ;
     dragging = {
       card, dragCard, contentId, startX:event.clientX, startY:event.clientY,
-      anchorX:clamp((event.clientX - initialLeft) / Math.max(1, initialWidth), 0, 1),
-      anchorY:clamp((event.clientY - initialTop) / Math.max(1, initialHeight), 0, 1),
-      left:initialLeft, top:initialTop, moved:false, lifted:startsRevealed, origin:{ ...state.positions[contentId] }
+      offsetX:event.clientX - initialLeft, offsetY:event.clientY - initialTop,
+      left:initialLeft, top:initialTop, moved:false, origin
     };
     document.body.classList.add("vm-is-dragging");
   });
@@ -722,26 +807,15 @@
     if (!dragging) return;
     const dx = event.clientX - dragging.startX;
     const dy = event.clientY - dragging.startY;
-    if (Math.abs(dx) + Math.abs(dy) > 5) {
-      dragging.moved = true;
-      if (!dragging.lifted) {
-        dragging.lifted = true;
-        const size = cardLiftSize();
-        dragging.dragCard.classList.add("is-lifting", "is-revealed");
-        dragging.dragCard.querySelector(".vm-card-front")?.setAttribute("aria-hidden", "false");
-        dragging.dragCard.querySelector(".vm-card-back")?.setAttribute("aria-hidden", "true");
-        dragging.dragCard.style.width = `${size.width}px`;
-        dragging.dragCard.style.height = `${size.height}px`;
-        dragging.dragCard.style.transform = "rotate(0deg) translateY(-8px) scale(1.015)";
-      }
-    }
+    if (Math.abs(dx) + Math.abs(dy) > 5) dragging.moved = true;
     const lift = event.pointerType === "touch" ? 44 : 0;
-    dragging.left = event.clientX - dragging.dragCard.offsetWidth * dragging.anchorX;
-    dragging.top = event.clientY - dragging.dragCard.offsetHeight * dragging.anchorY - lift;
+    dragging.left = event.clientX - dragging.offsetX;
+    dragging.top = event.clientY - dragging.offsetY - lift;
     dragging.dragCard.style.left = `${dragging.left}px`;
     dragging.dragCard.style.top = `${dragging.top}px`;
     if (event.clientY > window.innerHeight - 64) window.scrollBy(0, 18);
     else if (event.clientY < 48) window.scrollBy(0, -18);
+    if (dragging.returning) return;
     const isMobile = window.matchMedia("(max-width: 680px)").matches;
     const machineRect = machine.getBoundingClientRect();
     const lockerRect = lockers.getBoundingClientRect();
@@ -757,6 +831,26 @@
   window.addEventListener("pointerup", (event) => {
     if (!dragging) return;
     const current = dragging;
+    if (current.returning) {
+      const bounds = floor.getBoundingClientRect();
+      const inFloor = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
+      current.card.classList.remove("is-dragging");
+      current.card.setAttribute("aria-grabbed", "false");
+      if (current.moved && inFloor) {
+        restoreEjectedCard();
+      } else if (pendingReturn?.card === current.card) {
+        current.card.style.left = `${current.slotLeft}px`;
+        current.card.style.top = `${current.slotTop}px`;
+        setStatus(returnCardText());
+      }
+      dragging = null;
+      document.body.classList.remove("vm-is-dragging");
+      mobileTray.hidden = true;
+      mobileLockerTray.hidden = true;
+      mobileTray.setAttribute("aria-hidden", "true");
+      mobileLockerTray.setAttribute("aria-hidden", "true");
+      return;
+    }
     const cardWidth = current.dragCard.offsetWidth;
     const cardHeight = current.dragCard.offsetHeight;
     const target = document.elementFromPoint(event.clientX, event.clientY);
@@ -766,8 +860,8 @@
     const trayRect = mobileTray.getBoundingClientRect();
     const overTray = window.matchMedia("(max-width: 680px)").matches && !mobileTray.hidden && document.body.classList.contains("vm-is-dragging") && event.clientX >= trayRect.left && event.clientX <= trayRect.right && event.clientY >= trayRect.top && event.clientY <= trayRect.bottom;
     const shouldInsert = overTray || onMachineTray;
-    current.left = event.clientX - current.dragCard.offsetWidth * current.anchorX;
-    current.top = event.clientY - current.dragCard.offsetHeight * current.anchorY - (event.pointerType === "touch" ? 44 : 0);
+    current.left = event.clientX - current.offsetX;
+    current.top = event.clientY - current.offsetY - (event.pointerType === "touch" ? 44 : 0);
     if (shouldInsert) {
       current.dragCard.style.left = `${current.left}px`;
       current.dragCard.style.top = `${current.top}px`;
@@ -793,10 +887,9 @@
     const left = clamp(current.left - bounds.left, 0, Math.max(0, bounds.width - cardWidth));
     const top = clamp(current.top - bounds.top, 0, Math.max(0, bounds.height - cardHeight));
     if (shouldInsert) {
-      state.positions[current.contentId].x = bounds.width ? left / bounds.width * 100 : current.origin.x;
-      state.positions[current.contentId].y = bounds.height ? top / bounds.height * 100 : current.origin.y;
+      state.positions[current.contentId] = { ...current.origin, z:++state.nextZ };
       save(); render();
-      insertCard(current.contentId, current.dragCard);
+      insertCard(current.contentId, current.dragCard, current.origin);
     } else if ((locker && locker.dataset.vmLocker) || (tempLocker && tempLocker.dataset.vmTempLocker)) {
       const groupId = locker?.dataset.vmLocker || tempLocker?.dataset.vmTempLocker;
       const accepted = categoryDrop(groupId, current.contentId);
@@ -824,6 +917,14 @@
   });
   window.addEventListener("pointercancel", () => {
     if (!dragging) return;
+    if (dragging.returning) {
+      dragging.card.classList.remove("is-dragging");
+      dragging.card.style.left = `${dragging.slotLeft}px`;
+      dragging.card.style.top = `${dragging.slotTop}px`;
+      dragging = null;
+      document.body.classList.remove("vm-is-dragging");
+      return;
+    }
     dragging.dragCard.remove();
     dragging.card.style.visibility = "";
     dragging.card.setAttribute("aria-grabbed", "false");
