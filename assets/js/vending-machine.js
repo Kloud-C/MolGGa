@@ -620,12 +620,8 @@
       clone.style.transform = "rotate(0deg)";
     });
     await waitForMotion(520);
-    clone.style.transform = "rotate(0deg) scale(.72)";
-    await waitForMotion(230);
-    const feedScale = clamp((Math.max(8, slotRect.height) * .72) / Math.max(1, cardHeight), .06, .14);
-    clone.style.transform = `rotate(0deg) scale(${feedScale})`;
-    clone.style.opacity = ".12";
-    await waitForMotion(260);
+    clone.classList.add("is-feeding-up");
+    await waitForMotion(600);
     clone.remove();
     card.style.visibility = "";
     card.classList.add("is-return-target");
