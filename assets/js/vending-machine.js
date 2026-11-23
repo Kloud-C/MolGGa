@@ -165,6 +165,7 @@
   const status = by("[data-vm-status]");
   let dragging = null;
   let basketMovement = null;
+  const revealedCards = new Set();
   let activeContent = null;
   let pendingReturn = null;
   let completionObserver = null;
@@ -272,6 +273,7 @@
 
   const makeCard = (entry, position) => {
     const card = make("article", "vm-card");
+    const revealed = revealedCards.has(entry.id);
     card.dataset.vmCard = entry.id;
     card.dataset.vmType = entryDefinition(entry).type;
     card.dataset.vmRoute = entry.page;
@@ -285,17 +287,18 @@
     card.tabIndex = 0;
     card.setAttribute("role", "button");
     card.setAttribute("aria-label", label(entry));
-    card.setAttribute("aria-expanded", "false");
+    card.classList.toggle("is-revealed", revealed);
+    card.setAttribute("aria-expanded", String(revealed));
     card.setAttribute("aria-grabbed", "false");
     const inner = make("div", "vm-card-inner");
     const back = make("div", "vm-card-face vm-card-back");
-    back.setAttribute("aria-hidden", "false");
+    back.setAttribute("aria-hidden", String(revealed));
     const backBrand = make("b", "", t("cardBack"));
     const flip = make("span", "vm-card-turn", "↻");
     flip.setAttribute("aria-hidden", "true");
     back.append(backBrand, flip);
     const front = make("div", "vm-card-face vm-card-front");
-    front.setAttribute("aria-hidden", "true");
+    front.setAttribute("aria-hidden", String(!revealed));
     const image = make("img", "vm-card-picture");
     image.src = assetUrl(entry.thumbnail);
     image.alt = "";
@@ -316,6 +319,8 @@
     card.addEventListener("click", (event) => {
       if (card.dataset.suppressClick === "1") { card.dataset.suppressClick = "0"; return; }
       const reveal = !card.classList.contains("is-revealed");
+      if (reveal) revealedCards.add(entry.id);
+      else revealedCards.delete(entry.id);
       card.classList.toggle("is-revealed", reveal);
       back.setAttribute("aria-hidden", String(reveal));
       front.setAttribute("aria-hidden", String(!reveal));
@@ -839,26 +844,26 @@
     const slotRect = slot.getBoundingClientRect();
     const centerX = slotRect.left + slotRect.width / 2;
     const slotCenterLeft = centerX - cardWidth / 2;
-    const slotCenterTop = slotRect.top + slotRect.height / 2 - 2;
+    const slotEntryTop = slotRect.bottom;
     requestAnimationFrame(() => {
       clone.style.left = `${slotCenterLeft}px`;
-      clone.style.top = `${slotCenterTop}px`;
+      clone.style.top = `${slotEntryTop}px`;
       clone.style.transform = "rotate(0deg)";
     });
     await waitForMotion(520);
     if (!isCurrentLaunch()) { clone.remove(); card.style.visibility = ""; return; }
     const feedWindow = document.createElement("div");
-    const feedWidth = Math.max(1, slotRect.width - 4);
-    const feedHeight = Math.max(1, slotRect.height - 4);
+    const feedWidth = Math.max(1, slotRect.width);
+    const feedHeight = Math.max(1, slotRect.height);
     feedWindow.className = "vm-slot-feed-window";
-    feedWindow.style.left = `${slotRect.left + 2}px`;
-    feedWindow.style.top = `${slotRect.top + 2}px`;
+    feedWindow.style.left = `${slotRect.left}px`;
+    feedWindow.style.top = `${slotRect.top}px`;
     feedWindow.style.width = `${feedWidth}px`;
     feedWindow.style.height = `${feedHeight}px`;
     clone.classList.remove("vm-insert-animation");
     clone.classList.add("vm-slot-feed-card");
     clone.style.left = `${(feedWidth - cardWidth) / 2}px`;
-    clone.style.top = `${feedHeight / 2 - 2}px`;
+    clone.style.top = `${feedHeight}px`;
     clone.style.width = `${cardWidth}px`;
     clone.style.height = `${cardHeight}px`;
     clone.style.setProperty("--vm-feed-distance", `-${cardHeight + feedHeight}px`);
@@ -915,10 +920,11 @@
     save();
     pendingReturn = null;
     activeContent = null;
+    if (returned.revealed) revealedCards.add(returned.contentId);
+    else revealedCards.delete(returned.contentId);
     render();
     setStatus(t("backToAlley"));
     const floorCard = floor.querySelector(`[data-vm-card="${CSS.escape(returned.contentId)}"]`);
-    if (floorCard && returned.revealed) floorCard.click();
     floorCard?.focus({ preventScroll:true });
   };
 
@@ -956,20 +962,27 @@
       const sourceCard = previous && floor.querySelector(`[data-vm-card="${CSS.escape(previous.id)}"]`);
       if (previous && sourceCard) {
         const slotRect = slot.getBoundingClientRect();
+        const feedHeight = Math.max(1, slotRect.height);
         const size = {
           width:pendingReturn?.width || sourceCard.offsetWidth,
           height:pendingReturn?.height || sourceCard.offsetHeight
         };
+        const feedWindow = document.createElement("div");
+        feedWindow.className = "vm-return-feed-window";
+        feedWindow.style.left = `${slotRect.left}px`;
+        feedWindow.style.top = `${slotRect.top}px`;
+        feedWindow.style.width = `${slotRect.width}px`;
+        feedWindow.style.height = `${feedHeight + size.height}px`;
         const card = sourceCard.cloneNode(true);
         card.classList.remove("is-return-target", "vm-insert-animation", "vm-drag-preview", "is-dragging", "is-lifting");
         card.classList.add("vm-return-card", "is-revealed", "is-emerging");
-        card.style.position = "fixed";
+        card.style.position = "absolute";
         card.style.width = `${size.width}px`;
         card.style.height = `${size.height}px`;
-        card.style.left = `${slotRect.left + slotRect.width / 2 - size.width / 2}px`;
-        card.style.top = `${slotRect.top + slotRect.height / 2 - 2}px`;
-        card.style.transform = "rotate(0deg)";
-        card.style.zIndex = "20001";
+        card.style.left = `${(slotRect.width - size.width) / 2}px`;
+        card.style.top = `${-size.height}px`;
+        card.style.setProperty("--vm-feed-distance", `${size.height + feedHeight}px`);
+        card.style.zIndex = "1";
         card.tabIndex = 0;
         card.setAttribute("role", "button");
         card.setAttribute("aria-label", returnCardText());
@@ -990,7 +1003,10 @@
             restoreEjectedCard();
           }
         });
-        document.body.append(card);
+        feedWindow.append(card);
+        document.body.append(feedWindow);
+        const returnLeft = slotRect.left + slotRect.width / 2 - size.width / 2;
+        const returnTop = slotRect.bottom;
         pendingReturn = {
           contentId:previous.id,
           origin:{ ...(pendingReturn?.origin || state.positions[previous.id]) },
@@ -999,10 +1015,18 @@
           width:size.width,
           height:size.height,
           revealed:true,
-          slotLeft:Number.parseFloat(card.style.left),
-          slotTop:Number.parseFloat(card.style.top)
+          slotLeft:returnLeft,
+          slotTop:returnTop
         };
         await waitForMotion(880);
+        card.remove();
+        card.style.position = "fixed";
+        card.style.left = `${returnLeft}px`;
+        card.style.top = `${returnTop}px`;
+        card.style.transform = "rotate(0deg)";
+        card.style.zIndex = "20001";
+        document.body.append(card);
+        feedWindow.remove();
         card.classList.remove("is-emerging");
         card.classList.add("is-ready");
         setStatus(returnCardText());
