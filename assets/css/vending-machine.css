@@ -234,9 +234,9 @@
   .vm-head h1 { font-size:clamp(1.65rem,7vw,2.1rem); }
   .vm-head p { max-width:100%; margin-top:7px; font-size:.87rem; }
   .vm-stage { grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); align-items:stretch; gap:7px; }
-  .vm-machine-panel { grid-column:1; grid-row:1; min-height:0; justify-content:flex-start; padding:10px 7px 12px; }
+  .vm-machine-panel { grid-column:1; grid-row:1; min-height:0; justify-content:center; padding:10px 7px 12px; border:0; background:transparent; box-shadow:none; }
   .vm-machine-caption { margin-bottom:7px; font-size:.63rem; line-height:1.35; }
-  .vm-machine { width:100%; padding:12px 8px 18px; border-radius:17px 17px 13px 13px; }
+  .vm-machine { width:96%; margin-inline:auto; padding:12px 8px 18px; border-radius:17px 17px 13px 13px; }
   .vm-machine-brand { margin:2px 2px 7px; font-size:.52rem; letter-spacing:.1em; }
   .vm-machine-lights { gap:3px; }
   .vm-machine-lights i { width:5px; height:5px; }
@@ -260,8 +260,9 @@
   .vm-panel-head [data-vm-floor-count] { display:none; }
   .vm-plain-button { min-width:0; min-height:39px; padding:6px 4px; font-size:.64rem; line-height:1.2; white-space:normal; }
   .vm-floor { min-height:330px; margin:0 6px 6px; background-size:36px 36px,36px 36px,100% 100%,100% 100%; }
-  .vm-card { width:clamp(80px,25vw,104px); }
-  .vm-card.is-revealed:not(.vm-insert-animation) { width:clamp(118px,34vw,140px); }
+  .vm-card { width:clamp(40px,12.5vw,52px); filter:drop-shadow(0 5px 4px #09071088); }
+  .vm-card::before { position:absolute; inset:-2px; content:""; }
+  .vm-card.is-revealed:not(.vm-insert-animation) { width:clamp(96px,28vw,112px); }
   .vm-card-copy { padding:6px 6px 7px; }
   .vm-card-title { margin:3px 0 2px; font-size:.7rem; }
   .vm-card-description { font-size:.61rem; line-height:1.35; }
@@ -272,6 +273,17 @@
   .vm-mobile-tray[hidden], .vm-mobile-baskets[hidden] { display:none!important; }
   .vm-mobile-tray { top:calc(10px + env(safe-area-inset-top)); min-height:54px; }
   .vm-floor-tools { gap:5px; }
+  .vm-basket::before { position:absolute; inset:-3px; content:""; }
+  .vm-basket-face { padding:4px 2px 3px; border-radius:3px; box-shadow:0 3px 0 #100e15,0 5px 7px #05040aaa,inset 0 1px #d2c5dc55; }
+  .vm-basket-face::before { inset:2px; border-radius:2px; }
+  .vm-basket-face::after { right:2px; bottom:2px; left:2px; height:7px; background:repeating-linear-gradient(90deg,#302b37 0 2px,#443b4b 2px 3px); }
+  .vm-basket-rim { top:2px; right:2px; left:2px; height:5px; }
+  .vm-basket-slots { inset:7px 3px 14px; }
+  .vm-basket-slot-card { width:12px; height:23px; border-radius:2px 2px 1px 1px; }
+  .vm-basket-slot-card::before { inset:2px 1px 6px; }
+  .vm-basket-slot-card::after { right:1px; bottom:2px; left:1px; height:2px; }
+  .vm-basket-name { right:2px; bottom:8px; left:2px; font-size:.42rem; }
+  .vm-basket-count { top:7px; right:3px; min-width:22px; padding:1px 2px; font-size:.38rem; }
   .vm-mobile-baskets:not([hidden]) { display:flex; }
   .vm-basket-dialog-body { gap:9px; padding:13px; }
   .vm-basket-dialog-name { grid-template-columns:minmax(0,1fr); }
@@ -305,10 +317,8 @@
   .vm-panel-head p { font-size:.6rem; }
   .vm-plain-button { min-height:36px; padding-inline:6px; font-size:.62rem; }
   .vm-floor { min-height:300px; margin:0 4px 4px; background-size:32px 32px,32px 32px,100% 100%,100% 100%; }
-  .vm-card { width:clamp(74px,25vw,90px); }
-  .vm-card.is-revealed:not(.vm-insert-animation) { width:clamp(108px,34vw,122px); }
-  .vm-basket-slot-card { width:22px; height:43px; }
-  .vm-basket-name { font-size:.61rem; }
+  .vm-card { width:clamp(37px,12.5vw,45px); }
+  .vm-card.is-revealed:not(.vm-insert-animation) { width:clamp(90px,28vw,101px); }
   .vm-mobile-basket-target { min-width:80px; font-size:.59rem; }
 }
 @media (prefers-reduced-motion:reduce) {

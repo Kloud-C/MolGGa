@@ -56,12 +56,12 @@
   };
   const cardAspectRatio = 0.66;
   const cardWidthForViewport = () => {
-    if (window.matchMedia("(max-width: 360px)").matches) return clamp(window.innerWidth * .29, 84, 104);
-    if (window.matchMedia("(max-width: 680px)").matches) return clamp(window.innerWidth * .29, 90, 112);
+    if (window.matchMedia("(max-width: 360px)").matches) return clamp(window.innerWidth * .125, 37, 45);
+    if (window.matchMedia("(max-width: 680px)").matches) return clamp(window.innerWidth * .125, 40, 52);
     if (window.matchMedia("(max-width: 900px)").matches) return clamp(window.innerWidth * .12, 112, 132);
     return clamp(window.innerWidth * .1, 112, 140);
   };
-  const basketSizeForViewport = () => window.innerWidth <= 360 ? { width:88, height:100 } : window.innerWidth <= 680 ? { width:96, height:108 } : window.innerWidth <= 900 ? { width:104, height:116 } : { width:112, height:124 };
+  const basketSizeForViewport = () => window.innerWidth <= 360 ? { width:44, height:50 } : window.innerWidth <= 680 ? { width:48, height:54 } : window.innerWidth <= 900 ? { width:104, height:116 } : { width:112, height:124 };
   const defaultBasketPosition = (index) => {
     const mobile = window.matchMedia("(max-width: 680px)").matches;
     const columns = mobile ? 2 : 3;
@@ -374,7 +374,8 @@
       if (!entry) return;
       const card = make("span", "vm-basket-slot-card");
       card.style.setProperty("--vm-slot-index", String(index));
-      card.style.setProperty("--vm-slot-offset", `${(index - (basket.cards.length - 1) / 2) * 9}px`);
+      const slotSpread = window.innerWidth <= 680 ? 4 : 9;
+      card.style.setProperty("--vm-slot-offset", `${(index - (basket.cards.length - 1) / 2) * slotSpread}px`);
       card.style.setProperty("--vm-slot-angle", `${(index - (basket.cards.length - 1) / 2) * 3.1}deg`);
       card.style.setProperty("--vm-slot-accent", cardAccent(entry));
       card.title = label(entry);
