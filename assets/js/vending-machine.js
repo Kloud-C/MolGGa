@@ -4,10 +4,10 @@
   if (!registry || !root) return;
 
   const lang = () => (window.MOA_I18N?.language || document.documentElement.lang || "ko").slice(0, 2);
-  const ejectButtonText = () => ({ ko:"카드 꺼내기", en:"Eject card", ja:"カードを取り出す", zh:"取出卡片" }[lang()] || "Eject card");
+  const ejectButtonText = () => ({ ko:"게임칩 빼기", en:"Eject card", ja:"カードを取り出す", zh:"取出卡片" }[lang()] || "Eject card");
   const strings = {
     ko: {
-      brand:"딸깍 자판기", kicker:"MOLGGA · 심야 카드 골목", title:"밤 골목에서 카드를 찾아보자", intro:"바닥에 놓인 카드를 살펴보고, 마음에 드는 한 장을 자판기에 넣어보자.", points:"보유 포인트", floor:"골목 바닥", floorHint:"카드를 눌러 앞면을 확인하고, 카드와 바구니는 끌어 옮길 수 있다.", auto:"자동 정리", cardBack:"MOLGGA", turnCard:"카드를 뒤집어 내용 보기", insert:"자판기에 넣기", useCard:"이 카드로 시작", tray:"카드를 여기에 놓기", machine:"딸깍 자판기", machineHint:"카드를 초록색 받침에 놓으면 시작된다", screenIdle:"카드 대기 중", screenHint:"골목에서 카드 한 장을 골라보자", slot:"카드 슬롯", trayLabel:"카드 투입구", lockers:"카드 정리함", emptyLocker:"아직 보관한 카드가 없다.", open:"열기", close:"닫기", takeOut:"바닥에 꺼내기", cards:"장", autoConfirm:"카드를 자동 정리하겠습니까?", autoExplain:"지금 배치한 카드 위치가 바뀐다.", cancel:"취소", confirmArrange:"자동 정리", sorted:"바닥의 카드를 가지런히 놓았다.", noCards:"정리할 카드가 없다.", standard:"골목 카드팩", standardDesc:"아직 찾지 못한 카드 한 장이 나온다. 한 팩에 40P가 든다.", buyStandard:"40P로 카드팩 뜯기", theme:"테마 확장팩", themeDesc:"테마와 들어 있는 카드를 확인한 뒤 무료로 구매 흐름을 체험할 수 있다.", buyTheme:"무료 테스트 구매", allOwned:"이 유형의 카드는 모두 찾았다.", insufficient:"포인트가 부족하다.", packEmpty:"새 카드가 남아 있지 않다.", packGet:"새 카드를 찾았다: {{name}}", stored:"정리함에 넣었다.", returned:"골목 바닥에 꺼내놓았다.", start:"카드 인식 중", scanHint:"잠시만 기다려줘", ready:"카드 인식 완료", startContent:"콘텐츠를 불러오는 중이다", eject:"게임칩 빼기", saved:"카드와 포인트는 이 브라우저에 저장된다.", completed:"처음 완료한 콘텐츠다. 20P를 받았다.", completedBefore:"이미 완료한 콘텐츠다.", chooseTheme:"테마를 고르자", count:"보유 카드", floorCount:"바닥에 놓인 카드", folderStored:"정리함에 보관 중", source:"콘텐츠 페이지 열기", shop:"카드팩 상점", closeOverlay:"자판기 닫기", fallback:"이 콘텐츠를 새 탭에서 연다.", backToAlley:"골목으로 돌아왔다.", kindMatch:"월드컵", kindTest:"테스트", kindStory:"이야기", completion:"끝까지 완료하면 20P", included:"팩에 들어 있는 카드", kindPrefix:"콘텐츠", standardOpening:"카드팩을 뜯는 중", lockerHint:"카드를 유형에 맞는 칸에 놓자", dragInsert:"카드를 넣을 곳", dragLocker:"정리함에 넣기"
+      brand:"몰까 자판기", kicker:"수상한 자판기", title:"카드를 모아 나만의 놀이공간을 꾸며보자", intro:"흩어진 카드들을 찾아 자판기에 넣어보자.", points:"보유 포인트", floor:"골목 바닥", floorHint:"카드를 투입구에 넣으면 카드에 적힌 콘텐츠를 플레이할 수 있다.\n카드를 누르면 뒤집어 내용을 확인할 수 있다.", auto:"정리하기", cardBack:"MOLGGA", turnCard:"카드를 뒤집어 내용 보기", insert:"자판기에 넣기", useCard:"이 카드로 시작", tray:"카드를 여기에 놓기", machine:"몰까 자판기", machineHint:"카드를 투입구에 넣어주세요", screenIdle:"카드 대기 중", screenHint:"", slot:"투입구", trayLabel:"", lockers:"카드 정리함", emptyLocker:"아직 보관한 카드가 없다.", open:"열기", close:"닫기", takeOut:"바닥에 꺼내기", cards:"장", autoConfirm:"정리 하시겠습니까?", autoExplain:"주의: 바닥에 놓은 카드의 위치가 모두 초기화됩니다.", cancel:"취소", confirmArrange:"정리하기", sorted:"바닥에 흩어진 카드를 정리했다.", noCards:"정리할 카드가 없다.", standard:"New 카드팩", standardDesc:"새로운 카드 두 장을 뽑는다.", buyStandard:"카드팩 뜯기", theme:"테마 확장팩", themeDesc:"테마와 들어 있는 카드를 확인한 뒤 무료로 구매 흐름을 체험할 수 있다.", buyTheme:"무료 테스트 구매", allOwned:"이 유형의 카드는 모두 찾았다.", insufficient:"포인트가 부족하다.", packEmpty:"두 장을 뽑을 새 카드가 남아 있지 않다.", packGet:"새 카드를 찾았다: {{name}}", packGetTwo:"새 카드 두 장을 뽑았다.", ejectedMustBeRemoved:"투입구에 걸린 카드를 먼저 바닥으로 꺼내야 한다.", stored:"정리함에 넣었다.", returned:"골목 바닥에 꺼내놓았다.", start:"카드 인식 중", scanHint:"잠시만 기다려줘", ready:"카드 인식 완료", startContent:"콘텐츠를 불러오는 중이다", eject:"게임칩 빼기", saved:"카드와 포인트는 이 브라우저에 저장된다.", completed:"처음 완료한 콘텐츠다. 20P를 받았다.", completedBefore:"이미 완료한 콘텐츠다.", chooseTheme:"테마를 고르자", count:"보유 카드", floorCount:"바닥에 놓인 카드", folderStored:"정리함에 보관 중", source:"콘텐츠 페이지 열기", shop:"New 카드팩", closeOverlay:"자판기 닫기", fallback:"이 콘텐츠를 새 탭에서 연다.", backToAlley:"골목으로 돌아왔다.", kindMatch:"월드컵", kindTest:"테스트", kindStory:"이야기", completion:"끝까지 완료하면 20P", included:"팩에 들어 있는 카드", kindPrefix:"콘텐츠", standardOpening:"새 카드팩을 여는 중", lockerHint:"카드를 유형에 맞는 칸에 놓자", dragInsert:"카드를 넣을 곳", dragLocker:"정리함에 넣기"
     },
     en: {
       brand:"Click Card Arcade", kicker:"MOLGGA · THE MIDNIGHT ALLEY", title:"Find a card in the night alley", intro:"Turn over a card on the pavement, then feed the one you like into the machine.", points:"Your points", floor:"Cards on the pavement", floorHint:"Tap a card to reveal it. Drag cards and baskets to move them.", auto:"Arrange cards", cardBack:"MOLGGA", turnCard:"Turn over this card", insert:"Insert into machine", useCard:"Play this card", tray:"Drop a card here", machine:"Click Card Machine", machineHint:"Place a card on the green tray to begin", screenIdle:"CARD WAITING", screenHint:"Pick one card from the alley", slot:"Card slot", trayLabel:"Insert card", lockers:"Card lockers", emptyLocker:"Nothing stored here yet.", open:"Open", close:"Close", takeOut:"Return to floor", cards:"cards", autoConfirm:"Arrange the cards automatically?", autoExplain:"The positions you chose will change.", cancel:"Cancel", confirmArrange:"Arrange cards", sorted:"The cards are lined up on the floor.", noCards:"There are no cards to arrange.", standard:"Alley card pack", standardDesc:"Get one card you have not found yet. Each pack costs 40P.", buyStandard:"Open pack · 40P", theme:"Themed expansion", themeDesc:"Preview its theme and cards, then try the purchase flow for free.", buyTheme:"Try a free purchase", allOwned:"You found every card of this type.", insufficient:"You need more points.", packEmpty:"No new cards remain.", packGet:"New card found: {{name}}", stored:"Card placed in the locker.", returned:"Card returned to the pavement.", start:"Reading card", scanHint:"Just a moment", ready:"Card recognized", startContent:"Loading your content", eject:"Eject game chip", saved:"Cards and points are saved in this browser.", completed:"First completion. You earned 20P.", completedBefore:"This content was already completed.", chooseTheme:"Choose a theme", count:"owned", floorCount:"on the floor", folderStored:"stored", source:"Open content page", shop:"Card pack shop", closeOverlay:"Close machine", fallback:"Opening this content in a new tab.", backToAlley:"Back in the alley.", kindMatch:"Matchup", kindTest:"Quiz", kindStory:"Story", completion:"Earn 20P by completing it", included:"Cards in this pack", kindPrefix:"Content", standardOpening:"Opening the pack", lockerHint:"Place each card in its matching locker", dragInsert:"Drop card to play", dragLocker:"Store in a locker"
@@ -20,7 +20,7 @@
     }
   };
   const basketStrings = {
-    ko:{ baskets:"내 바구니", addBasket:"바구니 추가", basketDefault:"바구니 {{n}}", basketName:"바구니 이름", saveBasket:"저장", renameBasket:"이름 바꾸기", deleteBasket:"바구니 삭제", basketEmpty:"아직 카드가 없다.", basketNameRequired:"바구니 이름을 입력해줘.", basketRemoved:"바구니를 삭제했다. 안에 있던 카드는 바닥으로 돌아왔다.", stored:"바구니에 넣었다.", dragBasket:"바구니에 넣기", basketLabel:"바구니 {{name}} · {{count}}/10장", basketDeleteConfirm:"이 바구니를 삭제할까? 안의 카드는 바닥으로 돌아온다.", basketDialogTitle:"바구니 안 카드", basketMax:"최대 10장", basketFull:"바구니가 가득 찼다. 최대 10장까지 넣을 수 있다.", closeBasket:"닫기", basketEmptyHint:"아직 꽂힌 카드가 없다.", basketMoved:"바구니를 옮겼다."},
+    ko:{ baskets:"내 정리함", addBasket:"정리함 추가", basketDefault:"바구니 {{n}}", basketName:"바구니 이름", saveBasket:"저장", renameBasket:"이름 바꾸기", deleteBasket:"바구니 삭제", basketEmpty:"아직 카드가 없다.", basketNameRequired:"바구니 이름을 입력해줘.", basketRemoved:"바구니를 삭제했다. 안에 있던 카드는 바닥으로 돌아왔다.", stored:"바구니에 넣었다.", dragBasket:"바구니에 넣기", basketLabel:"바구니 {{name}} · {{count}}/10장", basketDeleteConfirm:"이 바구니를 삭제할까? 안의 카드는 바닥으로 돌아온다.", basketDialogTitle:"바구니 안 카드", basketMax:"최대 10장", basketFull:"바구니가 가득 찼다. 최대 10장까지 넣을 수 있다.", closeBasket:"닫기", basketEmptyHint:"아직 꽂힌 카드가 없다.", basketMoved:"바구니를 옮겼다."},
     en:{baskets:"My baskets", addBasket:"Add basket", basketDefault:"Basket {{n}}", basketName:"Basket name", saveBasket:"Save", renameBasket:"Rename", deleteBasket:"Delete basket", basketEmpty:"No cards here yet.", basketNameRequired:"Enter a basket name.", basketRemoved:"Basket deleted. Its cards are back on the floor.", stored:"Card placed in the basket.", dragBasket:"Store in basket", basketLabel:"Basket {{name}} · {{count}}/10", basketDeleteConfirm:"Delete this basket? Its cards will return to the floor.", basketDialogTitle:"Cards in basket", basketMax:"Up to 10 cards", basketFull:"This basket is full. It can hold up to 10 cards.", closeBasket:"Close", basketEmptyHint:"No cards are slotted in yet.", basketMoved:"Basket moved."},
     ja:{baskets:"マイバスケット", addBasket:"バスケットを追加", basketDefault:"バスケット {{n}}", basketName:"バスケット名", saveBasket:"保存", renameBasket:"名前を変更", deleteBasket:"バスケットを削除", basketEmpty:"カードはまだありません。", basketNameRequired:"バスケット名を入力してください。", basketRemoved:"バスケットを削除しました。カードは床に戻りました。", stored:"バスケットに入れました。", dragBasket:"バスケットに入れる", basketLabel:"{{name}} · {{count}}/10枚", basketDeleteConfirm:"このバスケットを削除しますか？カードは床に戻ります。", basketDialogTitle:"バスケットのカード", basketMax:"最大10枚", basketFull:"バスケットはいっぱいです。10枚まで入れられます。", closeBasket:"閉じる", basketEmptyHint:"カードはまだありません。", basketMoved:"バスケットを移動しました。"},
     zh:{baskets:"我的篮子", addBasket:"添加篮子", basketDefault:"篮子 {{n}}", basketName:"篮子名称", saveBasket:"保存", renameBasket:"重命名", deleteBasket:"删除篮子", basketEmpty:"这里还没有卡片。", basketNameRequired:"请输入篮子名称。", basketRemoved:"篮子已删除，卡片已放回地面。", stored:"已放入篮子。", dragBasket:"放入篮子", basketLabel:"{{name}} · {{count}}/10张", basketDeleteConfirm:"删除这个篮子？里面的卡片会放回地面。", basketDialogTitle:"篮子里的卡片", basketMax:"最多10张", basketFull:"篮子已满，最多可放10张卡片。", closeBasket:"关闭", basketEmptyHint:"还没有插入卡片。", basketMoved:"篮子已移动。"}
@@ -156,6 +156,8 @@
   const slot = by("[data-vm-slot]");
   const crt = by("[data-vm-crt]");
   const machineTray = by("[data-vm-insert-tray]");
+  const machineDropSelector = lang() === "ko" ? "[data-vm-slot]" : "[data-vm-insert-tray]";
+  const machineDropTarget = lang() === "ko" ? slot : machineTray;
   const mobileTray = by("[data-vm-mobile-tray]");
   const mobileBasketTray = by("[data-vm-mobile-baskets]");
   const basketRail = by("[data-vm-baskets]");
@@ -371,7 +373,7 @@
     card.addEventListener("keydown", (event) => {
       if (event.key === " " || event.key === "Enter") {
         event.preventDefault();
-        if (event.key === "Enter" && card.classList.contains("is-revealed")) insertCard(entry.id);
+      if (event.key === "Enter" && card.classList.contains("is-revealed")) insertCard(entry.id);
         else card.click();
       }
     });
@@ -517,7 +519,7 @@
     document.querySelectorAll("[data-vm-points]").forEach((node) => { node.textContent = `${state.points}P`; });
     const visibleOwned = state.owned.filter((id) => contentById.has(id));
     const storedIds = storedCardIds();
-    const onFloor = visibleOwned.filter((id) => !storedIds.has(id));
+    const onFloor = visibleOwned.filter((id) => !storedIds.has(id) && id !== pendingReturn?.contentId);
     const ownedCount = by("[data-vm-owned-count]");
     if (ownedCount) ownedCount.textContent = cardCount(visibleOwned.length, "owned");
     const floorCount = by("[data-vm-floor-count]");
@@ -546,14 +548,16 @@
     renderMobileBasketTargets();
     floor.replaceChildren(...cardElements, basketRail);
     const options = by("[data-vm-theme]");
-    const selectedTheme = options.value;
-    options.replaceChildren();
-    categories.forEach((category) => {
-      const option = make("option", "", categoryLabel(category.id));
-      option.value = category.id;
-      options.append(option);
-    });
-    if (categories.some((category) => category.id === selectedTheme)) options.value = selectedTheme;
+    if (options) {
+      const selectedTheme = options.value;
+      options.replaceChildren();
+      categories.forEach((category) => {
+        const option = make("option", "", categoryLabel(category.id));
+        option.value = category.id;
+        options.append(option);
+      });
+      if (categories.some((category) => category.id === selectedTheme)) options.value = selectedTheme;
+    }
     renderThemePreview();
     updateShopButtons();
   };
@@ -580,9 +584,14 @@
   };
   const updateShopButtons = () => {
     const available = unowned();
-    const themeAvailable = unowned(by("[data-vm-theme]").value);
-    by("[data-vm-buy-theme]").disabled = themeAvailable.length === 0 || packBusy;
-    by("[data-vm-buy-standard]").disabled = packBusy || state.points < 40 || available.length === 0;
+    const themeSelect = by("[data-vm-theme]");
+    const themeButton = by("[data-vm-buy-theme]");
+    const standardButton = by("[data-vm-buy-standard]");
+    if (themeSelect && themeButton) themeButton.disabled = unowned(themeSelect.value).length === 0 || packBusy;
+    if (standardButton) {
+      const drawCount = lang() === "ko" ? 2 : 1;
+      standardButton.disabled = packBusy || state.points < 40 || available.length < drawCount;
+    }
   };
 
   const addCard = (entry) => {
@@ -599,21 +608,26 @@
     if (packBusy) return;
     if (!categoryId && state.points < 40) { setStatus(t("insufficient")); return; }
     const pool = unowned(categoryId);
-    if (!pool.length) { setStatus(categoryId ? t("allOwned") : t("packEmpty")); return; }
-    const entry = pool[Math.floor(safeRandom() * pool.length)];
+    const drawCount = !categoryId && lang() === "ko" ? 2 : 1;
+    if (pool.length < drawCount) { setStatus(categoryId ? t("allOwned") : t("packEmpty")); return; }
+    const candidates = [...pool];
+    const entries = [];
+    for (let i = 0; i < drawCount; i += 1) entries.push(candidates.splice(Math.floor(safeRandom() * candidates.length), 1)[0]);
     packBusy = true;
     const pack = root.querySelector(`[data-vm-pack="${categoryId ? "theme" : "standard"}"]`);
     pack?.classList.add("is-opening");
     if (!categoryId) state.points -= 40;
-    state.owned.push(entry.id);
-    state.positions[entry.id] = { x:5 + safeRandom() * 74, y:8 + safeRandom() * 55, r:(safeRandom() - .5) * 24, z:++state.nextZ };
+    entries.forEach((entry) => {
+      state.owned.push(entry.id);
+      state.positions[entry.id] = { x:5 + safeRandom() * 74, y:8 + safeRandom() * 55, r:(safeRandom() - .5) * 24, z:++state.nextZ };
+    });
     save(); render();
     setStatus(t("standardOpening"));
     await wait(680);
     pack?.classList.remove("is-opening");
     packBusy = false;
     updateShopButtons();
-    setStatus(t("packGet", { name:label(entry) }));
+    setStatus(!categoryId && lang() === "ko" ? t("packGetTwo") : t("packGet", { name:label(entries[0]) }));
   };
 
   const arrange = () => {
@@ -806,7 +820,8 @@
   };
 
   const insertCard = async (contentId, flightCard = null, savedPosition = null) => {
-    if (activeContent || pendingReturn || !state.owned.includes(contentId)) { flightCard?.remove(); return; }
+    if (pendingReturn) { flightCard?.remove(); setStatus(t("ejectedMustBeRemoved")); return; }
+    if (activeContent || !state.owned.includes(contentId)) { flightCard?.remove(); return; }
     const entry = contentById.get(contentId);
     if (!entry) { flightCard?.remove(); return; }
     const card = floor.querySelector(`[data-vm-card="${CSS.escape(contentId)}"]`);
@@ -931,7 +946,7 @@
     card.classList.add("is-return-target");
     card.setAttribute("aria-hidden", "true");
     pendingReturn = { contentId, origin:returnOrigin, sourceCard:card, card:null, slotLeft:0, slotTop:0, width:cardWidth, height:cardHeight };
-    machineTray.classList.remove("is-drop-target");
+    machineDropTarget?.classList.remove("is-drop-target");
     const crtRect = crt.getBoundingClientRect();
     document.body.style.overflow = "hidden";
     showRecognition(entry);
@@ -1194,7 +1209,7 @@
     mobileBasketTray.setAttribute("aria-hidden", String(mobileBasketTray.hidden));
     mobileTray.classList.toggle("is-drop-target", Boolean(isMobile && !mobileTray.hidden && event.clientX >= mobileTray.getBoundingClientRect().left && event.clientX <= mobileTray.getBoundingClientRect().right && event.clientY >= mobileTray.getBoundingClientRect().top && event.clientY <= mobileTray.getBoundingClientRect().bottom));
     const hoverTarget = document.elementFromPoint(event.clientX, event.clientY);
-    machineTray.classList.toggle("is-drop-target", Boolean(hoverTarget?.closest("[data-vm-insert-tray]")));
+    machineDropTarget?.classList.toggle("is-drop-target", Boolean(hoverTarget?.closest(machineDropSelector)));
     basketRail.querySelectorAll("[data-vm-basket-target]").forEach((basket) => basket.classList.toggle("is-drop-target", hoverTarget?.closest("[data-vm-basket-target]") === basket));
     mobileBasketTray.querySelectorAll("[data-vm-temp-basket]").forEach((basket) => basket.classList.toggle("is-drop-target", hoverTarget?.closest("[data-vm-temp-basket]") === basket));
   });
@@ -1249,7 +1264,7 @@
     const target = document.elementFromPoint(event.clientX, event.clientY);
     const basketTarget = target?.closest("[data-vm-basket-target]");
     const tempBasket = target?.closest("[data-vm-temp-basket]");
-    const onMachineTray = Boolean(target?.closest("[data-vm-insert-tray]"));
+    const onMachineTray = Boolean(target?.closest(machineDropSelector));
     const trayRect = mobileTray.getBoundingClientRect();
     const overTray = window.matchMedia("(max-width: 680px)").matches && !mobileTray.hidden && document.body.classList.contains("vm-is-dragging") && event.clientX >= trayRect.left && event.clientX <= trayRect.right && event.clientY >= trayRect.top && event.clientY <= trayRect.bottom;
     const shouldInsert = overTray || onMachineTray;
@@ -1305,7 +1320,7 @@
       mobileBasketTray.hidden = true;
     mobileTray.setAttribute("aria-hidden", "true");
       mobileBasketTray.setAttribute("aria-hidden", "true");
-    machineTray.classList.remove("is-drop-target");
+    machineDropTarget?.classList.remove("is-drop-target");
   });
   window.addEventListener("pointercancel", () => {
     if (basketMovement) {
@@ -1334,7 +1349,7 @@
     mobileBasketTray.hidden = true;
     mobileTray.setAttribute("aria-hidden", "true");
     mobileBasketTray.setAttribute("aria-hidden", "true");
-    machineTray.classList.remove("is-drop-target");
+    machineDropTarget?.classList.remove("is-drop-target");
     render();
   });
 
@@ -1355,8 +1370,8 @@
   by("[data-vm-auto-confirm]").addEventListener("click", () => autoDialog?.close("confirm"));
   autoDialog?.addEventListener("close", () => { if (autoDialog.returnValue === "confirm") arrangeCards(); });
   by("[data-vm-buy-standard]").addEventListener("click", () => purchase());
-  by("[data-vm-buy-theme]").addEventListener("click", () => purchase(by("[data-vm-theme]").value));
-  by("[data-vm-theme]").addEventListener("change", () => { renderThemePreview(); updateShopButtons(); });
+  by("[data-vm-buy-theme]")?.addEventListener("click", () => purchase(by("[data-vm-theme]")?.value));
+  by("[data-vm-theme]")?.addEventListener("change", () => { renderThemePreview(); updateShopButtons(); });
   by("[data-vm-eject]").addEventListener("click", eject);
   window.addEventListener("resize", () => {
     syncReturnedCardToSlot();
