@@ -271,6 +271,21 @@
     return canvas;
   };
 
+  const cloneWithCanvasContent = (source) => {
+    const clone = source.cloneNode(true);
+    const sourceCanvases = source.querySelectorAll("canvas");
+    const clonedCanvases = clone.querySelectorAll("canvas");
+    sourceCanvases.forEach((canvas, index) => {
+      const copiedCanvas = clonedCanvases[index];
+      const context = copiedCanvas?.getContext("2d");
+      if (!context) return;
+      copiedCanvas.width = canvas.width;
+      copiedCanvas.height = canvas.height;
+      context.drawImage(canvas, 0, 0);
+    });
+    return clone;
+  };
+
   const makeCard = (entry, position) => {
     const card = make("article", "vm-card");
     const revealed = revealedCards.has(entry.id);
@@ -811,7 +826,7 @@
         const rect = card.getBoundingClientRect();
         const width = card.offsetWidth;
         const height = card.offsetHeight;
-        clone = card.cloneNode(true);
+        clone = cloneWithCanvasContent(card);
         clone.classList.add("vm-insert-animation", "is-revealed");
         clone.style.left = `${rect.left + rect.width / 2 - width / 2}px`;
         clone.style.top = `${rect.top + rect.height / 2 - height / 2}px`;
@@ -883,7 +898,7 @@
       window.append(segmentCard);
       feedStage.append(window);
     };
-    const upperCard = clone.cloneNode(true);
+    const upperCard = cloneWithCanvasContent(clone);
     createFeedSegment(upperCard, "upper", 1);
     createFeedSegment(clone, "lower", -1);
     document.body.append(feedStage);
@@ -991,7 +1006,7 @@
         feedWindow.style.top = `${slotRect.top}px`;
         feedWindow.style.width = `${slotRect.width}px`;
         feedWindow.style.height = `${feedHeight + size.height}px`;
-        const card = sourceCard.cloneNode(true);
+        const card = cloneWithCanvasContent(sourceCard);
         card.classList.remove("is-return-target", "vm-insert-animation", "vm-drag-preview", "is-dragging", "is-lifting");
         card.classList.add("vm-return-card", "is-revealed", "is-emerging");
         card.style.position = "absolute";
@@ -1077,7 +1092,7 @@
     const contentId = card.dataset.vmCard;
     const rect = card.getBoundingClientRect();
     const origin = { ...state.positions[contentId] };
-    const dragCard = card.cloneNode(true);
+    const dragCard = cloneWithCanvasContent(card);
     dragCard.classList.remove("vm-insert-animation");
     dragCard.classList.add("vm-drag-preview", "is-dragging");
     dragCard.style.position = "fixed";
