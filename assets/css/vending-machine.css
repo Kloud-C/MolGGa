@@ -337,7 +337,7 @@ html[lang^="ko"] .vm-site-title { transform:translateX(-40px); }
   .vm-mobile-basket-target { min-width:80px; font-size:.59rem; }
 }
 
-/* Korean vending home: the physical slot is the only machine drop target. */
+/* The physical card slot is the only machine drop target on every locale. */
 .vm-machine-slot-only .vm-vendor-controls { margin-bottom:2px; }
 .vm-machine-slot-only .vm-slot-label { color:#372d46; font-size:.74rem; }
 .vm-machine-slot-only .vm-slot { height:28px; }

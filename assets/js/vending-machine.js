@@ -4,7 +4,7 @@
   if (!registry || !root) return;
 
   const lang = () => (window.MOA_I18N?.language || document.documentElement.lang || "ko").slice(0, 2);
-  const ejectButtonText = () => ({ ko:"게임칩 빼기", en:"Eject card", ja:"カードを取り出す", zh:"取出卡片" }[lang()] || "Eject card");
+  const ejectButtonText = () => ({ ko:"게임칩 빼기", en:"Eject game chip", ja:"ゲームチップを取り出す", zh:"取出游戏芯片" }[lang()] || "Eject game chip");
   const strings = {
     ko: {
       brand:"몰까 자판기", kicker:"수상한 자판기", title:"카드를 모아 나만의 놀이공간을 꾸며보자", intro:"흩어진 카드들을 찾아 자판기에 넣어보자.", points:"보유 포인트", floor:"골목 바닥", floorHint:"카드를 투입구에 넣으면 카드에 적힌 콘텐츠를 플레이할 수 있다.\n카드를 누르면 뒤집어 내용을 확인할 수 있다.", auto:"정리하기", cardBack:"MOLGGA", turnCard:"카드를 뒤집어 내용 보기", insert:"자판기에 넣기", useCard:"이 카드로 시작", tray:"카드를 여기에 놓기", machine:"몰까 자판기", machineHint:"카드를 투입구에 넣어주세요", screenIdle:"카드 대기 중", screenHint:"", slot:"투입구", trayLabel:"", lockers:"카드 정리함", emptyLocker:"아직 보관한 카드가 없다.", open:"열기", close:"닫기", takeOut:"바닥에 꺼내기", cards:"장", autoConfirm:"정리 하시겠습니까?", autoExplain:"주의: 바닥에 놓은 카드의 위치가 모두 초기화됩니다.", cancel:"취소", confirmArrange:"정리하기", sorted:"바닥에 흩어진 카드를 정리했다.", noCards:"정리할 카드가 없다.", standard:"New 카드팩", standardDesc:"새로운 카드 두 장을 뽑는다.", buyStandard:"카드팩 뜯기", theme:"테마 확장팩", themeDesc:"테마와 들어 있는 카드를 확인한 뒤 무료로 구매 흐름을 체험할 수 있다.", buyTheme:"무료 테스트 구매", allOwned:"이 유형의 카드는 모두 찾았다.", insufficient:"포인트가 부족하다.", packEmpty:"두 장을 뽑을 새 카드가 남아 있지 않다.", packGet:"새 카드를 찾았다: {{name}}", packGetTwo:"새 카드 두 장을 뽑았다.", ejectedMustBeRemoved:"투입구에 걸린 카드를 먼저 바닥으로 꺼내야 한다.", stored:"정리함에 넣었다.", returned:"골목 바닥에 꺼내놓았다.", start:"카드 인식 중", scanHint:"잠시만 기다려줘", ready:"카드 인식 완료", startContent:"콘텐츠를 불러오는 중이다", eject:"게임칩 빼기", saved:"카드와 포인트는 이 브라우저에 저장된다.", completed:"처음 완료한 콘텐츠다. 20P를 받았다.", completedBefore:"이미 완료한 콘텐츠다.", chooseTheme:"테마를 고르자", count:"보유 카드", floorCount:"바닥에 놓인 카드", folderStored:"정리함에 보관 중", source:"콘텐츠 페이지 열기", shop:"New 카드팩", closeOverlay:"자판기 닫기", fallback:"이 콘텐츠를 새 탭에서 연다.", backToAlley:"골목으로 돌아왔다.", kindMatch:"월드컵", kindTest:"테스트", kindStory:"이야기", completion:"끝까지 완료하면 20P", included:"팩에 들어 있는 카드", kindPrefix:"콘텐츠", standardOpening:"새 카드팩을 여는 중", lockerHint:"카드를 유형에 맞는 칸에 놓자", dragInsert:"카드를 넣을 곳", dragLocker:"정리함에 넣기"
@@ -19,11 +19,47 @@
       brand:"卡片贩卖机", kicker:"MOLGGA · 深夜卡片小巷", title:"在夜巷里找一张卡", intro:"翻开地上的卡片，挑一张喜欢的放进贩卖机。", points:"当前积分", floor:"巷子里的卡片", floorHint:"点击卡片查看正面，拖动卡片或篮子即可移动。", auto:"整理卡片", cardBack:"MOLGGA", turnCard:"翻开这张卡", insert:"投入贩卖机", useCard:"用这张卡开始", tray:"把卡放在这里", machine:"卡片贩卖机", machineHint:"把卡放到绿色托盘上即可开始", screenIdle:"等待卡片", screenHint:"从巷子里挑一张卡吧", slot:"卡片插槽", trayLabel:"卡片入口", lockers:"卡片收纳柜", emptyLocker:"这里还没有卡片。", open:"打开", close:"关闭", takeOut:"放回地面", cards:"张", autoConfirm:"要自动整理卡片吗？", autoExplain:"卡片现在的位置会改变。", cancel:"取消", confirmArrange:"自动整理", sorted:"地上的卡片已摆放整齐。", noCards:"没有需要整理的卡片。", standard:"巷子卡包", standardDesc:"随机获得一张尚未找到的卡片。每包40P。", buyStandard:"打开卡包 · 40P", theme:"主题扩展包", themeDesc:"先查看主题和卡片，再免费体验购买流程。", buyTheme:"免费体验购买", allOwned:"这一类卡片都已找到。", insufficient:"积分不足。", packEmpty:"没有新卡了。", packGet:"发现新卡：{{name}}", stored:"已放入收纳柜。", returned:"已放回巷子地面。", start:"正在识别卡片", scanHint:"请稍候", ready:"卡片识别完成", startContent:"正在加载内容", eject:"取出游戏芯片", saved:"卡片和积分保存在此浏览器中。", completed:"首次完成，获得20P。", completedBefore:"此内容已完成过。", chooseTheme:"选择主题", count:"张已拥有", floorCount:"张在地面", folderStored:"已收纳", source:"打开内容页面", shop:"卡包商店", closeOverlay:"关闭贩卖机", fallback:"将在新标签页打开此内容。", backToAlley:"已回到巷子。", kindMatch:"对决", kindTest:"测试", kindStory:"故事", completion:"完成内容可获得20P", included:"卡包内的卡片", kindPrefix:"类型", standardOpening:"正在拆开卡包", lockerHint:"请把卡片放入对应收纳格", dragInsert:"放入贩卖机", dragLocker:"放入收纳柜"
     }
   };
+  Object.assign(strings.en, {
+    brand:"MOLGGA Vending Machine", kicker:"A Mysterious Vending Machine", title:"Collect cards and create your own play space",
+    intro:"Find scattered cards and feed them into the vending machine.", floor:"Alley Floor",
+    floorHint:"Insert a card into the slot to play its content.\nTap a card to turn it over and read about it.", auto:"Arrange cards",
+    autoConfirm:"Arrange the scattered cards?", autoExplain:"Warning: All card positions you set will be reset.", confirmArrange:"Arrange cards",
+    machineHint:"Insert a card into the slot", screenHint:"", slot:"Slot", trayLabel:"",
+    lockers:"Card organizers", lockerHint:"Drag cards into an organizer to keep the alley tidy.",
+    standard:"New Card Pack", standardDesc:"Draw two new cards.", buyStandard:"Open Card Pack",
+    packEmpty:"At least two undiscovered cards are needed to open a pack.", packGetTwo:"You drew two new cards.",
+    ejectedMustBeRemoved:"Move the card sticking out of the slot onto the floor first.",
+    machine:"MOLGGA Vending Machine", shop:"New Card Pack", eject:"Eject game chip"
+  });
+  Object.assign(strings.ja, {
+    brand:"MOLGGA自販機", kicker:"あやしい自販機", title:"カードを集めて、自分だけの遊び場を作ろう",
+    intro:"散らばったカードを見つけて、自販機に入れてみよう。", floor:"路地の床",
+    floorHint:"投入口にカードを入れると、カードに対応するコンテンツをプレイできます。\nカードをタップすると裏返り、紹介文を読めます。", auto:"カードを整理する",
+    autoConfirm:"散らばったカードを整理しますか？", autoExplain:"注意：自分で配置したカードはすべて初期位置に戻ります。", confirmArrange:"整理する",
+    machineHint:"カードを投入口に入れてください", screenHint:"", slot:"投入口", trayLabel:"",
+    lockers:"カード整理箱", lockerHint:"カードを整理箱に入れて、路地をすっきり片付けましょう。",
+    standard:"新しいカードパック", standardDesc:"新しいカードを2枚引く。", buyStandard:"カードパックを開ける",
+    packEmpty:"パックを開けるには、未入手のカードが2枚以上必要です。", packGetTwo:"新しいカードを2枚引きました。",
+    ejectedMustBeRemoved:"投入口から出ているカードを、先に床へ戻してください。",
+    machine:"MOLGGA自販機", shop:"新しいカードパック", eject:"ゲームチップを取り出す"
+  });
+  Object.assign(strings.zh, {
+    brand:"MOLGGA卡片贩卖机", kicker:"神秘贩卖机", title:"收集卡片，布置自己的游乐空间",
+    intro:"找到散落的卡片，投入贩卖机。", floor:"巷子地面",
+    floorHint:"把卡片插入投入口，就能游玩对应内容。\n点击卡片可以翻到正面查看介绍。", auto:"整理卡片",
+    autoConfirm:"要整理散落的卡片吗？", autoExplain:"注意：手动摆放的卡片位置将全部恢复初始状态。", confirmArrange:"整理卡片",
+    machineHint:"请将卡片插入投入口", screenHint:"", slot:"投入口", trayLabel:"",
+    lockers:"卡片收纳盒", lockerHint:"把卡片放进收纳盒，让巷子地面保持整洁。",
+    standard:"新卡包", standardDesc:"抽取两张新卡片。", buyStandard:"拆开卡包",
+    packEmpty:"至少需要两张未收集的新卡才能开包。", packGetTwo:"抽到了两张新卡片。",
+    ejectedMustBeRemoved:"请先将卡槽中露出的卡片拖回地面。",
+    machine:"MOLGGA卡片贩卖机", shop:"新卡包", eject:"取出游戏芯片"
+  });
   const basketStrings = {
     ko:{ baskets:"내 정리함", addBasket:"정리함 추가", basketDefault:"바구니 {{n}}", basketName:"바구니 이름", saveBasket:"저장", renameBasket:"이름 바꾸기", deleteBasket:"바구니 삭제", basketEmpty:"아직 카드가 없다.", basketNameRequired:"바구니 이름을 입력해줘.", basketRemoved:"바구니를 삭제했다. 안에 있던 카드는 바닥으로 돌아왔다.", stored:"바구니에 넣었다.", dragBasket:"바구니에 넣기", basketLabel:"바구니 {{name}} · {{count}}/10장", basketDeleteConfirm:"이 바구니를 삭제할까? 안의 카드는 바닥으로 돌아온다.", basketDialogTitle:"바구니 안 카드", basketMax:"최대 10장", basketFull:"바구니가 가득 찼다. 최대 10장까지 넣을 수 있다.", closeBasket:"닫기", basketEmptyHint:"아직 꽂힌 카드가 없다.", basketMoved:"바구니를 옮겼다."},
-    en:{baskets:"My baskets", addBasket:"Add basket", basketDefault:"Basket {{n}}", basketName:"Basket name", saveBasket:"Save", renameBasket:"Rename", deleteBasket:"Delete basket", basketEmpty:"No cards here yet.", basketNameRequired:"Enter a basket name.", basketRemoved:"Basket deleted. Its cards are back on the floor.", stored:"Card placed in the basket.", dragBasket:"Store in basket", basketLabel:"Basket {{name}} · {{count}}/10", basketDeleteConfirm:"Delete this basket? Its cards will return to the floor.", basketDialogTitle:"Cards in basket", basketMax:"Up to 10 cards", basketFull:"This basket is full. It can hold up to 10 cards.", closeBasket:"Close", basketEmptyHint:"No cards are slotted in yet.", basketMoved:"Basket moved."},
-    ja:{baskets:"マイバスケット", addBasket:"バスケットを追加", basketDefault:"バスケット {{n}}", basketName:"バスケット名", saveBasket:"保存", renameBasket:"名前を変更", deleteBasket:"バスケットを削除", basketEmpty:"カードはまだありません。", basketNameRequired:"バスケット名を入力してください。", basketRemoved:"バスケットを削除しました。カードは床に戻りました。", stored:"バスケットに入れました。", dragBasket:"バスケットに入れる", basketLabel:"{{name}} · {{count}}/10枚", basketDeleteConfirm:"このバスケットを削除しますか？カードは床に戻ります。", basketDialogTitle:"バスケットのカード", basketMax:"最大10枚", basketFull:"バスケットはいっぱいです。10枚まで入れられます。", closeBasket:"閉じる", basketEmptyHint:"カードはまだありません。", basketMoved:"バスケットを移動しました。"},
-    zh:{baskets:"我的篮子", addBasket:"添加篮子", basketDefault:"篮子 {{n}}", basketName:"篮子名称", saveBasket:"保存", renameBasket:"重命名", deleteBasket:"删除篮子", basketEmpty:"这里还没有卡片。", basketNameRequired:"请输入篮子名称。", basketRemoved:"篮子已删除，卡片已放回地面。", stored:"已放入篮子。", dragBasket:"放入篮子", basketLabel:"{{name}} · {{count}}/10张", basketDeleteConfirm:"删除这个篮子？里面的卡片会放回地面。", basketDialogTitle:"篮子里的卡片", basketMax:"最多10张", basketFull:"篮子已满，最多可放10张卡片。", closeBasket:"关闭", basketEmptyHint:"还没有插入卡片。", basketMoved:"篮子已移动。"}
+    en:{baskets:"My organizers", addBasket:"Add organizer", basketDefault:"Organizer {{n}}", basketName:"Organizer name", saveBasket:"Save", renameBasket:"Rename", deleteBasket:"Delete organizer", basketEmpty:"No cards here yet.", basketNameRequired:"Enter a name for the organizer.", basketRemoved:"Organizer deleted. Its cards are back on the floor.", stored:"Card placed in the organizer.", dragBasket:"Store in organizer", basketLabel:"{{name}} · {{count}}/10", basketDeleteConfirm:"Delete this organizer? Its cards will return to the floor.", basketDialogTitle:"Cards in organizer", basketMax:"Up to 10 cards", basketFull:"This organizer is full. It can hold up to 10 cards.", closeBasket:"Close", basketEmptyHint:"No cards are slotted in yet.", basketMoved:"Organizer moved."},
+    ja:{baskets:"マイ整理箱", addBasket:"整理箱を追加", basketDefault:"整理箱 {{n}}", basketName:"整理箱の名前", saveBasket:"保存", renameBasket:"名前を変更", deleteBasket:"整理箱を削除", basketEmpty:"カードはまだありません。", basketNameRequired:"整理箱の名前を入力してください。", basketRemoved:"整理箱を削除しました。カードは床に戻りました。", stored:"整理箱に入れました。", dragBasket:"整理箱に入れる", basketLabel:"{{name}} · {{count}}/10枚", basketDeleteConfirm:"この整理箱を削除しますか？カードは床に戻ります。", basketDialogTitle:"整理箱のカード", basketMax:"最大10枚", basketFull:"整理箱はいっぱいです。10枚まで入れられます。", closeBasket:"閉じる", basketEmptyHint:"カードはまだありません。", basketMoved:"整理箱を移動しました。"},
+    zh:{baskets:"我的收纳盒", addBasket:"添加收纳盒", basketDefault:"收纳盒 {{n}}", basketName:"收纳盒名称", saveBasket:"保存", renameBasket:"重命名", deleteBasket:"删除收纳盒", basketEmpty:"这里还没有卡片。", basketNameRequired:"请输入收纳盒名称。", basketRemoved:"收纳盒已删除，卡片已放回地面。", stored:"已放入收纳盒。", dragBasket:"放入收纳盒", basketLabel:"{{name}} · {{count}}/10张", basketDeleteConfirm:"删除这个收纳盒？里面的卡片会放回地面。", basketDialogTitle:"收纳盒里的卡片", basketMax:"最多10张", basketFull:"收纳盒已满，最多可放10张卡片。", closeBasket:"关闭", basketEmptyHint:"还没有插入卡片。", basketMoved:"收纳盒已移动。"}
   };
   const t = (key, values = {}) => {
     const template = key === "eject" ? ejectButtonText() : (basketStrings[lang()]?.[key] || strings[lang()]?.[key] || basketStrings.ko[key] || strings.ko[key] || key);
@@ -155,9 +191,8 @@
   const machineBody = by(".vm-machine");
   const slot = by("[data-vm-slot]");
   const crt = by("[data-vm-crt]");
-  const machineTray = by("[data-vm-insert-tray]");
-  const machineDropSelector = lang() === "ko" ? "[data-vm-slot]" : "[data-vm-insert-tray]";
-  const machineDropTarget = lang() === "ko" ? slot : machineTray;
+  const machineDropSelector = "[data-vm-slot]";
+  const machineDropTarget = slot;
   const mobileTray = by("[data-vm-mobile-tray]");
   const mobileBasketTray = by("[data-vm-mobile-baskets]");
   const basketRail = by("[data-vm-baskets]");
@@ -589,7 +624,7 @@
     const standardButton = by("[data-vm-buy-standard]");
     if (themeSelect && themeButton) themeButton.disabled = unowned(themeSelect.value).length === 0 || packBusy;
     if (standardButton) {
-      const drawCount = lang() === "ko" ? 2 : 1;
+      const drawCount = 2;
       standardButton.disabled = packBusy || state.points < 40 || available.length < drawCount;
     }
   };
@@ -608,7 +643,7 @@
     if (packBusy) return;
     if (!categoryId && state.points < 40) { setStatus(t("insufficient")); return; }
     const pool = unowned(categoryId);
-    const drawCount = !categoryId && lang() === "ko" ? 2 : 1;
+    const drawCount = categoryId ? 1 : 2;
     if (pool.length < drawCount) { setStatus(categoryId ? t("allOwned") : t("packEmpty")); return; }
     const candidates = [...pool];
     const entries = [];
@@ -627,7 +662,7 @@
     pack?.classList.remove("is-opening");
     packBusy = false;
     updateShopButtons();
-    setStatus(!categoryId && lang() === "ko" ? t("packGetTwo") : t("packGet", { name:label(entries[0]) }));
+    setStatus(!categoryId ? t("packGetTwo") : t("packGet", { name:label(entries[0]) }));
   };
 
   const arrange = () => {
@@ -894,8 +929,8 @@
     await waitForMotion(520);
     if (!isCurrentLaunch()) { clone.remove(); card.style.visibility = ""; return; }
     const feedHeight = Math.max(1, slotRect.height);
-    // Korean feed-in uses a single card below the slot; the copied upper slice looked like a duplicate.
-    const showUpperSegment = lang() !== "ko";
+    // Use one clipped feed segment so a duplicate card never appears above the slot.
+    const showUpperSegment = false;
     const segmentHeight = showUpperSegment ? Math.max(8, Math.min(cardHeight * .12, 14)) : 0;
     const lowerHeight = cardHeight;
     const feedStage = document.createElement("div");
@@ -1073,7 +1108,7 @@
         });
         feedWindow.append(card);
         document.body.append(feedWindow);
-        const anchorToMachine = lang() === "ko";
+        const anchorToMachine = true;
         const machineRect = machineBody.getBoundingClientRect();
         const viewportLeft = slotRect.left + slotRect.width / 2 - size.width / 2;
         const viewportTop = slotRect.bottom;
@@ -1234,7 +1269,6 @@
         current.element.style.zIndex = String(basket?.position.z ?? state.nextZ);
         current.element.dataset.vmSuppressClick = "1";
         window.setTimeout(() => { if (current.element.dataset.vmSuppressClick === "1") current.element.dataset.vmSuppressClick = "0"; }, 250);
-        if (lang() !== "ko") setStatus(t("basketMoved"));
       }
       return;
     }
