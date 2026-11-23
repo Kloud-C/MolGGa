@@ -1026,7 +1026,8 @@
       overlay.hidden = true;
       overlay.classList.remove("is-returning");
       document.body.style.overflow = "";
-      const sourceCard = previous && floor.querySelector(`[data-vm-card="${CSS.escape(previous.id)}"]`);
+      const savedSource = pendingReturn?.contentId === previous?.id ? pendingReturn.sourceCard : null;
+      const sourceCard = previous && (savedSource || floor.querySelector(`[data-vm-card="${CSS.escape(previous.id)}"]`));
       if (previous && sourceCard) {
         const slotRect = slot.getBoundingClientRect();
         const feedHeight = Math.max(1, slotRect.height);
@@ -1233,7 +1234,7 @@
         current.element.style.zIndex = String(basket?.position.z ?? state.nextZ);
         current.element.dataset.vmSuppressClick = "1";
         window.setTimeout(() => { if (current.element.dataset.vmSuppressClick === "1") current.element.dataset.vmSuppressClick = "0"; }, 250);
-        setStatus(t("basketMoved"));
+        if (lang() !== "ko") setStatus(t("basketMoved"));
       }
       return;
     }
