@@ -48,6 +48,12 @@
   const previousStorageKeys = ["molgga.vendingMachine.v3", "molgga.vendingMachine.v2", "molgga.vendingMachine.v1"];
   const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
   const safeRandom = () => Math.random();
+  const nextFloorRotation = (previous) => {
+    const current = clamp(Number(previous) || 0, -14, 14);
+    const turn = 4 + safeRandom() * 6;
+    const next = current + (safeRandom() < .5 ? -turn : turn);
+    return clamp(next > 14 ? current - turn : next < -14 ? current + turn : next, -14, 14);
+  };
   const cardAspectRatio = 0.66;
   const cardWidthForViewport = () => {
     if (window.matchMedia("(max-width: 360px)").matches) return clamp(window.innerWidth * .29, 84, 104);
@@ -1202,6 +1208,7 @@
     } else if (inFloor) {
       state.positions[current.contentId].x = bounds.width ? left / bounds.width * 100 : 0;
       state.positions[current.contentId].y = bounds.height ? top / bounds.height * 100 : 0;
+      state.positions[current.contentId].r = nextFloorRotation(current.origin.r);
       state.positions[current.contentId].z = state.nextZ;
       save(); render();
     } else {
