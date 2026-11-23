@@ -868,8 +868,9 @@
     await waitForMotion(520);
     if (!isCurrentLaunch()) { clone.remove(); card.style.visibility = ""; return; }
     const feedHeight = Math.max(1, slotRect.height);
-    // Keep only a narrow edge visible above the slot so the card appears to pass through the opening.
-    const segmentHeight = Math.max(8, Math.min(cardHeight * .12, 14));
+    // Korean feed-in uses a single card below the slot; the copied upper slice looked like a duplicate.
+    const showUpperSegment = lang() !== "ko";
+    const segmentHeight = showUpperSegment ? Math.max(8, Math.min(cardHeight * .12, 14)) : 0;
     const lowerHeight = cardHeight;
     const feedStage = document.createElement("div");
     feedStage.className = "vm-slot-feed-stage";
@@ -901,8 +902,10 @@
       window.append(segmentCard);
       feedStage.append(window);
     };
-    const upperCard = cloneWithCanvasContent(clone);
-    createFeedSegment(upperCard, "upper", 1);
+    if (showUpperSegment) {
+      const upperCard = cloneWithCanvasContent(clone);
+      createFeedSegment(upperCard, "upper", 1);
+    }
     createFeedSegment(clone, "lower", -1);
     document.body.append(feedStage);
     slot.classList.add("is-feeding-card");
