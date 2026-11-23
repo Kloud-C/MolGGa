@@ -852,30 +852,48 @@
     });
     await waitForMotion(520);
     if (!isCurrentLaunch()) { clone.remove(); card.style.visibility = ""; return; }
-    const feedWindow = document.createElement("div");
-    const feedWidth = Math.max(1, slotRect.width);
     const feedHeight = Math.max(1, slotRect.height);
-    feedWindow.className = "vm-slot-feed-window";
-    feedWindow.style.left = `${slotRect.left}px`;
-    feedWindow.style.top = `${slotRect.top}px`;
-    feedWindow.style.width = `${feedWidth}px`;
-    feedWindow.style.height = `${feedHeight}px`;
-    clone.classList.remove("vm-insert-animation");
-    clone.classList.add("vm-slot-feed-card");
-    clone.style.left = `${(feedWidth - cardWidth) / 2}px`;
-    clone.style.top = `${feedHeight}px`;
-    clone.style.width = `${cardWidth}px`;
-    clone.style.height = `${cardHeight}px`;
-    clone.style.setProperty("--vm-feed-distance", `-${cardHeight + feedHeight}px`);
-    feedWindow.append(clone);
-    document.body.append(feedWindow);
+    const segmentHeight = Math.max(16, Math.min(cardHeight * .34, 48));
+    const feedStage = document.createElement("div");
+    feedStage.className = "vm-slot-feed-stage";
+    feedStage.style.left = `${slotRect.left}px`;
+    feedStage.style.top = `${slotRect.top - segmentHeight}px`;
+    feedStage.style.width = `${slotRect.width}px`;
+    feedStage.style.height = `${segmentHeight * 2 + feedHeight}px`;
+    const createFeedSegment = (source, edge, direction) => {
+      const window = document.createElement("div");
+      window.className = `vm-slot-feed-window vm-slot-feed-${edge}`;
+      window.style.left = `${(slotRect.width - cardWidth) / 2}px`;
+      window.style.top = `${edge === "upper" ? 0 : segmentHeight + feedHeight}px`;
+      window.style.width = `${cardWidth}px`;
+      window.style.height = `${segmentHeight}px`;
+      const segmentCard = source;
+      segmentCard.classList.remove("vm-insert-animation", "vm-drag-preview", "is-dragging", "is-lifting");
+      segmentCard.classList.add("vm-slot-feed-card");
+      segmentCard.style.position = "absolute";
+      segmentCard.style.left = "0px";
+      segmentCard.style.top = `${edge === "upper" ? segmentHeight - cardHeight : 0}px`;
+      segmentCard.style.width = `${cardWidth}px`;
+      segmentCard.style.height = `${cardHeight}px`;
+      segmentCard.style.transform = "rotate(0deg)";
+      segmentCard.style.setProperty("--vm-feed-distance", `${direction * segmentHeight}px`);
+      segmentCard.dataset.vmFeedDirection = direction < 0 ? "up" : "down";
+      segmentCard.querySelector(".vm-card-front")?.setAttribute("aria-hidden", "false");
+      segmentCard.querySelector(".vm-card-back")?.setAttribute("aria-hidden", "true");
+      window.append(segmentCard);
+      feedStage.append(window);
+    };
+    const upperCard = clone.cloneNode(true);
+    createFeedSegment(upperCard, "upper", 1);
+    createFeedSegment(clone, "lower", -1);
+    document.body.append(feedStage);
     slot.classList.add("is-feeding-card");
     await waitForMotion(120);
-    if (!isCurrentLaunch()) { feedWindow.remove(); slot.classList.remove("is-feeding-card"); card.style.visibility = ""; return; }
-    clone.classList.add("is-feeding-up");
+    if (!isCurrentLaunch()) { feedStage.remove(); slot.classList.remove("is-feeding-card"); card.style.visibility = ""; return; }
+    feedStage.querySelectorAll(".vm-slot-feed-card").forEach((segmentCard) => segmentCard.classList.add("is-feeding"));
     await waitForMotion(900);
-    if (!isCurrentLaunch()) { feedWindow.remove(); slot.classList.remove("is-feeding-card"); card.style.visibility = ""; return; }
-    feedWindow.remove();
+    if (!isCurrentLaunch()) { feedStage.remove(); slot.classList.remove("is-feeding-card"); card.style.visibility = ""; return; }
+    feedStage.remove();
     slot.classList.remove("is-feeding-card");
     card.style.visibility = "";
     card.classList.add("is-return-target");
