@@ -869,19 +869,21 @@
     if (!isCurrentLaunch()) { clone.remove(); card.style.visibility = ""; return; }
     const feedHeight = Math.max(1, slotRect.height);
     const segmentHeight = Math.max(16, Math.min(cardHeight * .34, 48));
+    const lowerHeight = cardHeight;
     const feedStage = document.createElement("div");
     feedStage.className = "vm-slot-feed-stage";
     feedStage.style.left = `${slotRect.left}px`;
     feedStage.style.top = `${slotRect.top - segmentHeight}px`;
     feedStage.style.width = `${slotRect.width}px`;
-    feedStage.style.height = `${segmentHeight * 2 + feedHeight}px`;
+    feedStage.style.height = `${segmentHeight + feedHeight + lowerHeight}px`;
     const createFeedSegment = (source, edge, direction) => {
       const window = document.createElement("div");
       window.className = `vm-slot-feed-window vm-slot-feed-${edge}`;
       window.style.left = `${(slotRect.width - cardWidth) / 2}px`;
+      const windowHeight = edge === "upper" ? segmentHeight : lowerHeight;
       window.style.top = `${edge === "upper" ? 0 : segmentHeight + feedHeight}px`;
       window.style.width = `${cardWidth}px`;
-      window.style.height = `${segmentHeight}px`;
+      window.style.height = `${windowHeight}px`;
       const segmentCard = source;
       segmentCard.classList.remove("vm-insert-animation", "vm-drag-preview", "is-dragging", "is-lifting");
       segmentCard.classList.add("vm-slot-feed-card");
@@ -891,7 +893,7 @@
       segmentCard.style.width = `${cardWidth}px`;
       segmentCard.style.height = `${cardHeight}px`;
       segmentCard.style.transform = "rotate(0deg)";
-      segmentCard.style.setProperty("--vm-feed-distance", `${direction * segmentHeight}px`);
+      segmentCard.style.setProperty("--vm-feed-distance", `${direction * windowHeight}px`);
       segmentCard.dataset.vmFeedDirection = direction < 0 ? "up" : "down";
       segmentCard.querySelector(".vm-card-front")?.setAttribute("aria-hidden", "false");
       segmentCard.querySelector(".vm-card-back")?.setAttribute("aria-hidden", "true");
@@ -959,6 +961,23 @@
     setStatus(t("backToAlley"));
     const floorCard = floor.querySelector(`[data-vm-card="${CSS.escape(returned.contentId)}"]`);
     floorCard?.focus({ preventScroll:true });
+  };
+
+  const syncReturnedCardToSlot = () => {
+    const returned = pendingReturn;
+    if (!returned?.card?.classList.contains("is-ready") || dragging?.returning) return;
+    const slotRect = slot.getBoundingClientRect();
+    const card = returned.card;
+    const left = slotRect.left + slotRect.width / 2 - card.offsetWidth / 2;
+    const top = slotRect.bottom;
+    card.style.transition = "none";
+    card.style.left = `${left}px`;
+    card.style.top = `${top}px`;
+    returned.slotLeft = left;
+    returned.slotTop = top;
+    requestAnimationFrame(() => {
+      if (pendingReturn?.card === card && !dragging?.returning) card.style.transition = "";
+    });
   };
 
   const startEjectedCardDrag = (event) => {
@@ -1332,7 +1351,11 @@
   by("[data-vm-buy-theme]").addEventListener("click", () => purchase(by("[data-vm-theme]").value));
   by("[data-vm-theme]").addEventListener("change", () => { renderThemePreview(); updateShopButtons(); });
   by("[data-vm-eject]").addEventListener("click", eject);
-  window.addEventListener("resize", () => { if (!dragging && !basketMovement && !activeContent) render(); });
+  window.addEventListener("scroll", syncReturnedCardToSlot, { passive:true });
+  window.addEventListener("resize", () => {
+    if (!dragging && !basketMovement && !activeContent) render();
+    syncReturnedCardToSlot();
+  });
   mobileTray.addEventListener("dragover", (event) => event.preventDefault());
   mobileTray.setAttribute("aria-hidden", "true");
   mobileBasketTray.setAttribute("aria-hidden", "true");
