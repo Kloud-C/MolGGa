@@ -152,6 +152,7 @@
   const by = (selector) => root.querySelector(selector);
   const floor = by("[data-vm-floor]");
   const machine = by("[data-vm-machine]");
+  const machineBody = by(".vm-machine");
   const slot = by("[data-vm-slot]");
   const crt = by("[data-vm-crt]");
   const machineTray = by("[data-vm-insert-tray]");
@@ -174,6 +175,16 @@
   let closePromise = null;
 
   const setStatus = (message) => { if (status) status.textContent = message; };
+  const syncReturnedCardToSlot = () => {
+    const returned = pendingReturn;
+    if (!returned?.anchorToMachine || !returned.card?.classList.contains("is-ready") || dragging?.returning) return;
+    const slotRect = slot.getBoundingClientRect();
+    const machineRect = machineBody.getBoundingClientRect();
+    returned.slotLeft = slotRect.left + slotRect.width / 2 - returned.width / 2 - machineRect.left;
+    returned.slotTop = slotRect.bottom - machineRect.top;
+    returned.card.style.left = `${returned.slotLeft}px`;
+    returned.card.style.top = `${returned.slotTop}px`;
+  };
   const label = (entry) => tr(entry.titleKey, entry.titleKey);
   const description = (entry) => tr(entry.descriptionKey, "");
   const categoryLabel = (categoryId) => {
@@ -972,13 +983,15 @@
     event.preventDefault();
     const card = pendingReturn.card;
     const rect = card.getBoundingClientRect();
+    const machineRect = pendingReturn.anchorToMachine ? machineBody.getBoundingClientRect() : null;
     card.classList.add("is-dragging");
     try { card.setPointerCapture(event.pointerId); } catch { /* Keep mouse and touch dragging available. */ }
     dragging = {
       returning:true, card, dragCard:card, contentId:pendingReturn.contentId,
       startX:event.clientX, startY:event.clientY,
       offsetX:event.clientX - rect.left, offsetY:event.clientY - rect.top,
-      left:rect.left, top:rect.top, moved:false,
+      left:rect.left - (machineRect?.left || 0), top:rect.top - (machineRect?.top || 0),
+      anchorToMachine:pendingReturn.anchorToMachine, moved:false,
       origin:{ ...pendingReturn.origin }, slotLeft:pendingReturn.slotLeft, slotTop:pendingReturn.slotTop
     };
     document.body.classList.add("vm-is-dragging");
@@ -1044,8 +1057,12 @@
         });
         feedWindow.append(card);
         document.body.append(feedWindow);
-        const returnLeft = slotRect.left + slotRect.width / 2 - size.width / 2;
-        const returnTop = slotRect.bottom;
+        const anchorToMachine = lang() === "ko";
+        const machineRect = machineBody.getBoundingClientRect();
+        const viewportLeft = slotRect.left + slotRect.width / 2 - size.width / 2;
+        const viewportTop = slotRect.bottom;
+        const returnLeft = anchorToMachine ? viewportLeft - machineRect.left : viewportLeft;
+        const returnTop = anchorToMachine ? viewportTop - machineRect.top : viewportTop;
         pendingReturn = {
           contentId:previous.id,
           origin:{ ...(pendingReturn?.origin || state.positions[previous.id]) },
@@ -1054,17 +1071,19 @@
           width:size.width,
           height:size.height,
           revealed:true,
+          anchorToMachine,
           slotLeft:returnLeft,
           slotTop:returnTop
         };
         await waitForMotion(880);
         card.remove();
-        card.style.position = "fixed";
+        if (anchorToMachine) card.style.setProperty("position", "absolute", "important");
+        else card.style.position = "fixed";
         card.style.left = `${returnLeft}px`;
         card.style.top = `${returnTop}px`;
         card.style.transform = "rotate(0deg)";
         card.style.zIndex = "20001";
-        document.body.append(card);
+        (anchorToMachine ? machineBody : document.body).append(card);
         feedWindow.remove();
         card.classList.remove("is-emerging");
         card.classList.add("is-ready");
@@ -1158,8 +1177,9 @@
     const dy = event.clientY - dragging.startY;
     if (Math.abs(dx) + Math.abs(dy) > 5) dragging.moved = true;
     const lift = event.pointerType === "touch" ? 44 : 0;
-    dragging.left = event.clientX - dragging.offsetX;
-    dragging.top = event.clientY - dragging.offsetY - lift;
+    const returnParentRect = dragging.returning && dragging.anchorToMachine ? machineBody.getBoundingClientRect() : null;
+    dragging.left = event.clientX - dragging.offsetX - (returnParentRect?.left || 0);
+    dragging.top = event.clientY - dragging.offsetY - lift - (returnParentRect?.top || 0);
     dragging.dragCard.style.left = `${dragging.left}px`;
     dragging.dragCard.style.top = `${dragging.top}px`;
     if (event.clientY > window.innerHeight - 64) window.scrollBy(0, 18);
@@ -1338,7 +1358,10 @@
   by("[data-vm-buy-theme]").addEventListener("click", () => purchase(by("[data-vm-theme]").value));
   by("[data-vm-theme]").addEventListener("change", () => { renderThemePreview(); updateShopButtons(); });
   by("[data-vm-eject]").addEventListener("click", eject);
-  window.addEventListener("resize", () => { if (!dragging && !basketMovement && !activeContent) render(); });
+  window.addEventListener("resize", () => {
+    syncReturnedCardToSlot();
+    if (!dragging && !basketMovement && !activeContent) render();
+  });
   mobileTray.addEventListener("dragover", (event) => event.preventDefault());
   mobileTray.setAttribute("aria-hidden", "true");
   mobileBasketTray.setAttribute("aria-hidden", "true");
