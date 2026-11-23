@@ -963,23 +963,6 @@
     floorCard?.focus({ preventScroll:true });
   };
 
-  const syncReturnedCardToSlot = () => {
-    const returned = pendingReturn;
-    if (!returned?.card?.classList.contains("is-ready") || dragging?.returning) return;
-    const slotRect = slot.getBoundingClientRect();
-    const card = returned.card;
-    const left = slotRect.left + slotRect.width / 2 - card.offsetWidth / 2;
-    const top = slotRect.bottom;
-    card.style.transition = "none";
-    card.style.left = `${left}px`;
-    card.style.top = `${top}px`;
-    returned.slotLeft = left;
-    returned.slotTop = top;
-    requestAnimationFrame(() => {
-      if (pendingReturn?.card === card && !dragging?.returning) card.style.transition = "";
-    });
-  };
-
   const startEjectedCardDrag = (event) => {
     if (event.button !== 0 || !pendingReturn?.card?.classList.contains("is-ready") || dragging) return;
     event.preventDefault();
@@ -1351,11 +1334,7 @@
   by("[data-vm-buy-theme]").addEventListener("click", () => purchase(by("[data-vm-theme]").value));
   by("[data-vm-theme]").addEventListener("change", () => { renderThemePreview(); updateShopButtons(); });
   by("[data-vm-eject]").addEventListener("click", eject);
-  window.addEventListener("scroll", syncReturnedCardToSlot, { passive:true });
-  window.addEventListener("resize", () => {
-    if (!dragging && !basketMovement && !activeContent) render();
-    syncReturnedCardToSlot();
-  });
+  window.addEventListener("resize", () => { if (!dragging && !basketMovement && !activeContent) render(); });
   mobileTray.addEventListener("dragover", (event) => event.preventDefault());
   mobileTray.setAttribute("aria-hidden", "true");
   mobileBasketTray.setAttribute("aria-hidden", "true");
