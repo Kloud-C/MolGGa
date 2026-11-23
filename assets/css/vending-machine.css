@@ -233,24 +233,35 @@
   .vm-kicker { margin-bottom:6px; font-size:.66rem; }
   .vm-head h1 { font-size:clamp(1.65rem,7vw,2.1rem); }
   .vm-head p { max-width:100%; margin-top:7px; font-size:.87rem; }
-  .vm-stage { grid-template-columns:minmax(0,1fr); gap:11px; }
-  .vm-machine-panel { grid-column:1; grid-row:1; min-height:0; padding:13px 12px 17px; }
-  .vm-machine-caption { margin-bottom:8px; font-size:.76rem; }
-  .vm-machine { width:min(100%,380px); padding:15px 14px 22px; border-radius:21px 21px 15px 15px; }
-  .vm-machine-brand { margin-bottom:9px; font-size:.65rem; }
-  .vm-crt-window { padding:6px; border-width:6px; border-radius:17px; }
-  .vm-crt-screen { min-height:190px; }
-  .vm-vendor-controls { margin:15px 3px 12px; }
-  .vm-machine-tray { min-height:61px; font-size:.69rem; }
-  .vm-floor-panel { grid-column:1; grid-row:2; }
-  .vm-panel-head { gap:7px; padding:13px 11px 10px; }
+  .vm-stage { grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); align-items:stretch; gap:7px; }
+  .vm-machine-panel { grid-column:1; grid-row:1; min-height:0; justify-content:flex-start; padding:10px 7px 12px; }
+  .vm-machine-caption { margin-bottom:7px; font-size:.63rem; line-height:1.35; }
+  .vm-machine { width:100%; padding:12px 8px 18px; border-radius:17px 17px 13px 13px; }
+  .vm-machine-brand { margin:2px 2px 7px; font-size:.52rem; letter-spacing:.1em; }
+  .vm-machine-lights { gap:3px; }
+  .vm-machine-lights i { width:5px; height:5px; }
+  .vm-crt-window { padding:4px; border-width:5px; border-radius:13px; }
+  .vm-crt-screen { min-height:158px; border-radius:9px; }
+  .vm-crt-pixel { width:54px; height:54px; margin-bottom:6px; font-size:.75rem; }
+  .vm-crt-screen strong { font-size:.76rem; }
+  .vm-crt-screen small { margin-top:6px; font-size:.56rem; }
+  .vm-vendor-controls { gap:5px; margin:11px 2px 9px; }
+  .vm-slot-label { font-size:.54rem; }
+  .vm-slot { height:18px; }
+  .vm-machine-tray { min-height:50px; font-size:.61rem; }
+  .vm-machine-tray::before { inset:8px 19%; }
+  .vm-machine-base { right:26px; left:26px; }
+  .vm-floor-panel { grid-column:2; grid-row:1; }
+  .vm-panel-head { display:grid; grid-template-columns:minmax(0,1fr); gap:8px; padding:11px 9px 8px; }
+  .vm-panel-head > div:first-child { min-width:0; }
   .vm-panel-head h2 { font-size:.9rem; }
-  .vm-panel-head p { max-width:150px; font-size:.7rem; line-height:1.35; }
+  .vm-panel-head p { max-width:none; font-size:.66rem; line-height:1.35; }
+  .vm-floor-tools { display:grid; width:100%; grid-template-columns:repeat(2,minmax(0,1fr)); justify-self:stretch; }
   .vm-panel-head [data-vm-floor-count] { display:none; }
-  .vm-plain-button { min-height:39px; padding:6px 8px; font-size:.7rem; white-space:nowrap; }
-  .vm-floor { min-height:360px; margin:0 7px 7px; background-size:42px 42px,42px 42px,100% 100%,100% 100%; }
-  .vm-card { width:clamp(90px,29vw,112px); }
-  .vm-card.is-revealed:not(.vm-insert-animation) { width:clamp(126px,38vw,152px); }
+  .vm-plain-button { min-width:0; min-height:39px; padding:6px 4px; font-size:.64rem; line-height:1.2; white-space:normal; }
+  .vm-floor { min-height:330px; margin:0 6px 6px; background-size:36px 36px,36px 36px,100% 100%,100% 100%; }
+  .vm-card { width:clamp(80px,25vw,104px); }
+  .vm-card.is-revealed:not(.vm-insert-animation) { width:clamp(118px,34vw,140px); }
   .vm-card-copy { padding:6px 6px 7px; }
   .vm-card-title { margin:3px 0 2px; font-size:.7rem; }
   .vm-card-description { font-size:.61rem; line-height:1.35; }
@@ -283,11 +294,19 @@
 }
 @media (max-width:360px) {
   .vm-home .wrap { width:calc(100% - 14px); }
-  .vm-panel-head { flex-wrap:wrap; }
-  .vm-panel-head p { max-width:130px; }
-  .vm-floor { min-height:350px; }
-  .vm-card { width:clamp(84px,29vw,104px); }
-  .vm-card.is-revealed:not(.vm-insert-animation) { width:clamp(118px,38vw,136px); }
+  .vm-stage { grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:5px; }
+  .vm-machine-panel { padding-inline:5px; }
+  .vm-machine { padding-inline:6px; }
+  .vm-crt-screen { min-height:138px; }
+  .vm-crt-pixel { width:46px; height:46px; font-size:.66rem; }
+  .vm-crt-screen strong { font-size:.68rem; }
+  .vm-crt-screen small { font-size:.5rem; }
+  .vm-panel-head { gap:6px; padding:9px 7px 7px; }
+  .vm-panel-head p { font-size:.6rem; }
+  .vm-plain-button { min-height:36px; padding-inline:6px; font-size:.62rem; }
+  .vm-floor { min-height:300px; margin:0 4px 4px; background-size:32px 32px,32px 32px,100% 100%,100% 100%; }
+  .vm-card { width:clamp(74px,25vw,90px); }
+  .vm-card.is-revealed:not(.vm-insert-animation) { width:clamp(108px,34vw,122px); }
   .vm-basket-slot-card { width:22px; height:43px; }
   .vm-basket-name { font-size:.61rem; }
   .vm-mobile-basket-target { min-width:80px; font-size:.59rem; }
